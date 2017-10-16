@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="/lib/bootstrap/bootstrap.3.3.0.min.css" rel="stylesheet">
+
+    <style>
+        [v-cloak] {
+            display: none
+        }
+    </style>
+
+    <title>Admin Dashboard</title>
+</head>
+
+<body>
+    <div id="app" v-cloak>
+        
+        <app-header name="Admin"></app-header>
+        
+        <app-dashboard title="Coordinators management">
+            <app-option name="Add a coordinator" link="add_coordinator.html"></app-option>
+            <app-option name="Remove a coordinator" link="remove_coordinator.html"></app-option>
+        </app-dashboard>
+        
+        <app-dashboard title="Other utilities">
+            <app-option name="Generate a report" link="report_generator.html"></app-option>
+            <app-option name="Maintain database" link="database.html"></app-option>
+        </app-dashboard>
+
+    </div>
+
+    <script src="/lib/vue/vue-2.5.0.min.js "></script>
+
+    <script src="/components/app-header.js "></script>
+    <script src="/components/app-option.js "></script>
+    <script src="/components/app-dashboard.js "></script>
+
+    <script src="/components/app.js "></script>
+
+    <script src="/lib/jquery/jquery-3.2.1.min.js "></script>
+    <script src="/lib/bootstrap/bootstrap.3.3.0.min.js "></script>
+</body>
+
+</html>
