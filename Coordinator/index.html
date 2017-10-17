@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="/lib/bootstrap/bootstrap.3.3.0.min.css" rel="stylesheet">
+
+    <style>
+        [v-cloak] {
+            display: none
+        }
+    </style>
+
+    <title>Coordinator Dashboard</title>
+</head>
+
+<body>
+    <div id="app" v-cloak>
+
+        <app-header name="Coordinator"></app-header>
+
+        <app-dashboard title="Advisors management">
+            <app-option name="Add an advisor" link=""></app-option>
+            <app-option name="Remove an advisor" link=""></app-option>
+        </app-dashboard>
+
+        <app-dashboard title="Students management">
+            <app-option name="Add a student" link=""></app-option>
+            <app-option name="Remove a student" link=""></app-option>
+            <app-option name="Assign a student to an advisor" link=""></app-option>
+        </app-dashboard>
+
+        <app-dashboard title="Evaluations management">
+            <app-option name="Set up an evaluation form" link=""></app-option>
+            <app-option name="Set up evaluation availability " link=""></app-option>
+            <app-option name="Calculate studenets' marks" link=""></app-option>
+        </app-dashboard>
+
+        <!-- Advisor's view -->
+        <app-dashboard title="Supervisors management">
+            <app-option name="Add a supervisor" link=""></app-option>
+        </app-dashboard>
+
+        <app-dashboard title="Students management">
+            <app-option name="View student" link=""></app-option>
+            <app-option name="Contracts" link=""></app-option>
+        </app-dashboard>
+
+        <app-dashboard title="Other utilities">
+            <app-option name="Generate a report" link=""></app-option>
+        </app-dashboard>
+        <!--  -->
+
+    </div>
+
+    <script src="/lib/vue/vue-2.5.0.min.js "></script>
+
+    <script src="/components/app-header.js "></script>
+    <script src="/components/app-option.js "></script>
+    <script src="/components/app-dashboard.js "></script>
+
+    <script src="/components/app.js "></script>
+
+    <script src="/lib/jquery/jquery-3.2.1.min.js "></script>
+    <script src="/lib/bootstrap/bootstrap.3.3.0.min.js "></script>
+</body>
+
+</html>
