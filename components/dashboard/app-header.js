@@ -6,8 +6,8 @@ app_header_template = `
 `
 app_header = {
     template: app_header_template,
-    props:{
-        name:String
+    props: {
+        name: String
     }
 };
 

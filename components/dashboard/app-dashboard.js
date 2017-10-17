@@ -11,8 +11,8 @@ app_dashboard_template = `
 `
 app_dashboard = {
     template: app_dashboard_template,
-    props:{
-        title:String
+    props: {
+        title: String
     }
 };
 
