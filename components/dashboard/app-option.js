@@ -7,7 +7,7 @@ app_option_template = `
                 <a :href="link" class="small">{{name}}</a>
                 <hr style="width:50%;margin:15px auto">
             </div>
-            <div v-else class="caption" style="text-align:center"  :style="{ 'background-color'  : '#eee' }">
+            <div v-else class="caption" style="text-align:center;background-color:#eee;">
                 <p>{{name}}</p>
                 <hr style="width:50%;margin:15px auto">
                 <p style="font-size:12px">Work in progress!</p>
