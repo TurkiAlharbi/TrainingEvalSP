@@ -25,6 +25,7 @@ headers = ["Name", "Majors", "Numbr of students"];
 coordinators = [
     { name: "Husni Al-Muhtaseb", majors: ["ICS", "SWE"], students: "55" },
     { name: "Yahya Osais", majors: ["COE"], students: "10" },
+    { name: "Mohammed Antar", majors: ["ME"], students: "100" },
 ];
 
 app_coordinators_table = {
