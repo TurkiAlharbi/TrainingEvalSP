@@ -19,13 +19,8 @@
 <body>
     <div id="app" v-cloak>
 
-        <div class="container">
-            <br/>
-            <a href="./">
-                <button class="btn btn-warning">Return to dashboard</button>
-            </a>
-            <hr/>
-        </div>
+        <app-page-header></app-page-header>
+
 
         <app-dashboard title="Add supervisor">
             <form>
@@ -53,6 +48,8 @@
     <script src="../components/admin/app-remove-coordinators.js "></script>
     <script src="../components/dashboard/app-dashboard.js "></script>
 
+    <script src="../components/dashboard/app-page-header.js "></script>
+    
     <script src="../components/app.js "></script>
 
     <script src="../lib/jquery/jquery-3.2.1.min.js "></script>
