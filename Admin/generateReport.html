@@ -26,26 +26,38 @@
             </a>
             <hr/>
         </div>
-        
-        <app-dashboard title="Generate a Report" >
+
+        <app-dashboard title="Generate a Report">
             <form>
                 <fieldset>
                     <legend>Report Specification:</legend>
-                    Period:  
-                    <select>
-                        <option value="P163">163</option>
-                        <option value="P163-171">163-171</option>
-                        <option value="P172-173">172-173</option>
-                        <option value="P173">173</option>
-                        <option value="P173-181">173-181</option>
-                    </select><br>
-                    Major: 
-                    <select>
-                        <option value="ICS-SWE">ICS-SWE</option>
-                        <option value="COE">COE</option>
-                        <option value="ME">ME</option>
-                        <option value="EE">EE</option>
-                    </select>
+
+                    <div class="input-group">
+                        <span class="input-group-addon" style="min-width: 150px;"> Period: </span>
+                        <div class="form-group" data-toggle="tooltip" data-placement="top" title="hold ctrl to select more than one">
+                            <select multiple class="form-control" id="periods">
+                                <option value="P163">163</option>
+                                <option value="P163-171">163-171</option>
+                                <option value="P172-173">172-173</option>
+                                <option value="P173">173</option>
+                                <option value="P173-181">173-181</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <br/>
+                    <div class="input-group">
+                        <span class="input-group-addon" style="min-width: 150px;"> Majors: </span>
+                        <div class="form-group" data-toggle="tooltip" data-placement="top" title="hold ctrl to select more than one">
+                            <select multiple class="form-control" id="majors">
+                                <option value="ICS">ICS</option>
+                                <option value="SWE">SWE</option>
+                                <option value="COE">COE</option>
+                                <option value="ME">ME</option>
+                                <option value="EE">EE</option>
+                            </select>
+                        </div>
+                    </div>
                 </fieldset>
                 <button>Request</button>
             </form>
