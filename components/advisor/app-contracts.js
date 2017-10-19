@@ -23,7 +23,7 @@ app_contracts_template = `
                         <p>City: {{ contract.info.city }}</p>
                         <p>Location: {{ contract.info.location }}</p>
                         <p>Supervisor: {{ contract.info.supervisor }}</p>
-                        <a :href="contract.info.cid"> More details</a>
+                        <a> More details</a>
                     </div>
                 </div>
             </tr>
