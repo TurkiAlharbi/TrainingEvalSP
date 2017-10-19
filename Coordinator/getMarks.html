@@ -13,7 +13,7 @@
         }
     </style>
 
-    <title>Students' Results</title>
+    <title>Students' Marks</title>
 </head>
 
 <body>
@@ -27,34 +27,15 @@
             <hr/>
         </div>
 
-        <app-dashboard title="Check Evaluation Results">
-            <table class="table table-striped table-hover table-bordered">
-                <thead>
-                    <tr>
-                        <th style="text-align: center">ID</th>
-                        <th style="text-align: center">Name</th>
-                        <th style="text-align: center">Company</th>
-                        <th style="text-align: center">Supervisor</th>
-                        <th style="text-align: center">Score</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>201224780</td>
-                        <td>Ibrahim Al-Beladi</td>
-                        <td>Aramco</td>
-                        <td>Maha Al-Dossary</td>
-                        <td>35 / 40</td>
-                    </tr>
-                </tbody>
-            </table>
+        <app-dashboard title="Students' Marks">
+            <app-marks></app-marks>
         </app-dashboard>
 
     </div>
 
     <script src="../lib/vue/vue-2.5.0.min.js "></script>
 
-    <script src="../components/admin/app-remove-coordinators.js "></script>
+    <script src="../components/coordinator/app-marks.js "></script>
     <script src="../components/dashboard/app-dashboard.js "></script>
 
     <script src="../components/app.js "></script>
