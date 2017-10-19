@@ -52,17 +52,7 @@ contracts = [
         id: "2", hash: "#2", name: "Mohammed Alhumaidi", type: "Summer", company: "Tweetso",
         info: { country: "Saudi Arabia", city: "Dhahran", location: "Techno Valley", supervisor: "Abdulrahman Alshehri", cid:"2"}
     },
-    {
-        id: "3", hash: "#3", name: "Ibrahim Al-Beladi", type: "Summer"
-    },
-    {
-        id: "4", hash: "#4", name: "Ibrahim Al-Beladi", type: "COOP"
-    },
-    {
-        id: "5", hash: "#5", name: "Ibrahim Al-Beladi", type: "Summer"
-    },
-    id: "5", hash: "#5", name: "Ibrahim Al-Beladi" ,type: "Summer"
-    },
+
 ];
 
 app_contracts = {
