@@ -53,13 +53,13 @@ contracts = [
         info: { country: "Saudi Arabia", city: "Dhahran" }
     },
     {
-        id: "3", hash: "#3", name: "Ibrahim Al-Beladi" ,type: "Summer"
+        id: "3", hash: "#3", name: "Ibrahim Al-Beladi", type: "Summer"
     },
     {
-        id: "4", hash: "#4", name: "Ibrahim Al-Beladi" ,type: "COOP"
+        id: "4", hash: "#4", name: "Ibrahim Al-Beladi", type: "COOP"
     },
     {
-        id: "5", hash: "#5", name: "Ibrahim Al-Beladi" ,type: "Summer"
+        id: "5", hash: "#5", name: "Ibrahim Al-Beladi", type: "Summer"
     },
 ];
 
