@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="../lib/bootstrap/bootstrap.3.3.0.min.css" rel="stylesheet">
+
+    <style>
+        [v-cloak] {
+            display: none
+        }
+    </style>
+
+    <title>Training Contract</title>
+</head>
+
+<body>
+    <div id="app" v-cloak>
+
+        <div class="container">
+            <br/>
+            <a href="./">
+                <button class="btn btn-warning">Return to dashboard</button>
+            </a>
+            <hr/>
+        </div>
+        
+        <app-dashboard title="Training Contract">
+            <form>
+                <fieldset>
+                <legend>Company Information</legend>
+                    Company Name: <input type="text"><br>
+                    Address: <input type="text"><br>
+                    Country: <input type="text"><br>
+                    Zip code: <input type="text"><br>
+                    City: <input type="text"><br>
+                    URL: <input type="text"><br>
+                    Company business in brief: <input type="text" height="2000pt"><br>
+                </fieldset>
+                <hr>
+                <fieldset>
+                <legend>Training Opportunity</legend>
+                    Duration: <input type="radio" value="summerTraining"> 8 Weeks(Summer Training) | <input type="radio" value="coop"> 28 Weeks(Cooperative Work)<br>
+                    Location: <input type="text"><br>
+                    Transportation: <input type="text"><br>
+                    Housing: <input type="text"><br>
+                    Salary: <input type="text"><br>
+                    Other benefits: <input type="text"><br>
+                </fieldset>
+                <hr>
+                <fieldset>
+                <legend>Student Information</legend>
+                    Name: <input type="text"><br>
+                    Major: <input type="text"><br>
+                    ID: <input type="text"><br>
+                </fieldset>
+                <hr>
+                <fieldset>
+                <legend>Mentor</legend>
+                    Name: <input type="text"><br>
+                    Position: <input type="text"><br>
+                    Email: <input type="text"><br>
+                    Phone: <input type="tel"><br>
+                    Fax: <input type="tel"><br>
+                    Mobile: <input type="tel"><br>
+                    Date: <input type="date"><br>
+                </fieldset><br>
+                <button>Submit</button>
+            </form>
+        </app-dashboard>
+    </div>
+
+    <script src="../lib/vue/vue-2.5.0.min.js "></script>
+
+    <script src="../components/coordinator/app-remove-students.js "></script>
+    <script src="../components/dashboard/app-dashboard.js "></script>
+
+    <script src="../components/app.js "></script>
+
+    <script src="../lib/jquery/jquery-3.2.1.min.js "></script>
+    <script src="../lib/bootstrap/bootstrap.3.3.0.min.js "></script>
+</body>
+
+</html>
