@@ -19,6 +19,7 @@ headers = ["Name", "Coordinator", "Advisor"];
 
 students = [
     { name: "Ibrahim Al-Beladi", coordinator: "Husni Al-Muhtaseb", advisor: "Husni Al-Muhtaseb" },
+    
 ];
 
 app_students_table = {
