@@ -26,9 +26,9 @@ app_evaluations_table_template = `
 headers = ["Id", "Title", "Terms", "Status", "Number of evaluations"];
 
 evaluations = [
-    { id: "1", title: "Summer training form", terms: [163], status: "Closed", numOfEvals: "53" },
+    { id: "1", title: "Summer training form", terms: [163], status: "Opened", numOfEvals: "53" },
     { id: "2", title: "Coop form #1", terms: [163, 171], status: "Closed", numOfEvals: "2" },
-    { id: "3", title: "Coop form #2", terms: [163, 171], status: "Opened", numOfEvals: "0" },
+    { id: "3", title: "Coop form #2", terms: [163, 171], status: "Drafted", numOfEvals: "-" },
 ];
 
 app_evaluations_table = {

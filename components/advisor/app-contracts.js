@@ -24,6 +24,7 @@ app_contracts_template = `
                         <p>Location: {{ contract.info.location }}</p>
                         <p>Supervisor: {{ contract.info.supervisor }}</p>
                         <a> More details</a>
+                        
                     </div>
                 </div>
             </tr>
