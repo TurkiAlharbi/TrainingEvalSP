@@ -50,7 +50,7 @@ contracts = [
     },
     {
         id: "2", hash: "#2", name: "Mohammed Alhumaidi", type: "Summer", company: "Tweetso",
-        info: { country: "Saudi Arabia", city: "Dhahran", location: "Techno Valley", supervisor: "Abdulrahman Alshehri", cid:"2"}
+        info: { country: "Saudi Arabia", city: "Dhahran", location: "Techno Valley", supervisor: "Abdulrahman Alshehri", cid: "2" }
     },
 
 ];
