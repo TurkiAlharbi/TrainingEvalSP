@@ -24,44 +24,54 @@
         <app-dashboard title="Training Contract">
             <form>
                 <fieldset>
+                    <legend>Student Information</legend>
+                    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Name: </span><input id="stuname" type="text" class="form-control"></div><br>
+                    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Major: </span><input id="major" type="text" class="form-control"></div><br>
+                    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> ID: </span><input id="id" type="text" class="form-control"></div><br>
+                    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Token: </span><input id="token" type="text" class="form-control"></div><br>
+                </fieldset>
+                <hr>
+                <fieldset>
                 <legend>Company Information</legend>
-                    Company Name: <input type="text"><br>
-                    Address: <input type="text"><br>
-                    Country: <input type="text"><br>
-                    Zip code: <input type="text"><br>
-                    City: <input type="text"><br>
-                    URL: <input type="text"><br>
-                    Company business in brief: <input type="text" height="2000pt"><br>
+                    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Company Name: </span><input id="company" type="text" class="form-control"></div><br/>
+                    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Address: </span><input id="address" type="text" class="form-control"></div><br/>
+                    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Country: </span><input id="country" type="text" class="form-control"></div><br/>
+                    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Zip code: </span><input id="zip" type="text" class="form-control"></div><br/>
+                    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> City: </span><input id="city" type="text" class="form-control"></div><br/>
+                    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> URL: </span><input id="url" type="text" class="form-control"></div><br/>
+                    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Company business<br/>in brief:  </span><textarea id="url" rows=2 class="form-control"></textarea></div><br/>                    
                 </fieldset>
                 <hr>
                 <fieldset>
-                <legend>Training Opportunity</legend>
-                    Duration: <input type="radio" value="summerTraining"> 8 Weeks(Summer Training) | <input type="radio" value="coop"> 28 Weeks(Cooperative Work)<br>
-                    Location: <input type="text"><br>
-                    Transportation: <input type="text"><br>
-                    Housing: <input type="text"><br>
-                    Salary: <input type="text"><br>
-                    Other benefits: <input type="text"><br>
-                </fieldset>
-                <hr>
-                <fieldset>
-                <legend>Student Information</legend>
-                    Name: <input type="text"><br>
-                    Major: <input type="text"><br>
-                    ID: <input type="text"><br>
+                    <legend>Training Opportunity</legend>
+                    <div class="input-group"><span class="input-group-addon"> Duration: </span>
+                    <div class="input-group-btn" data-toggle="buttons">
+                        <label class="btn btn-primary" style="width: 50%;">
+                            <input type="radio" name="options" id="option1">8 Weeks (Summer Training)
+                        </label>
+                        <label class="btn btn-primary" style="width: 50%;">
+                            <input type="radio" name="options" id="option2">28 Weeks (Cooperative Work)
+                        </label>
+                    </div></div><br/>
+                    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Location: </span><input id="location" type="text" class="form-control"></div><br>
+                    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Transportation: </span><input id="trans" type="text" class="form-control"></div><br>
+                    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Housing: </span><input id="housing" type="text" class="form-control"></div><br>
+                    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Salary: </span><input id="salary" type="text" class="form-control"></div><br>
+                    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Other benefits: </span><input id="benefits" type="text" class="form-control"></div><br>
                 </fieldset>
                 <hr>
                 <fieldset>
                 <legend>Mentor</legend>
-                    Name: <input type="text"><br>
-                    Position: <input type="text"><br>
-                    Email: <input type="text"><br>
-                    Phone: <input type="tel"><br>
-                    Fax: <input type="tel"><br>
-                    Mobile: <input type="tel"><br>
-                    Date: <input type="date"><br>
-                </fieldset><br>
-                <button>Submit</button>
+                    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Name: </span><input id="mentor" type="text" class="form-control"></div><br>
+                    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Position: </span><input id="men_pos" type="text" class="form-control"></div><br>
+                    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Email: </span><input id="men_email" type="text" class="form-control"></div><br>
+                    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Phone: </span><input id="men_phone" type="tel" class="form-control"></div><br>
+                    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Fax: </span><input id="fax" type="tel" class="form-control"></div><br>
+                    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Mobile: </span><input id="men_mobile" type="tel" class="form-control"></div><br>
+                    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Date: </span><input id="date" type="date" class="form-control"></div><br>
+                </fieldset
+                ><br>
+                <button class="btn btn-success">Submit</button>
             </form>
         </app-dashboard>
     </div>
