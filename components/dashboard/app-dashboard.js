@@ -1,5 +1,5 @@
 app_dashboard_template = `
-<div class="container">
+<div class="container" style="text-align: center;">
     <div class="panel panel-primary">
         <div class="panel-heading">{{title}}</div>
             <div class="panel-body">
