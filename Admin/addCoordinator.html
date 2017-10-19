@@ -26,22 +26,36 @@
             </a>
             <hr/>
         </div>
-        
-        <app-dashboard title="Add coordinators" >
+
+        <app-dashboard title="Add coordinators">
             <form>
                 <fieldset>
                     <legend>Coordinator Information:</legend>
-                    Name: <input type="text"><br>
-                    Email: <input type="text"><br>
-                    Major: 
-                    <select>
-                        <option value="ICS-SWE">ICS-SWE</option>
-                        <option value="COE">COE</option>
-                        <option value="ME">ME</option>
-                        <option value="EE">EE</option>
-                    </select>
+                    <div class="input-group">
+                        <span class="input-group-addon" style="min-width: 150px;"> Name: </span>
+                        <input id="name" type="text" class="form-control">
+                    </div>
+                    <br>
+                    <div class="input-group">
+                        <span class="input-group-addon" style="min-width: 150px;"> Email: </span>
+                        <input id="email" type="text" class="form-control">
+                    </div>
+                    <br>
+                    <div class="input-group">
+                        <span class="input-group-addon" style="min-width: 150px;"> Majors: </span>
+                        <div class="form-group" data-toggle="tooltip" data-placement="top" title="hold ctrl to select more than one">
+                            <select multiple class="form-control" id="majors">
+                                <option value="ICS">ICS</option>
+                                <option value="SWE">SWE</option>
+                                <option value="COE">COE</option>
+                                <option value="ME">ME</option>
+                                <option value="EE">EE</option>
+                            </select>
+                        </div>
+                    </div>
                 </fieldset>
-                <button>Submit</button>
+                <br/>
+                <button class="btn btn-success">Add</button>
             </form>
         </app-dashboard>
 
