@@ -21,7 +21,11 @@ headers = ["Name", "ID", "Major", "Advisor", "Remove"];
 
 students = [
     { name: "Ibrahim Al-Beladi", major: "ICS", advisor: "Husni Al-Muhtaseb", id: "201224780" },
+<<<<<<< HEAD
+    { name: "Mohammed Alhumaidi", major: "ICS", advisor: "Husni Al-Muhtaseb", id: "201237940"},
+=======
     
+>>>>>>> 51dc08a56aba850a7b6dbeafa9be080e8226bc64
 ];
 
 app_remove_students = {

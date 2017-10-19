@@ -49,8 +49,8 @@ contracts = [
         info: { country: "Saudi Arabia", city: "Dhahran", location: "Expec II", supervisor: "Maha Dossary", cid: "1" }
     },
     {
-        id: "2", hash: "#2", name: "Ibrahim Al-Beladi", type: "COOP", company: "Aramco",
-        info: { country: "Saudi Arabia", city: "Dhahran" }
+        id: "2", hash: "#2", name: "Mohammed Alhumaidi", type: "Summer", company: "Tweetso",
+        info: { country: "Saudi Arabia", city: "Dhahran", location: "Techno Valley", supervisor: "Abdulrahman Alshehri", cid:"2"}
     },
     {
         id: "3", hash: "#3", name: "Ibrahim Al-Beladi", type: "Summer"
@@ -60,6 +60,8 @@ contracts = [
     },
     {
         id: "5", hash: "#5", name: "Ibrahim Al-Beladi", type: "Summer"
+    },
+    id: "5", hash: "#5", name: "Ibrahim Al-Beladi" ,type: "Summer"
     },
 ];
 
