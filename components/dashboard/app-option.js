@@ -4,7 +4,8 @@ app_option_template = `
         <div v-if="link!=''" class="thumbnail panel panel-primary">
             <div class="caption" style="text-align:center">
                 <hr style="width:50%;margin:15px auto">
-                <a :href="link" class="small">{{name}}</a>
+                <a v-if="!popup" :href="link" class="small">{{name}}</a>
+                <a v-if="popup" target="_blank" :href="link+'?popup'" class="small" >{{name}}</a>
                 <hr style="width:50%;margin:15px auto">
             </div>
         </div>
@@ -23,6 +24,7 @@ app_option = {
     props: {
         name: String,
         link: String,
+        popup: Boolean
     }
 };
 
