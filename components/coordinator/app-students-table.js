@@ -21,6 +21,7 @@ headers = ["Name", "Major", "Advisor", "Company", "Supervisor"];
 
 students = [
     { name: "Ibrahim Al-Beladi", major: "ICS", advisor: "Husni Al-Muhtaseb", company: "Aramco", supervisor: "Maha Al-Dossary" },
+    { name: "Mohammed Alhumaidi", major: "ICS", advisor: "Husni Al-Muhtaseb", company: "Tweetso", supervisor: "Abdulrahman Alshehri" },
 ];
 
 app_students_table = {
