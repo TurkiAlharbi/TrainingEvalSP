@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="../lib/bootstrap/bootstrap.3.3.0.min.css" rel="stylesheet">
+
+    <style>
+        [v-cloak] {
+            display: none
+        }
+    </style>
+
+    <title>Students' Results</title>
+</head>
+
+<body>
+    <div id="app" v-cloak>
+
+        <div class="container">
+            <br/>
+            <a href="./">
+                <button class="btn btn-warning">Return to dashboard</button>
+            </a>
+            <hr/>
+        </div>
+        
+        <app-dashboard title="Check Evaluation Results" >
+            <table style="border:1px solid black;">
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Company</th>
+                    <th>Supervisor</th>
+                    <th>Score</th>
+                </tr>
+                <tr>
+                    <td>2012</td>
+                    <td>Ibrahim Al-Beladi</td>
+                    <td>Aramco</td>
+                    <td>Maha Al-Dossary</td>
+                    <td>Excellent</td>
+                </tr>
+            </table>
+        </app-dashboard>
+
+    </div>
+
+    <script src="../lib/vue/vue-2.5.0.min.js "></script>
+
+    <script src="../components/admin/app-remove-coordinators.js "></script>
+    <script src="../components/dashboard/app-dashboard.js "></script>
+
+    <script src="../components/app.js "></script>
+
+    <script src="../lib/jquery/jquery-3.2.1.min.js "></script>
+    <script src="../lib/bootstrap/bootstrap.3.3.0.min.js "></script>
+</body>
+
+</html>
