@@ -13,25 +13,29 @@
         }
     </style>
 
-    <title>Supervisor Dashboard</title>
+    <title>View Students</title>
 </head>
 
 <body>
     <div id="app" v-cloak>
-        
-        <app-header name="Supervisor"></app-header>
-        
-        <app-dashboard title="Students management">
-            <app-option name="View students" link="./viewStudents.html"></app-option>
-            <app-option name="Evaluate" link=""></app-option>
+
+        <div class="container">
+            <br/>
+            <a href="./">
+                <button class="btn btn-warning">Return to dashboard</button>
+            </a>
+            <hr/>
+        </div>
+
+        <app-dashboard title="View students">
+            <app-students-table></app-students-table>
         </app-dashboard>
 
     </div>
 
     <script src="../lib/vue/vue-2.5.0.min.js "></script>
 
-    <script src="../components/dashboard/app-header.js "></script>
-    <script src="../components/dashboard/app-option.js "></script>
+    <script src="../components/supervisor/app-students-table.js "></script>
     <script src="../components/dashboard/app-dashboard.js "></script>
 
     <script src="../components/app.js "></script>
