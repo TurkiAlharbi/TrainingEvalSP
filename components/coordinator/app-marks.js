@@ -21,7 +21,7 @@ headers = ["ID", "Name", "Company", "Supervisor", "Mark"];
 
 students = [
     { id: "201224780", name: "Ibrahim Al-Beladi", company: "Aramco", supervisor: "Maha Al-Dossary", mark: "35 / 40" },
-
+    { id: "201237940", name: "Mohammed Alhumaidi", company: "Tweetso", supervisor: "Abdulrahman Alshehri", mark: "33 / 40" },
 ];
 
 app_marks = {
