@@ -19,13 +19,7 @@
 <body>
     <div id="app" v-cloak>
 
-        <div class="container">
-            <br/>
-            <a href="./">
-                <button class="btn btn-warning">Return to dashboard</button>
-            </a>
-            <hr/>
-        </div>
+        <app-page-header></app-page-header>
 
         <app-dashboard title="View contracts">
             <app-contracts-table></app-contracts-table>
@@ -37,6 +31,8 @@
 
     <script src="../components/advisor/app-contracts.js "></script>
     <script src="../components/dashboard/app-dashboard.js "></script>
+
+    <script src="../components/dashboard/app-page-header.js "></script>
 
     <script src="../components/app.js "></script>
 
