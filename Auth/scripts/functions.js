@@ -1,8 +1,5 @@
-function writeUserDB(email, type) {//unused
-    email = email.split(".").join(" ");
-    firebase.database().ref('users/' + email).set({
-        type: type,
-    });
+function write2DB(record, json) {
+    firebase.database().ref(record).set(json);
 };
 
 
@@ -10,10 +7,11 @@ var secondaryApp = firebase.initializeApp(config, "Secondary");
 function createUser(email, password, type) {
     secondaryApp.auth().createUserWithEmailAndPassword(email, password)
         .then(function (firebaseUser) {
-            email = email.split(".").join(" ");
-            firebase.database().ref('users/' + email).set({
+            json = {
                 type: type,
-            });
+            };
+            record = 'users/' + email.split(".").join(" ");
+            write2DB(record, json)
             console.log('Successfully created ' + email)
         })
         .catch(
