@@ -10,8 +10,7 @@ app_coordinators_table_template = `
             <td> {{ coordinator.name }} </td>
             <td>
                 <span v-for="(major, index) in coordinator.majors">
-                    <span v-if="index == 0"></span>
-                    <span v-else-if="index == 1">{{ major }}</span>
+                    <span v-if="index == 0">{{ major }}</span>
                     <span v-else>, {{ major }}</span>
                 </span>
             </td>
