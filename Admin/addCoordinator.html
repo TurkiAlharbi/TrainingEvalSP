@@ -49,13 +49,32 @@
                     </div>
                 </fieldset>
                 <br/>
-                <button class="btn btn-success">Add</button>
             </form>
+            <button class="btn btn-success" @click="addCoord">Add</button>
         </app-dashboard>
 
     </div>
-
+    <script>
+        function addCoord() {
+            var name = $('#name').val();
+            var email = $('#email').val();
+            var majors = $('#majors').val();
+            var password = email;//temp
+            createUser(email, password, "Coordinator");
+            write2DB("coordinators/" + email.split(".").join(" "), { name: name, majors: majors });
+            setTimeout(function () {
+                $('#name').val("");
+                $('#email').val("");
+                $('#majors').val("");
+            }, 1000);
+        }
+    </script>
     <script src="../lib/vue/vue-2.5.0.min.js "></script>
+
+    <!-- Firebase -->
+    <script src="../lib/firebase/firebase-4.6.0.min.js"></script>
+    <script src="../login/config.js"></script>
+    <script src="../login/functions.js"></script>
 
     <script src="../components/admin/app-remove-coordinators.js "></script>
     <script src="../components/page-dashboard/app-dashboard.js "></script>

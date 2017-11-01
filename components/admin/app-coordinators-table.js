@@ -10,7 +10,8 @@ app_coordinators_table_template = `
             <td> {{ coordinator.name }} </td>
             <td>
                 <span v-for="(major, index) in coordinator.majors">
-                    <span v-if="!index">{{ major }}</span>
+                    <span v-if="index == 0"></span>
+                    <span v-else-if="index == 1">{{ major }}</span>
                     <span v-else>, {{ major }}</span>
                 </span>
             </td>
@@ -22,15 +23,32 @@ app_coordinators_table_template = `
 
 headers = ["Name", "Majors", "Numbr of students"];
 
-coordinators = [
-    { name: "Husni Al-Muhtaseb", majors: ["ICS", "SWE"], students: "55" },
-    { name: "Yahya Osais", majors: ["COE"], students: "10" },
-    { name: "Mohammed Antar", majors: ["ME"], students: "100" },
-    { name: "Mahmoud Kassas", majors: ["EE"], students: "120" },
-];
+
+
+var coordRef = firebase.database().ref('coordinators/');
+var coordinators = [];
+
+coordRef.on('value', function (snapshot) {
+    while (coordinators.length > 0)
+        coordinators.pop();
+
+    vals = snapshot.val();
+
+    for (var key in vals) {
+        coord = vals[key];
+        // coord["email"] = key.split(" ").join(".");
+        coord["students"] = "TBD";
+        coordinators.push(coord);
+    }
+});
 
 app_coordinators_table = {
     template: app_coordinators_table_template,
+    data() {
+        return {
+            coordinators: coordinators
+        }
+    }
 };
 
 Vue.component('app-coordinators-table', app_coordinators_table);

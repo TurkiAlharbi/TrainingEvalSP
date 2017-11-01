@@ -148,6 +148,10 @@
                 <app-supervisor></app-supervisor>
             </div>
 
+            <div v-else-if="auth.type == 'disabled'">
+                <p>Your account is disabled, contact admin!</p>
+            </div>
+
             <div v-else>
                 <p>Loading!</p>
             </div>
@@ -156,9 +160,18 @@
 
     <script src="../lib/vue/vue-2.5.0.min.js"></script>
 
+    <!-- Firebase -->
     <script src="../lib/firebase/firebase-4.6.0.min.js"></script>
     <script src="./login/config.js"></script>
     <script src="./login/functions.js"></script>
+    <script>
+        function newLogin() {
+            app.login();
+            setTimeout(getUserType, 2000);
+        };
+
+        setTimeout(getUserType, 1000);
+    </script>
 
     <!-- Login's -->
     <script src="./components/login/app-field.js"></script>

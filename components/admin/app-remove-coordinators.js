@@ -10,28 +10,50 @@ app_remove_coordinators_template = `
             <td> {{ coordinator.name }} </td>
             <td>
                 <span v-for="(major, index) in coordinator.majors">
-                    <span v-if="!index">{{ major }}</span>
+                    <span v-if="index == 0"></span>
+                    <span v-else-if="index == 1">{{ major }}</span>
                     <span v-else>, {{ major }}</span>
                 </span>
             </td>
             <td> {{ coordinator.students }} </td>
-            <td> <button class="btn btn-danger" style="padding:0px 5px;">X</button> </td>
+            <td> <button class="btn btn-danger" style="padding:0px 5px;" @click="remCoord(coordinator.key)">X</button> </td>
         </tr>
     </tbody>
 </table>
 `;
 
-headers = ["Name", "Majors", "Numbr of students","Remove"];
+headers = ["Name", "Majors", "Numbr of students", "Remove"];
 
-coordinators = [
-    { name: "Husni Al-Muhtaseb", majors: ["ICS", "SWE"], students: "55" },
-    { name: "Yahya Osais", majors: ["COE"], students: "10" },
-    { name: "Mohammed Antar", majors: ["ME"], students: "100" },
-    { name: "Mahmoud Kassas", majors: ["EE"], students: "120" },
-];
+var coordRef = firebase.database().ref('coordinators/');
+var coordinators = [];
+
+coordRef.on('value', function (snapshot) {
+    while (coordinators.length > 0)
+        coordinators.pop();
+
+    vals = snapshot.val();
+
+    for (var key in vals) {
+        coord = vals[key];
+        // coord["email"] = key.split(" ").join(".");
+        coord["students"] = "TBD";
+        coord["key"] = key;
+        coordinators.push(coord);
+    }
+});
+
+function remCoord(coordKey) {
+    firebase.database().ref('coordinators/' + coordKey).remove();
+    write2DB('users/' + coordKey, { type: "disabled" });
+}
 
 app_remove_coordinators = {
     template: app_remove_coordinators_template,
+    data() {
+        return {
+            coordinators: coordinators
+        }
+    }
 };
 
 Vue.component('app-remove-coordinators', app_remove_coordinators);

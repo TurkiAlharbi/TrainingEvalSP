@@ -7,16 +7,13 @@ var secondaryApp = firebase.initializeApp(config, "Secondary");
 function createUser(email, password, type) {
     secondaryApp.auth().createUserWithEmailAndPassword(email, password)
         .then(function (firebaseUser) {
-            json = {
-                type: type,
-            };
             record = 'users/' + email.split(".").join(" ");
-            write2DB(record, json)
-            console.log('Successfully created ' + email)
+            write2DB(record, { type: type, })
+            alert('Successfully created ' + email)
         })
         .catch(
         function (error) {
-            console.log(error);
+            alert(error);
         });
 }
 
@@ -31,10 +28,3 @@ function getUserType() {
             app.auth.type = snapshot.val() && snapshot.val().type;
         });
 };
-
-function newLogin() {
-    app.login();
-    setTimeout(getUserType, 2000);
-};
-
-setTimeout(getUserType, 1000);
