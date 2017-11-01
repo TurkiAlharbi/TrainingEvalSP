@@ -17,7 +17,9 @@
 </head>
 
 <body>
-    <div id="app" v-cloak>        
+    <div id="app" v-cloak>
+        <br/>
+        <br/>
         <app-dashboard title="Training Contract">
             <form>
                 <fieldset>
@@ -43,12 +45,8 @@
                     <legend>Training Opportunity</legend>
                     <div class="input-group"><span class="input-group-addon"> Duration: </span>
                     <div class="input-group-btn" data-toggle="buttons">
-                        <label class="btn btn-primary" style="width: 50%;">
-                            <input type="radio" name="options" id="option1">8 Weeks (Summer Training)
-                        </label>
-                        <label class="btn btn-primary" style="width: 50%;">
-                            <input type="radio" name="options" id="option2">28 Weeks (Cooperative Work)
-                        </label>
+                        <label class="btn btn-primary" style="width: 50%;"><input type="radio" name="options" id="option1">Summer Training<br/>(8 Weeks)</label>
+                        <label class="btn btn-primary" style="width: 50%;"><input type="radio" name="options" id="option2">Cooperative Work<br/>(28 Weeks)</label>
                     </div></div><br/>
                     <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Location: </span><input id="location" type="text" class="form-control"></div><br>
                     <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Transportation: </span><input id="trans" type="text" class="form-control"></div><br>
