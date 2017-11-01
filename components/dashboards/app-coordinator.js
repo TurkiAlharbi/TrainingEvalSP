@@ -4,23 +4,23 @@ template = `
     <app-header name="Coordinator"></app-header>
 
     <app-dashboard title="Advisors management">
-        <app-option name="View advisors" link="./viewAdvisors.html"></app-option>
-        <app-option name="Add an advisor" link="./addAdvisor.html"></app-option>
-        <app-option name="Remove an advisor" link="./removeAdvisors.html"></app-option>
+        <app-option name="View advisors" link="./Coordinator/viewAdvisors.html"></app-option>
+        <app-option name="Add an advisor" link="./Coordinator/addAdvisor.html"></app-option>
+        <app-option name="Remove an advisor" link="./Coordinator/removeAdvisors.html"></app-option>
     </app-dashboard>
 
     <app-dashboard title="Students management">
-        <app-option name="View students" link="./viewStudents.html"></app-option>
+        <app-option name="View students" link="./Coordinator/viewStudents.html"></app-option>
         <app-option name="Add a student" link="addStudent.html"></app-option>
-        <app-option name="Remove a student" link="./removeStudents.html"></app-option>
-        <app-option name="Assign students to advisors" link="./assign.html"></app-option>
+        <app-option name="Remove a student" link="./Coordinator/removeStudents.html"></app-option>
+        <app-option name="Assign students to advisors" link="./Coordinator/assign.html"></app-option>
     </app-dashboard>
 
     <app-dashboard title="Evaluations management">
-        <app-option name="View evaluations" link="./viewEvaluations.html"></app-option>
-        <app-option name="Set up forms" link="./setup.html"></app-option>
-        <app-option name="Set up evaluation availability " link="./evaluationAvailability.html"></app-option>
-        <app-option name="Get students' marks" link="./getMarks.html"></app-option>
+        <app-option name="View evaluations" link="./Coordinator/viewEvaluations.html"></app-option>
+        <app-option name="Set up forms" link="./Coordinator/setup.html"></app-option>
+        <app-option name="Set up evaluation availability " link="./Coordinator/evaluationAvailability.html"></app-option>
+        <app-option name="Get students' marks" link="./Coordinator/getMarks.html"></app-option>
     </app-dashboard>
 
     <div class="container" style="text-align: center;">
