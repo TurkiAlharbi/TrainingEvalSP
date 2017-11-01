@@ -54,7 +54,7 @@
                                                                     <div class="input-group-addon">
                                                                         <span class="glyphicon glyphicon-user"></span>
                                                                     </div>
-                                                                    <input v-model:email="auth.email" type="text" placeholder="Username" name="uname" class="form-control">
+                                                                    <input v-model:email="auth.email" type="text" placeholder="Username" name="uname" class="form-control" @keydown.enter="newLogin">
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -66,7 +66,7 @@
                                                                     <div class="input-group-addon">
                                                                         <span class="glyphicon glyphicon-lock"></span>
                                                                     </div>
-                                                                    <input v-model:password="auth.password" type="password" placeholder="Password" name="pass" class="form-control">
+                                                                    <input v-model:password="auth.password" type="password" placeholder="Password" name="pass" class="form-control" @keydown.enter="newLogin">
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -149,7 +149,7 @@
             </div>
 
             <div v-else>
-                <p>Wait for it</p>
+                <p>Loading!</p>
             </div>
         </div>
     </div>
