@@ -6,7 +6,7 @@ app_page_header_template = `
     </div>
     <div class="container" v-else>
         <br/>
-        <a href="./">
+        <a href="../">
             <button class="btn btn-warning">Return to dashboard</button>
         </a>
         <hr/>
