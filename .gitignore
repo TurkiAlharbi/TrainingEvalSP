@@ -1,4 +1,4 @@
 node_modules
 firebase-debug\.log
 
-Auth/scripts/config\.js
+login/scripts/config\.js
