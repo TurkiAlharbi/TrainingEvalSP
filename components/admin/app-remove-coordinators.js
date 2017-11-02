@@ -42,8 +42,15 @@ coordRef.on('value', function (snapshot) {
 });
 
 function remCoord(coordKey) {
+    
+    // Remove from coordinators list
     firebase.database().ref('coordinators/' + coordKey).remove();
+    
+    //temp // Disables account -> remove account
     write2DB('users/' + coordKey, { type: "disabled" });
+    
+    //TODO // Removes account
+    // removeUser()
 }
 
 app_remove_coordinators = {
