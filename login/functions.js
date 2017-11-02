@@ -2,6 +2,10 @@ function write2DB(record, json) {
     firebase.database().ref(record).set(json);
 };
 
+function update2DB(record, json) {
+    firebase.database().ref(record).update(json);
+};
+
 
 var secondaryApp = firebase.initializeApp(config, "Secondary");
 function createUser(email, password, type) {
