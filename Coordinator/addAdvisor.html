@@ -36,15 +36,42 @@
                     </div>
                 </fieldset>
                 <br/>
-                <button class="btn btn-success">Add</button>
             </form>
+            <button class="btn btn-success" @click="addAdvisor">Add</button>
         </app-dashboard>
 
     </div>
 
+    <script>
+        function addAdvisor() {
+            var name = $('#name').val();
+            var email = $('#email').val();
+            var password = email;//temp
+
+            //Create an advisor account
+            createUser(email, password, "Advisor");
+            write2DB("advisors/" + email.split(".").join(" "), { name: name });
+
+            //append to the coordinator's advisors
+            coordinator = firebase.auth().currentUser.email.split(".").join(" ");
+            advisor = email.split(".").join(" ");
+            update2DB("coordinators/" + coordinator + "/advisors", { [advisor]: "" });
+
+            //temp
+            //Clears the input fields
+            setTimeout(function () {
+                $('#name').val("");
+                $('#email').val("");
+            }, 1000);
+        }
+    </script>
     <script src="../lib/vue/vue-2.5.0.min.js "></script>
 
-    <script src="../components/admin/app-remove-coordinators.js "></script>
+    <!-- Firebase -->
+    <script src="../lib/firebase/firebase-4.6.0.min.js"></script>
+    <script src="../login/config.js"></script>
+    <script src="../login/functions.js"></script>
+
     <script src="../components/page-dashboard/app-dashboard.js "></script>
     <script src="../components/page-dashboard/app-page-header.js "></script>
 

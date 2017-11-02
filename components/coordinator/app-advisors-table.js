@@ -8,26 +8,60 @@ app_advisors_table_template = `
     <tbody>
         <tr v-for="advisor in advisors">
             <td> {{ advisor.name }} </td>
-            <td>
-                <span v-for="(major, index) in advisor.majors">
-                    <span v-if="!index">{{ major }}</span>
-                    <span v-else>, {{ major }}</span>
-                </span>
-            </td>
             <td> {{ advisor.students }} </td>
         </tr>
     </tbody>
 </table>
 `;
 
-headers = ["Name", "Majors", "Numbr of students"];
+headers = ["Name", "Numbr of students"];
 
-advisors = [
-    { name: "Husni Al-Muhtaseb", majors: ["ICS", "SWE"], students: "55" },
-];
+var advisors = [];
+
+setTimeout(function () {
+
+    // Gets the cooridnator identifier (email)
+    coordinator = firebase.auth().currentUser.email.split(".").join(" ");
+
+    // Connects to the coordinator data
+    firebase.database().ref("coordinators/" + coordinator + "/advisors").once('value', function (snapshot) {
+        // Clears the old list
+        while (advisors.length > 0)
+            advisors.pop();
+
+        // Gets the snapshot of the data (advisors of the coordinator)
+        vals = snapshot.val();
+
+        // For each advisor in the new list
+        for (var adv in vals) {
+
+            // Connect to the advisors data
+            firebase.database().ref("advisors/" + adv).once('value', function (snapshot2) {
+
+                // Gets the snapshot of the data (current advisor's data)
+                advisorVals = snapshot2.val();
+                var advisor = {};
+                for (var key in advisorVals) {
+                    advisor[key] = advisorVals[key];
+                }
+
+                //temp //TBD
+                advisor["students"] = "TBD";
+
+                // Add to the list of advisors
+                advisors.push(advisor);
+            });
+        }
+    });
+}, 1000);
 
 app_advisors_table = {
     template: app_advisors_table_template,
+    data() {
+        return {
+            advisors: advisors
+        }
+    }
 };
 
 Vue.component('app-advisors-table', app_advisors_table);
