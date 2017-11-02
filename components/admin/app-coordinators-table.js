@@ -22,8 +22,6 @@ app_coordinators_table_template = `
 
 headers = ["Name", "Majors", "Numbr of students"];
 
-
-
 var coordRef = firebase.database().ref('coordinators/');
 var coordinators = [];
 
@@ -34,7 +32,7 @@ coordRef.on('value', function (snapshot) {
     vals = snapshot.val();
 
     for (var key in vals) {
-        coord = vals[key];
+        var coord = vals[key];
         // coord["email"] = key.split(" ").join(".");
         coord["students"] = "TBD";
         coordinators.push(coord);
