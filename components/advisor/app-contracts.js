@@ -43,20 +43,30 @@ app_contracts_template = `
 
 headers = ["Student Name", "Type", "Company"];
 
-contracts = [
-    {
-        id: "1", hash: "#1", name: "Ibrahim Al-Beladi", type: "Summer", company: "Aramco",
-        info: { country: "Saudi Arabia", city: "Dhahran", location: "Expec II", supervisor: "Maha Dossary", cid: "1" }
-    },
-    {
-        id: "2", hash: "#2", name: "Mohammed Alhumaidi", type: "Summer", company: "Tweetso",
-        info: { country: "Saudi Arabia", city: "Dhahran", location: "Techno Valley", supervisor: "Abdulrahman Alshehri", cid: "2" }
-    },
+var conRef = firebase.database().ref('contracts/');
+var contracts = [];
 
-];
+conRef.on('value', function (snapshot) {
+    while (contracts.length > 0)
+        contracts.pop();
 
-app_contracts = {
-    template: app_contracts_template,
+    vals = snapshot.val();
+
+    for (var key in vals) {
+        con = vals[key];
+        // con["email"] = key.split(" ").join(".");
+        con["contracts"] = "TBD";
+        contracts.push(con);
+    }
+});
+
+app_contracts_table = {
+    template: app_contracts_table_template,
+    data() {
+        return {
+            contracts: contracts
+        }
+    }
 };
 
 Vue.component('app-contracts-table', app_contracts);

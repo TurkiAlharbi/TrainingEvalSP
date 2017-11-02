@@ -18,13 +18,30 @@ app_students_table_template = `
 
 headers = ["Name", "Major", "Company", "Supervisor"];
 
-students = [
-    { name: "Ibrahim Al-Beladi", major: "ICS", company: "Aramco", supervisor: "Maha Al-Dossary" },
-    { name: "Mohammed Alhumaidi", major: "ICS", company: "Tweetso", supervisor: "Abdulrahman Alshehri" },
-];
+var stuRef = firebase.database().ref('students/');
+var students = [];
+
+stuRef.on('value', function (snapshot) {
+    while (students.length > 0)
+        students.pop();
+
+    vals = snapshot.val();
+
+    for (var key in vals) {
+        stu = vals[key];
+        // stu["email"] = key.split(" ").join(".");
+        stu["students"] = "TBD";
+        students.push(stu);
+    }
+});
 
 app_students_table = {
     template: app_students_table_template,
+    data() {
+        return {
+            students: students
+        }
+    }
 };
 
 Vue.component('app-students-table', app_students_table);
