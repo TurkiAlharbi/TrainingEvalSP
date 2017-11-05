@@ -25,14 +25,14 @@ setTimeout(function () {
     // Gets the advisor identifier (email)
     advisor = firebase.auth().currentUser.email.split(".").join(" ");
 
-    // Connects to the coordinator data
+    // Connects to the advisors data
     firebase.database().ref("advisors/" + advisor + "/students").once('value', function (snapshot) {
 
         // Clears the old list
         while (students.length > 0)
             students.pop();
 
-        // Gets the snapshot of the data (students of the coordinator)
+        // Gets the snapshot of the data (students of the advisors)
         vals = snapshot.val();
 
         // For each student in the new list
