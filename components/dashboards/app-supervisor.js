@@ -1,9 +1,9 @@
 template = `
 <div>
-    <app-dashboard title="Students management">
+    <app-dashboard-no-container title="Students management">
         <app-option name="View students" link="./Supervisor/viewStudents.html"></app-option>
         <app-option name="Evaluate" link="./Supervisor/evaluate.html"></app-option>
-    </app-dashboard>
+    </app-dashboard-no-container>
 </div>
 `;
 
