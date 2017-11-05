@@ -4,9 +4,9 @@ template = `
     <app-header name="Coordinator"></app-header>
 
     <app-dashboard title="Advisors management">
-        <app-option name="View advisors" link="./Coordinator/viewAdvisors.html"></app-option>
-        <app-option name="Add an advisor" link="./Coordinator/addAdvisor.html"></app-option>
-        <app-option name="Remove an advisor" link="./Coordinator/removeAdvisors.html"></app-option>
+        <app-option name="View advisors" link="./Coordinator/viewAdvisors.html" done="true"></app-option>
+        <app-option name="Add an advisor" link="./Coordinator/addAdvisor.html" done="true"></app-option>
+        <app-option name="Remove an advisor" link="./Coordinator/removeAdvisors.html" done="true"></app-option>
     </app-dashboard>
 
     <app-dashboard title="Students management">
