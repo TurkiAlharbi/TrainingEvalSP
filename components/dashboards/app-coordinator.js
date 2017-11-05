@@ -1,8 +1,5 @@
 template = `
 <div>
-    
-    <app-header name="Coordinator"></app-header>
-
     <app-dashboard title="Advisors management">
         <app-option name="View advisors" link="./Coordinator/viewAdvisors.html" done="true"></app-option>
         <app-option name="Add an advisor" link="./Coordinator/addAdvisor.html" done="true"></app-option>

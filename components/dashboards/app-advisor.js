@@ -1,7 +1,5 @@
 template = `
 <div>
-    <app-header name="Advisor"></app-header>
-
     <app-dashboard title="Supervisors management">
         <app-option name="Add a supervisor" link="./Advisor/addSupervisor.html"></app-option>
     </app-dashboard>
