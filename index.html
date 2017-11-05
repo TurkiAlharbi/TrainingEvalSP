@@ -32,6 +32,14 @@
 
         <div v-if="!isAuthenticated">
 
+            <nav class="navbar bg-primary">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <a class="navbar-brand" href="/" style="color:white">Evaluate Me</a>
+                    </div>
+                </div>
+            </nav>
+
             <div class="outer">
                 <div class="middle">
 
@@ -111,24 +119,31 @@
         </div>
 
         <div v-if="isAuthenticated" id="content">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="panel panel-default row">
-                        <div class="panel-heading container">
-                            <h3 class="panel-title col-xs-8 col-sm-9 col-md-10 col-lg-11">Welcome {{displayName()}}</h3>
-                            <button @click="signOut" class="btn btn-danger col-xs-4 col-sm-3 col-md-2 col-lg-1" type="button">Sign out</button>
-                        </div>
-                        <div class="panel-body" v-if="auth.message !== ''">
-                            <div class="alert" role="alert" :class="{'alert-danger': auth.hasErrors, 'alert-success': !auth.hasErrors}">
-                                <button @click="dismissAlert" type="button" class="close">
-                                    <span aria-hidden="true">×</span>
-                                </button>
-                                <p>
-                                    <strong>{{auth.message}}</strong>
-                                </p>
-                            </div>
-                        </div>
+
+            <nav class="navbar bg-primary">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <a class="navbar-brand" href="/" style="color:white">Evaluate Me</a>
                     </div>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="#" @click="signOut" style="color:white">
+                                Sign out
+                                <span class="glyphicon glyphicon-log-out"></span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <div v-if="auth.message !== ''">
+                <div class="alert" role="alert" :class="{'alert-danger': auth.hasErrors, 'alert-success': !auth.hasErrors}">
+                    <button @click="dismissAlert" type="button" class="close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <p>
+                        <strong>{{auth.message}}</strong>
+                    </p>
                 </div>
             </div>
 
