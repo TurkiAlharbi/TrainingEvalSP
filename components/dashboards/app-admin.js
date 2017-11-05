@@ -8,7 +8,7 @@ template = `
 
     <app-dashboard-no-container title="Other utilities">
         <app-option name="Generate a report" link="./Admin/generateReport.html"></app-option>
-        <!--<app-option name="Maintain database" link=""></app-option>-->
+        <app-option name="Maintain database" link="https://console.firebase.google.com/" done="true"></app-option>
     </app-dashboard-no-container>
 </div>
 `;
