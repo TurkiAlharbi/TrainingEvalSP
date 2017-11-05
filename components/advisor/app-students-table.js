@@ -18,22 +18,58 @@ app_students_table_template = `
 
 headers = ["Name", "Major", "Company", "Supervisor"];
 
-var stuRef = firebase.database().ref('students/');
 var students = [];
 
-stuRef.on('value', function (snapshot) {
-    while (students.length > 0)
-        students.pop();
+setTimeout(function () {
 
-    vals = snapshot.val();
+    // Gets the advisor identifier (email)
+    advisor = firebase.auth().currentUser.email.split(".").join(" ");
 
-    for (var key in vals) {
-        stu = vals[key];
-        // stu["email"] = key.split(" ").join(".");
-        stu["students"] = "TBD";
-        students.push(stu);
-    }
-});
+    // Connects to the coordinator data
+    firebase.database().ref("advisors/" + advisor + "/students").once('value', function (snapshot) {
+
+        // Clears the old list
+        while (students.length > 0)
+            students.pop();
+
+        // Gets the snapshot of the data (students of the coordinator)
+        vals = snapshot.val();
+
+        // For each student in the new list
+        for (var stu in vals) {
+
+            // Connect to get the student's data
+            firebase.database().ref("students/" + stu).once('value', function (snapshot2) {
+
+                // Gets the snapshot of the data (current student's data)
+                studentVals = snapshot2.val();
+
+                var student = {};
+                for (var key in studentVals) {
+                    student[key] = studentVals[key];
+                }
+
+                // Trying to get the student's supervisor's data
+                try {
+                    firebase.database().ref("supervisors/" + student.supervisor.split(".").join(" ")).once('value', function (snapshot4) {
+                        supVals = snapshot4.val();
+                        student.supervisor = supVals.name;
+                    });
+                } catch (err) {
+                    console.log(err.name);
+                }
+
+                // Highlight not submitting the contract yet
+                if (student.name == undefined) {
+                    student.name = snapshot2.key + " <no contract>";
+                }
+                // Add to the list of students
+                students.push(student);
+            });
+        }
+    });
+}, 1000);
+
 
 app_students_table = {
     template: app_students_table_template,
