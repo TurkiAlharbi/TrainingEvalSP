@@ -20,23 +20,11 @@ template = `
         <app-option name="Get students' marks" link="./Coordinator/getMarks.html"></app-option>
     </app-dashboard-no-container>
 
-    <div class="container" style="text-align: center;">
-        <hr/>
-        <p class="h3">Advisor's roles</p>
-        <hr/>
-    </div>
-
     <!-- Advisor's view -->
-    <app-dashboard-no-container title="Supervisors management">
+    <app-dashboard-no-container title="Advisor's roles">
         <app-option name="Add a supervisor" link="../Advisor/addSupervisor.html" popup="true"></app-option>
-    </app-dashboard-no-container>
-
-    <app-dashboard-no-container title="Students management">
         <app-option name="View students" link="../Advisor/viewStudents.html" popup="true"></app-option>
         <app-option name="View contracts" link="../Advisor/viewContracts.html" popup="true"></app-option>
-    </app-dashboard-no-container>
-
-    <app-dashboard-no-container title="Other utilities">
         <app-option name="Generate a report" link="../Advisor/generateReport.html" popup="true"></app-option>
     </app-dashboard-no-container>
     <!--  -->
