@@ -113,6 +113,7 @@ var app = new Vue({
 
                 } else {
                     this.auth.user = null;
+                    this.auth.type = null;
                 }
             }.bind(this));
 
