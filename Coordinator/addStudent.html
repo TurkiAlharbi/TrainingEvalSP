@@ -22,15 +22,11 @@
         <app-page-header></app-page-header>
 
         <app-dashboard title="Add students">
-            <form>
-                <fieldset>
-                    <div class="input-group">
-                        <span class="input-group-addon" style="min-width: 150px;"> IDs: </span>
-                        <input id="names" type="text" class="form-control" placeholder="Seperate by ,">
-                    </div>
-                </fieldset>
-                <br/>
-            </form>
+            <div class="input-group">
+                <span class="input-group-addon" style="min-width: 150px;"> IDs: </span>
+                <input id="names" type="text" class="form-control" placeholder="Seperate by ,">
+            </div>
+            <br/>
             <button class="btn btn-success" @click="addStudents">Submit</button>
         </app-dashboard>
 
@@ -39,8 +35,11 @@
     <script>
         function addStudents() {
             var names = $('#names').val();
+            if (names == "")
+                return;
+
             var json = {};
-            console.log(names);
+
             names = names
                 .replace(new RegExp(" ", 'g'), "")
                 .replace(new RegExp("s", 'g'), "")
@@ -51,17 +50,12 @@
                 id = parseInt(names[i]);
                 // Change it by 2030
                 if (id >= 201000000 && id <= 203000000) {
-                    console.log(names[i]);
                     json["s" + id] = "";
                 }
                 else {
                     errors.push(names[i]);
                 }
             }
-
-            console.log("errors:" + errors)
-            console.log(json);
-            // return;
 
             // Add to coordinator's students
             coordinator = firebase.auth().currentUser.email.split(".").join(" ");
