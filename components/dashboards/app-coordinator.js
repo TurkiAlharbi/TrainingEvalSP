@@ -7,9 +7,9 @@ template = `
     </app-dashboard-no-container>
 
     <app-dashboard-no-container title="Students management">
-        <app-option name="View students" link="./Coordinator/viewStudents.html"></app-option>
-        <app-option name="Add a student" link="./Coordinator/addStudent.html"></app-option>
-        <app-option name="Remove a student" link="./Coordinator/removeStudents.html"></app-option>
+        <app-option name="View students" link="./Coordinator/viewStudents.html" done="true"></app-option>
+        <app-option name="Add a student" link="./Coordinator/addStudent.html" done="true"></app-option>
+        <app-option name="Remove a student" link="./Coordinator/removeStudents.html" done="true"></app-option>
         <app-option name="Assign students to advisors" link="./Coordinator/assign.html"></app-option>
     </app-dashboard-no-container>
 
