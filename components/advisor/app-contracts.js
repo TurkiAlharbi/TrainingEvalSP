@@ -1,28 +1,28 @@
-app_contracts_template = `
+app_contracts_table_template = `
 <table class="table table-bordered">
     <thead>
         <tr>
             <th v-for="header in headers">{{ header }}</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody v-if="contracts.length!=0">
 
         <template v-for="(contract,index) in contracts">
 
-            <tr data-toggle="collapse" data-parent="#accordion" :href="contract.hash">
+            <tr v-if="contract" data-toggle="collapse" data-parent="#accordion" :href="'#'+contract.name">
                 <td> {{ contract.name }} </td>
-                <td> {{ contract.type }} </td>
                 <td> {{ contract.company }} </td>
+                <td> {{ contract.supervisor }} </td>
             </tr>
             
             <tr>
-                <div v-if="contract.company" :id="contract.id" class="panel-collapse collapse">
+                <div v-if="contract.company" :id="contract.name" class="panel-collapse collapse">
                     <div class="panel-body">
                         
-                        <p>Country: {{ contract.info.country }}</p>
-                        <p>City: {{ contract.info.city }}</p>
-                        <p>Location: {{ contract.info.location }}</p>
-                        <p>Supervisor: {{ contract.info.supervisor }}</p>
+                        <p>Type: {{ contract.type }}</p>
+                        <p>Country: {{ contract.country }}</p>
+                        <p>City: {{ contract.city }}</p>
+                        <p>Location: {{ contract.location }}</p>
                         <a> More details</a>
                         
                     </div>
@@ -41,32 +41,69 @@ app_contracts_template = `
 
 `;
 
-headers = ["Student Name", "Type", "Company"];
+// headers = ["Student Name", "Type", "Company"];
+headers = ["Student Name", "Company", "Supervisor"];
 
-var conRef = firebase.database().ref('contracts/');
-var contracts = [];
+var students = [];
 
-conRef.on('value', function (snapshot) {
-    while (contracts.length > 0)
-        contracts.pop();
+setTimeout(function () {
 
-    vals = snapshot.val();
+    // Gets the advisor identifier (email)
+    advisor = firebase.auth().currentUser.email.split(".").join(" ");
 
-    for (var key in vals) {
-        con = vals[key];
-        // con["email"] = key.split(" ").join(".");
-        con["contracts"] = "TBD";
-        contracts.push(con);
-    }
-});
+    // Connects to the advisors students
+    firebase.database().ref("advisors/" + advisor + "/students").once('value', function (snapshot) {
+
+        // Clears the old list
+        while (students.length > 0)
+            students.pop();
+
+        // Gets the snapshot of the data (students of the advisors)
+        vals = snapshot.val();
+
+        // For each student in the new list
+        for (var stu in vals) {
+
+            // Connect to get the student's data
+            firebase.database().ref("students/" + stu).once('value', function (snapshot2) {
+
+                // Gets the snapshot of the data (current student's data)
+                studentVals = snapshot2.val();
+
+                var student = {};
+                for (var key in studentVals) {
+                    student[key] = studentVals[key];
+                }
+
+                // Trying to get the student's supervisor's data
+                try {
+                    firebase.database().ref("supervisors/" + student.supervisor.split(".").join(" ")).once('value', function (snapshot4) {
+                        supVals = snapshot4.val();
+                        student.supervisor = supVals.name;
+                    });
+                } catch (err) {
+                    console.log(err.name);
+                }
+
+                // Highlight not submitting the contract yet
+                if (student.name == undefined) {
+                    student.name = snapshot2.key;
+                    student.supervisor = "<No contract>";
+                }
+                // Add to the list of students
+                students.push(student);
+            });
+        }
+    });
+}, 1000);
 
 app_contracts_table = {
     template: app_contracts_table_template,
     data() {
         return {
-            contracts: contracts
+            contracts: students
         }
     }
 };
 
-Vue.component('app-contracts-table', app_contracts);
+Vue.component('app-contracts-table', app_contracts_table);
