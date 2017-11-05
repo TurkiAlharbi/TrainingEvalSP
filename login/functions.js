@@ -36,20 +36,3 @@ function createUser(email, password, type) {
             alert(error);
         });
 }
-
-function getUserType() {
-    // Gets the current logged in user
-    var user = firebase.auth().currentUser;
-    if (user == null)
-        return;
-
-    // Gets the email (unique identifier)
-    var userId = user.email;
-    userId = userId.split(".").join(" ");
-
-    // Gets the type of the account
-    firebase.database().ref('/users/' + userId).once('value').then(
-        function (snapshot) {
-            app.auth.type = snapshot.val() && snapshot.val().type;
-        });
-};

@@ -103,7 +103,14 @@ var app = new Vue({
             // This function changes the auth.user state when the auth status of user changes.
             firebase.auth().onAuthStateChanged(function (user) {
                 if (user) {
+
                     this.auth.user = user;
+                    userId = user.email.split(".").join(" ");
+
+                    firebase.database().ref('/users/' + userId).once('value').then(function (snapshot) {
+                        this.auth.type = snapshot.val() && snapshot.val().type;
+                    });
+
                 } else {
                     this.auth.user = null;
                 }

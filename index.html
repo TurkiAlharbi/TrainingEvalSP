@@ -149,11 +149,19 @@
             </div>
 
             <div v-else-if="auth.type == 'disabled'">
-                <p>Your account is disabled, contact admin!</p>
+                <p>Your account is disabled, contact system's admin!</p>
+            </div>
+
+            <div v-else-if="auth.type == ''">
+                <p>Loading!</p>
+                <!-- //TBD: more visual loading screen -->
             </div>
 
             <div v-else>
-                <p>Loading!</p>
+                <p>
+                    Contact system's admin!
+                    <br/> {{auth.type}}
+                </p>
             </div>
         </div>
     </div>
@@ -164,13 +172,11 @@
     <script src="../lib/firebase/firebase-4.6.0.min.js"></script>
     <script src="./login/config.js"></script>
     <script src="./login/functions.js"></script>
+
     <script>
         function newLogin() {
             app.login();
-            setTimeout(getUserType, 2000);
         };
-
-        setTimeout(getUserType, 1000);
     </script>
 
     <!-- Login's -->
