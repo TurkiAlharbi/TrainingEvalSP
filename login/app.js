@@ -10,7 +10,8 @@ var app = new Vue({
             userName: '',
             type: '',
             hasErrors: false
-        }
+        },
+        loaded: false
     },
 
     methods: {
@@ -52,29 +53,6 @@ var app = new Vue({
                     alert('Failed to signout user, try again later');
                 });
         },
-
-        updateProfile: function () {
-            /**
-             * Update the user profile details.
-             */
-            if (this.auth.userName === '') {
-                alert('Please provide a username to update.');
-                return;
-            }
-
-            var user = firebase.auth().currentUser;
-            var vm = this;
-
-            user.updateProfile({
-                "type": vm.auth.type
-            }).then(function () {
-                vm.auth.message = 'Successfully udpated user profile.';
-            }, function (error) {
-                vm.auth.message = 'Failed to update user profile.';
-                vm.auth.hasErrors = true;
-            });
-        },
-
         dismissAlert: function () {
             /**
              * Dismiss the alert message
@@ -83,17 +61,17 @@ var app = new Vue({
             this.auth.hasErrors = false;
         },
 
-        displayName: function () {
-            /**
-             * Display name computed property
-             */
-            return this.auth.user.displayName ? this.auth.user.displayName : this.auth.user.email;
-        }
-
     },
 
     computed: {
-
+        loadAuth: function () {
+            /**
+             * Determines if the user is authenticated and the page is loaded
+             *
+             * @return boolean
+             */
+            return !this.isAuthenticated && this.loaded;
+        },
         isAuthenticated: function () {
             /**
              * Determines if the user is authenticated
@@ -103,14 +81,12 @@ var app = new Vue({
             // This function changes the auth.user state when the auth status of user changes.
             firebase.auth().onAuthStateChanged(function (user) {
                 if (user) {
-
                     this.auth.user = user;
                     userId = user.email.split(".").join(" ");
 
                     firebase.database().ref('/users/' + userId).once('value').then(function (snapshot) {
                         app.auth.type = snapshot.val() && snapshot.val().type;
                     });
-
                 } else {
                     this.auth.user = null;
                     this.auth.type = null;
@@ -123,3 +99,8 @@ var app = new Vue({
     }
 
 });
+
+// Allows the page to load without showing login transtion
+setTimeout(function () {
+    app.loaded = true;
+}, 1500);

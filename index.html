@@ -7,41 +7,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link href="../lib/bootstrap/bootstrap.3.3.0.min.css" rel="stylesheet">
-    <style>
-        [v-cloak] {
-            display: none;
-        }
-
-
-        /* Center login */
-
-        .outer {
-            display: table;
-            position: absolute;
-            height: 100%;
-        }
-
-        .middle {
-            display: table-cell;
-            vertical-align: middle;
-        }
-    </style>
+    <script src="./lib/jquery/jquery-3.2.1.min.js"></script>
+    <link href="./css/index.css" rel="stylesheet">
 
     <title>Evaluate Me</title>
 </head>
 
 <body>
-    <div id="app" class="container" v-cloak>
-
-        <div v-if="!isAuthenticated">
-
-            <nav class="navbar bg-primary">
-                <div class="container-fluid">
-                    <div class="navbar-header">
-                        <a class="navbar-brand" href="/" style="color:white">Evaluate Me</a>
-                    </div>
+    <div id="app" v-cloak>
+        <nav class="navbar bg-primary" style="margin-bottom:50px;border-radius: 0;">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a id="brand" class="navbar-brand" href="/" style="color:white">Evaluate Me</a>
                 </div>
-            </nav>
+                <ul class="nav navbar-nav navbar-right" v-if="isAuthenticated">
+                    <li>
+                        <a id="signout" href="#" @click="signOut" style="color:white">
+                            Sign out
+                            <span class="glyphicon glyphicon-log-out"></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <div v-if="loadAuth" class="container">
 
             <div class="outer">
                 <div class="middle">
@@ -121,23 +111,7 @@
 
         </div>
 
-        <div v-if="isAuthenticated" id="content">
-
-            <nav class="navbar bg-primary" style="margin-bottom:50px">
-                <div class="container-fluid">
-                    <div class="navbar-header">
-                        <a class="navbar-brand" href="/" style="color:white">Evaluate Me</a>
-                    </div>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li>
-                            <a href="#" @click="signOut" style="color:white">
-                                Sign out
-                                <span class="glyphicon glyphicon-log-out"></span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
+        <div v-if="isAuthenticated" id="content" class="container">
 
             <div v-if="auth.message !== ''">
                 <div class="alert" role="alert" :class="{'alert-danger': auth.hasErrors, 'alert-success': !auth.hasErrors}">
@@ -170,19 +144,18 @@
                 <p>Your account is disabled, contact system's admin!</p>
             </div>
 
-            <div v-else-if="auth.type == ''">
-                <p>Loading!</p>
-                <!-- //TBD: more visual loading screen -->
-            </div>
-
-            <div v-else>
-                <p>
-                    Contact system's admin!
-                    <br/> {{auth.type}}
-                </p>
-            </div>
         </div>
+
+        <div v-if="!loaded">
+            <p style="text-align:center">Loading!</p>
+            <!-- //TBD: more visual loading screen -->
+        </div>
+        <div style="margin:75px"></div>
+        <footer class="footer navbar-fixed-bottom" style="background-color:#428bca !important; text-align: center;margin-top:100px">
+            <p style="padding: 10px;color: white;">Evaluate Me © 2017</p>
+        </footer>
     </div>
+
 
     <script src="../lib/vue/vue-2.5.0.min.js"></script>
 
@@ -210,11 +183,10 @@
     <script src="./components/dashboards/app-supervisor.js "></script>
 
     <!-- Common -->
-    <!-- <script src="./components/page-dashboard/app-header.js "></script> -->
     <script src="./components/page-dashboard/app-option.js "></script>
     <script src="./components/page-dashboard/app-dashboard.js "></script>
     <script src="./components/page-dashboard/app-dashboard-no-container.js "></script>
-    
+
     <!-- Vue main -->
     <script src="./login/app.js"></script>
 </body>
