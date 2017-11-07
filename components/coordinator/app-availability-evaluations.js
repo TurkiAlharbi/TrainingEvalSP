@@ -12,11 +12,13 @@ app_availability_evaluations_template = `
                     <tr data-toggle="collapse" data-parent="#accordion" :href="eval.hash">
                         <td> {{ eval.id }} </td>
                         <td> {{ eval.title }} </td>
-                        <td> 
+                        <td> {{ eval.terms }} 
+                            <!--
                             <span v-for="(term, index) in eval.terms">
                                 <span v-if="!index">{{ term }}</span>
                                 <span v-else>, {{ term }}</span>
                             </span>
+                            -->
                         </td>
                     </tr>
                     
@@ -25,17 +27,15 @@ app_availability_evaluations_template = `
                             <div class="panel-body">
                                 <p>Status: {{ eval.status }}</p>
                                 <p v-if="eval.status != 'Drafted'">Number of evaluations: {{ eval.numOfEvals }}</p>
-                                <button class="btn btn-info" v-if="eval.status == 'Drafted'">Save & Open</button>
-                                <button class="btn btn-success"  v-if="eval.status == 'Closed'">Open</button>
-                                <p v-if="eval.status =='Opened'">Will be closed automatically in {{eval.autoClose}}</p>
-                                <button class="btn btn-danger" v-if="eval.status == 'Opened'">Close now</button>
+                                <button class="btn btn-info" v-if="eval.status == 'Drafted'" @click="open(coordinator+'/'+eval.id)">Save & Open</button>
+                                <button class="btn btn-success"  v-if="eval.status == 'Closed'" @click="open(coordinator+'/'+eval.id)">Open</button>
+                                <p v-if="eval.status =='Opened'">Will be closed automatically in {{eval.autoClose}} day(s)</p>
+                                <button class="btn btn-danger" v-if="eval.status == 'Opened'" @click="close(coordinator+'/'+eval.id)">Close now</button>
                             </div>
                         </div>
                     </tr>
-        
                     <tr></tr>
                     <tr></tr>
-            
         </template>
     </tbody>
 </table>
@@ -43,14 +43,50 @@ app_availability_evaluations_template = `
 
 headers = ["Id", "Title", "Terms"];
 
-evaluations = [
-    { hash: "#1", id: "1", title: "Summer training form", terms: [163], status: "Opened", numOfEvals: "53", autoClose: "20 days" },
-    { hash: "#2", id: "2", title: "Coop form #1", terms: [163, 171], status: "Closed", numOfEvals: "2" },
-    { hash: "#3", id: "3", title: "Coop form #2", terms: [163, 171], status: "Drafted", numOfEvals: "0" },
-];
+evaluations = [];
+
+setTimeout(function () {
+
+    // Gets the cooridnator identifier (email)
+    coordinator = firebase.auth().currentUser.email.split(".").join(" ");
+
+    // Connects to get the coordinator forms
+    firebase.database().ref("evaluation forms/" + coordinator).once('value', function (snapshot) {
+
+        // Clears the old list
+        while (evaluations.length > 0)
+            evaluations.pop();
+
+        // Gets the snapshot of the data (evaluations of the coordinator)
+        vals = snapshot.val();
+
+        // For each evaluation in the new list
+        for (var eva in vals) {
+            evaluation = vals[eva];
+            evaluation.id = eva;
+            evaluation.hash = "#" + eva;
+            evaluation.numOfEvals = "TBD";
+            console.log(evaluation);
+            evaluations.push(evaluation);
+        }
+    });
+}, 1000);
+
+function open(evaluation) {
+    update2DB('evaluation forms/' + evaluation, { status: "Opened", autoClose: "7" });
+}
+
+function close(evaluation) {
+    update2DB('evaluation forms/' + evaluation, { status: "Closed" });
+}
 
 app_availability_evaluations = {
     template: app_availability_evaluations_template,
+    data() {
+        return {
+            evaluations: evaluations
+        }
+    }
 };
 
 Vue.component('app-availability-evaluations', app_availability_evaluations);

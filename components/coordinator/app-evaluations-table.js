@@ -9,11 +9,13 @@ app_evaluations_table_template = `
         <tr v-for="evaluation in evaluations">
             <td> {{ evaluation.id }} </td>
             <td> {{ evaluation.title }} </td>
-            <td> 
+            <td> {{ evaluation.terms }} 
+                <!--
                 <span v-for="(term, index) in evaluation.terms">
                     <span v-if="!index">{{ term }}</span>
                     <span v-else>, {{ term }}</span>
                 </span>
+                -->
             </td>
             <td> {{ evaluation.status }} </td>
             <td> {{ evaluation.numOfEvals }} </td>
@@ -25,14 +27,41 @@ app_evaluations_table_template = `
 
 headers = ["Id", "Title", "Terms", "Status", "Number of evaluations"];
 
-evaluations = [
-    { id: "1", title: "Summer training form", terms: [163], status: "Opened", numOfEvals: "53" },
-    { id: "2", title: "Coop form #1", terms: [163, 171], status: "Closed", numOfEvals: "2" },
-    { id: "3", title: "Coop form #2", terms: [163, 171], status: "Drafted", numOfEvals: "-" },
-];
+evaluations = [];
+
+setTimeout(function () {
+
+    // Gets the cooridnator identifier (email)
+    coordinator = firebase.auth().currentUser.email.split(".").join(" ");
+
+    // Connects to get the coordinator forms
+    firebase.database().ref("evaluation forms/" + coordinator).once('value', function (snapshot) {
+
+        // Clears the old list
+        while (evaluations.length > 0)
+            evaluations.pop();
+
+        // Gets the snapshot of the data (evaluations of the coordinator)
+        vals = snapshot.val();
+
+        // For each evaluation in the new list
+        for (var eva in vals) {
+            evaluation = vals[eva];
+            evaluation.id = eva;
+            evaluation.numOfEvals = "TBD";
+            
+            evaluations.push(evaluation);
+        }
+    });
+}, 1000);
 
 app_evaluations_table = {
     template: app_evaluations_table_template,
+    data() {
+        return {
+            evaluations: evaluations
+        }
+    }
 };
 
 Vue.component('app-evaluations-table', app_evaluations_table);
