@@ -16,10 +16,11 @@ template = `
     <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Company business<br/>in brief:  </span><textarea id="textArea" rows=2 class="form-control"></textarea></div><br/>                    
     <hr>
     <legend>Training Opportunity</legend>
-    <div class="input-group"><span class="input-group-addon"> Duration: </span>
+    <div class="input-group"><span class="input-group-addon"> Type: </span>
     <div class="input-group-btn" data-toggle="buttons">
-        <label class="btn btn-primary" style="width: 50%;"><input type="radio" name="options" value="summer">Summer Training<br/>(8 Weeks)</label>
-        <label class="btn btn-primary" style="width: 50%;"><input type="radio" name="options" value="coop">Cooperative Work<br/>(28 Weeks)</label>
+        <label class="btn btn-primary" style="width: 34%;"><input type="radio" name="options" value="summer">Summer Training<br/>(8 Weeks)</label>
+        <label class="btn btn-primary" style="width: 33%;"><input type="radio" name="options" value="coop">Cooperative Work<br/>(28 Weeks)</label>
+        <label class="btn btn-primary" style="width: 33%;"><input type="radio" name="options" value="internship">Internship<br/>(18 Weeks)</label>
     </div></div><br/>
     <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Location: </span><input id="location" type="text" class="form-control"></div><br>
     <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Transportation: </span><input id="trans" type="text" class="form-control"></div><br>
@@ -72,6 +73,11 @@ function submit() {
     json = {
         name: stuname,
         major: major,
+    };
+
+    update2DB("students/" + id, json);
+
+    json = {
         company: company,
         address: address,
         country: country,
@@ -92,7 +98,9 @@ function submit() {
         fax: fax,
     };
 
-    update2DB("students/" + id, json);
+    update2DB("contracts/" + id, json);
+    
+
     setTimeout(function () {
         window.location.href = "./contractSubmitted.html";
     }, 2500);
@@ -105,6 +113,6 @@ function testToken(token) {
 
 app_contract = {
     template: template
-}
+};
 
 Vue.component("app-contract", app_contract);
