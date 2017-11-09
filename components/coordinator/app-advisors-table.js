@@ -53,7 +53,7 @@ function updateView() {
                 }
 
                 //temp //TBD
-                advisor["students"] = "TBD";
+                advisor.students = "TBD";
 
                 // Add to the list of advisors
                 advisors.push(advisor);

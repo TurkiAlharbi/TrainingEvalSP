@@ -9,22 +9,18 @@ app_contracts_table_template = `
 
         <template v-for="(contract,index) in contracts">
 
-            <tr v-if="contract" data-toggle="collapse" data-parent="#accordion" :href="'#'+contract.name">
+            <tr v-if="contract" data-toggle="collapse" data-parent="#accordion" :href="'#'+contract.id">
                 <td> {{ contract.name }} </td>
                 <td> {{ contract.company }} </td>
                 <td> {{ contract.supervisor }} </td>
             </tr>
             
             <tr>
-                <div v-if="contract.company" :id="contract.name" class="panel-collapse collapse">
+                <div v-if="contract.company != ''" :id="contract.id" class="panel-collapse collapse">
                     <div class="panel-body">
-                        
-                        <p>Type: {{ contract.type }}</p>
-                        <p>Country: {{ contract.country }}</p>
-                        <p>City: {{ contract.city }}</p>
-                        <p>Location: {{ contract.location }}</p>
-                        <a> More details</a>
-                        
+                        <span v-for="(thing,i) in contract.contract">
+                        <p v-if="thing!=''">{{i}} : {{thing}}</p>
+                        </span>
                     </div>
                 </div>
             </tr>
@@ -55,62 +51,83 @@ firebase.auth().onAuthStateChanged(function (user) {
 
 function updateView() {
 
-    // Gets the advisor identifier (email)
-    advisor = firebase.auth().currentUser.email.split(".").join(" ");//or coordinator
-    
-    firebase.database().ref("users/" + advisor).once('value', function (snapshot0) {
+    // Gets email (identifier)
+    advisor = firebase.auth().currentUser.email.split(".").join(" ");
 
-        path = "advisors/";
-        if (snapshot0.val().type == "Coordinator") {
-            path = "coordinators/";
-        }
+    // Connects to the coordinator data
+    firebase.database().ref("advisorStudent/" + advisor).once('value', function (snapshot) {
 
-        // Connects to the advisor's/coordinator's students
-        firebase.database().ref(path + advisor + "/students").once('value', function (snapshot) {
+        // Clears the old list
+        while (students.length > 0)
+            students.pop();
 
-            // Clears the old list
-            while (students.length > 0)
-                students.pop();
-
-            // Gets the snapshot of the data (students of the advisors)
-            vals = snapshot.val();
-
-            // For each student in the new list
-            for (var stu in vals) {
-
-                // Connect to get the student's data
-                firebase.database().ref("students/" + stu).once('value', function (snapshot2) {
-
-                    // Gets the snapshot of the data (current student's data)
-                    studentVals = snapshot2.val();
-
-                    var student = {};
-                    for (var key in studentVals) {
-                        student[key] = studentVals[key];
-                    }
-
-                    // Trying to get the student's supervisor's data
-                    try {
-                        firebase.database().ref("supervisors/" + student.supervisor.split(".").join(" ")).once('value', function (snapshot4) {
-                            supVals = snapshot4.val();
-                            student.supervisor = supVals.name;
-                        });
-                    } catch (err) {
-                        console.log(err.name);
-                    }
-
-                    // Highlight not submitting the contract yet
-                    if (student.name == undefined) {
-                        student.name = snapshot2.key;
-                        student.supervisor = "<No contract>";
-                    }
-                    // Add to the list of students
-                    students.push(student);
-                });
+        // Gets the snapshot of the data (students of the coordinator)
+        vals = snapshot.val();
+        console.log(vals);
+        // For each term
+        for (var term in vals) {
+            // For each major
+            for (var major in vals[term]) {
+                // For each student 
+                for (var stu in vals[term][major]) {
+                    fetchStudent(stu, major, term, vals);
+                }
             }
-        });
+        }
     });
 }
+
+function fetchStudent(stu, major, term, vals) {
+
+    // Connect to get the student's data
+    firebase.database().ref("students/" + stu).once('value', function (snapshot2) {
+
+        // Gets the snapshot of the data (current student's data)
+        studentVals = snapshot2.val();
+
+        // Stores the students data
+        var student = {
+            period: term,
+            id: snapshot2.key,
+            major: major.toUpperCase(),
+            supervisor: vals[term][major][snapshot2.key].supervisor,
+            company: "TBD",
+        };
+
+        // Get students data
+        for (var key in studentVals)
+            student[key] = studentVals[key];
+
+        // Trying to get the student's supervisor's data
+        try {
+            firebase.database().ref("supervisors/" + student.supervisor.split(".").join(" ")).once('value', function (snapshot4) {
+                supVals = snapshot4.val();
+                student.supervisor = supVals.name;
+            });
+        } catch (err) {
+            console.log(err.name);
+        }
+
+        // Trying to get the student's supervisor's data
+        try {
+            firebase.database().ref("contracts/" + stu).once('value', function (snapshot5) {
+                conVals = snapshot5.val();
+                student.contract = conVals;
+            });
+        } catch (err) {
+            console.log(err.name);
+        }
+
+        // Highlight not submitting the contract yet
+        if (student.name == undefined) {
+            student.name = " <no contract>";
+        }
+
+        // Add to the list of students
+        students.push(student);
+    });
+}
+
 
 app_contracts_table = {
     template: app_contracts_table_template,

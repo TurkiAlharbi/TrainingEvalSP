@@ -22,58 +22,10 @@
         <app-page-header></app-page-header>
 
         <app-dashboard title="Add students">
-            <div class="input-group">
-                <span class="input-group-addon" style="min-width: 150px;"> IDs: </span>
-                <input id="names" type="text" class="form-control" placeholder="Seperate by ,">
-            </div>
-            <br/>
-            <button class="btn btn-success" @click="addStudents">Submit</button>
+            <app-add-student></app-add-student>
         </app-dashboard>
 
     </div>
-
-    <script>
-        function addStudents() {
-            var names = $('#names').val();
-            if (names == "")
-                return;
-
-            var json = {};
-
-            names = names
-                .replace(new RegExp(" ", 'g'), "")
-                .replace(new RegExp("s", 'g'), "")
-                .replace(new RegExp("S", 'g'), "")
-                .split(",");
-            errors = [];
-            for (i in names) {
-                id = parseInt(names[i]);
-                // Change it by 2030
-                if (id >= 201000000 && id <= 203000000) {
-                    json["s" + id] = "";
-                }
-                else {
-                    errors.push(names[i]);
-                }
-            }
-
-            // Add to coordinator's students
-            coordinator = firebase.auth().currentUser.email.split(".").join(" ");
-            update2DB("coordinators/" + coordinator + "/students", json);
-
-            //temp
-            //Clears the input fields
-            setTimeout(function () {
-                $('#names').val("");
-                msg = Object.keys(json).length + " student(s) are processed"
-                if (errors.length != 0) {
-                    msg += ", and " + errors.length + " had errors processing: ";
-                    msg += errors.toString();
-                }
-                alert(msg);
-            }, 1000);
-        }
-    </script>
 
     <script src="../lib/vue/vue-2.5.0.min.js "></script>
 
@@ -82,7 +34,7 @@
     <script src="../login/config.js"></script>
     <script src="../login/functions.js"></script>
 
-    <script src="../components/admin/app-remove-coordinators.js "></script>
+    <script src="../components/coordinator/app-add-student.js "></script>
     <script src="../components/page-dashboard/app-dashboard.js "></script>
     <script src="../components/page-dashboard/app-page-header.js "></script>
 

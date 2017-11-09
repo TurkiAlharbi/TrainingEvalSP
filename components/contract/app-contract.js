@@ -71,35 +71,37 @@ function submit() {
         return;
 
     json = {
-        name: stuname,
-        major: major,
+        "name": stuname,
+        "supervisor": men_email,
+        "company": company,
+        // "major": major
     };
 
     update2DB("students/" + id, json);
 
     json = {
-        company: company,
-        address: address,
-        country: country,
-        zip: zip,
-        city: city,
-        url: url,
-        description: textArea,
-        location: location,
-        trans: trans,
-        housing: housing,
-        salary: salary,
-        benefits: benefits,
-        mentor: mentor,
-        mentor_pos: men_pos,
-        mentor_email: men_email,
-        mentor_phone: men_phone,
-        mentor_mobile: men_mobile,
-        fax: fax,
+        "company  country": country,
+        "company address": address,
+        "company city": city,
+        "company description": textArea,
+        "company location": location,
+        "company url": url,
+        "company zip": zip,
+
+        "salary": salary,
+        "salary transportation": trans,
+        "salary housing": housing,
+        "salary - benefits": benefits,
+
+        // "supervisor name": mentor,
+        "supervisor position": men_pos,
+        "supervisor phone": men_phone,
+        "supervisor mobile": men_mobile,
+        "supervisor fax": fax,
     };
 
     update2DB("contracts/" + id, json);
-    
+
 
     setTimeout(function () {
         window.location.href = "./contractSubmitted.html";
