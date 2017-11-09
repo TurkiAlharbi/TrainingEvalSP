@@ -25,19 +25,28 @@ headers = ["Name", "Majors", "Numbr of students"];
 var coordRef = firebase.database().ref('coordinators/');
 var coordinators = [];
 
-coordRef.on('value', function (snapshot) {
-    while (coordinators.length > 0)
-        coordinators.pop();
-
-    vals = snapshot.val();
-
-    for (var key in vals) {
-        var coord = vals[key];
-        // coord["email"] = key.split(" ").join(".");
-        coord["students"] = "TBD";
-        coordinators.push(coord);
+firebase.auth().onAuthStateChanged(function (user) {
+    if (user) {
+        console.log("updating view")
+        updateView();
     }
 });
+
+function updateView() {
+    coordRef.on('value', function (snapshot) {
+        while (coordinators.length > 0)
+            coordinators.pop();
+
+        vals = snapshot.val();
+
+        for (var key in vals) {
+            var coord = vals[key];
+            // coord["email"] = key.split(" ").join(".");
+            coord["students"] = "TBD";
+            coordinators.push(coord);
+        }
+    });
+}
 
 app_coordinators_table = {
     template: app_coordinators_table_template,

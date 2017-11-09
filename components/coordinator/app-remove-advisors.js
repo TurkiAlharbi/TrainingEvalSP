@@ -34,7 +34,14 @@ function remAdv(adv) {
 
 var advisors = [];
 var coordinator;
-setTimeout(function () {
+firebase.auth().onAuthStateChanged(function (user) {
+    if (user) {
+        console.log("updating view")
+        updateView();
+    }
+});
+
+function updateView() {
 
     // Gets the cooridnator identifier (email)
     coordinator = firebase.auth().currentUser.email.split(".").join(" ");
@@ -71,7 +78,7 @@ setTimeout(function () {
             });
         }
     });
-}, 1000);
+}
 
 app_remove_advisors = {
     template: app_remove_advisors_template,

@@ -20,7 +20,14 @@ headers = ["Name", "Major", "Company", "Supervisor"];
 
 var students = [];
 
-setTimeout(function () {
+firebase.auth().onAuthStateChanged(function (user) {
+    if (user) {
+        console.log("updating view")
+        updateView();
+    }
+});
+
+function updateView() {
 
     // Gets the advisor identifier (email)
     advisor = firebase.auth().currentUser.email.split(".").join(" ");//or coordinator
@@ -76,7 +83,7 @@ setTimeout(function () {
             }
         });
     });
-}, 1000);
+}
 
 
 app_students_table = {

@@ -29,7 +29,14 @@ headers = ["Id", "Title", "Terms", "Status", "Number of evaluations"];
 
 evaluations = [];
 
-setTimeout(function () {
+firebase.auth().onAuthStateChanged(function (user) {
+    if (user) {
+        console.log("updating view")
+        updateView();
+    }
+});
+
+function updateView() {
 
     // Gets the cooridnator identifier (email)
     coordinator = firebase.auth().currentUser.email.split(".").join(" ");
@@ -53,7 +60,7 @@ setTimeout(function () {
             evaluations.push(evaluation);
         }
     });
-}, 1000);
+}
 
 app_evaluations_table = {
     template: app_evaluations_table_template,

@@ -38,7 +38,14 @@ function remStudent(student) {
 
 var students = [];
 
-setTimeout(function () {
+firebase.auth().onAuthStateChanged(function (user) {
+    if (user) {
+        console.log("updating view")
+        updateView();
+    }
+});
+
+function updateView() {
 
     // Gets the cooridnator identifier (email)
     coordinator = firebase.auth().currentUser.email.split(".").join(" ");
@@ -63,7 +70,7 @@ setTimeout(function () {
                 studentVals = snapshot2.val();
 
                 var student = { show: true };
-                
+
                 for (var key in studentVals) {
                     student[key] = studentVals[key];
                 }
@@ -75,7 +82,7 @@ setTimeout(function () {
             });
         }
     });
-}, 1000);
+}
 
 
 app_remove_students = {

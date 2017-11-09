@@ -45,7 +45,14 @@ headers = ["Id", "Title", "Terms"];
 
 evaluations = [];
 
-setTimeout(function () {
+firebase.auth().onAuthStateChanged(function (user) {
+    if (user) {
+        console.log("updating view")
+        updateView();
+    }
+});
+
+function updateView() {
 
     // Gets the cooridnator identifier (email)
     coordinator = firebase.auth().currentUser.email.split(".").join(" ");
@@ -70,7 +77,7 @@ setTimeout(function () {
             evaluations.push(evaluation);
         }
     });
-}, 1000);
+}
 
 function open(evaluation) {
     update2DB('evaluation forms/' + evaluation, { status: "Opened", autoClose: "7" });
