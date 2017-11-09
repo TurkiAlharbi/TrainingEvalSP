@@ -112,12 +112,20 @@ function addStudents() {
         .replace(new RegExp("s", 'g'), "")
         .replace(new RegExp("S", 'g'), "")
         .split(",");
+
+
+    coordinator = firebase.auth().currentUser.email.split(".").join(" ");
+
     errors = [];
     for (i in names) {
         id = parseInt(names[i]);
         // Change it by 2030
         if (id >= 201000000 && id <= 203000000) {
             json["s" + id] = "";
+
+            // Add to coordinator's students
+            student = "s" + id;
+            update2DB("students/" + student, { advisor: coordinator, coordinator: coordinator });
         }
         else {
             errors.push(names[i]);
@@ -125,7 +133,6 @@ function addStudents() {
     }
 
     // Add to coordinator's students
-    coordinator = firebase.auth().currentUser.email.split(".").join(" ");
     update2DB("coordinatorStudent/" + coordinator + "/" + period + "/" + major, json);
 
     //temp

@@ -70,6 +70,21 @@ function submit() {
     if (!testToken(token))
         return;
 
+    if (id == "" || id == undefined)
+        return;
+
+    id = id.replace(new RegExp(" ", 'g'), "")
+        .replace(new RegExp("@kfupm.edu.sa", 'g'), "")
+        .replace(new RegExp("@KFUPM.EDU.SA", 'g'), "")
+        .replace(new RegExp("s", 'g'), "")
+        .replace(new RegExp("S", 'g'), "");
+
+    // Change it by 2030
+    if (id < 201000000 || id > 203000000)
+        return;
+
+    id = "s" + id;
+
     json = {
         "name": stuname,
         "supervisor": men_email,
@@ -80,17 +95,17 @@ function submit() {
     update2DB("students/" + id, json);
 
     json = {
-        "company  country": country,
+        "company   country": country,
+        "company  city": city,
+        "company  location": location,
         "company address": address,
-        "company city": city,
         "company description": textArea,
-        "company location": location,
         "company url": url,
         "company zip": zip,
 
         "salary": salary,
-        "salary transportation": trans,
-        "salary housing": housing,
+        "salary  housing": housing,
+        "salary  transportation": trans,
         "salary - benefits": benefits,
 
         // "supervisor name": mentor,
