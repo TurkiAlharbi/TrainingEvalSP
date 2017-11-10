@@ -1,3 +1,7 @@
+terms = [
+    "171", "172", "172 + 173", "173", "173 + 181",
+    "181", "182", "182 + 183", "183", "183 + 191",];
+
 template = `
 <div>
     <legend>Student Information</legend>
@@ -16,12 +20,24 @@ template = `
     <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Company business<br/>in brief:  </span><textarea id="textArea" rows=2 class="form-control"></textarea></div><br/>                    
     <hr>
     <legend>Training Opportunity</legend>
-    <div class="input-group"><span class="input-group-addon"> Type: </span>
-    <div class="input-group-btn" data-toggle="buttons">
-        <label class="btn btn-primary" style="width: 34%;"><input type="radio" name="options" value="summer">Summer Training<br/>(8 Weeks)</label>
-        <label class="btn btn-primary" style="width: 33%;"><input type="radio" name="options" value="coop">Cooperative Work<br/>(28 Weeks)</label>
-        <label class="btn btn-primary" style="width: 33%;"><input type="radio" name="options" value="internship">Internship<br/>(18 Weeks)</label>
-    </div></div><br/>
+    <div class="input-group">
+        <span class="input-group-addon" style="min-width: 150px;"> Type: </span>
+        <div class="form-group" data-toggle="tooltip">
+            <select class="form-control" id="type">
+                <option value="summer">Summer Training (8 Weeks)</option>
+                <option value="coop">Cooperative Work (28 Weeks)</option>
+                <option value="internship">Internship (18 Weeks)</option>
+            </select>
+        </div>
+    </div><br/>
+    <div class="input-group">
+        <span class="input-group-addon" style="min-width: 150px;"> Term(s): </span>
+        <div class="form-group" data-toggle="tooltip">
+            <select class="form-control" id="terms">
+                <option v-for="term in terms" :value="term">{{term}}</option>
+            </select>
+        </div>
+    </div><br/>
     <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Location: </span><input id="location" type="text" class="form-control"></div><br>
     <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Transportation: </span><input id="trans" type="text" class="form-control"></div><br>
     <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Housing: </span><input id="housing" type="text" class="form-control"></div><br>
@@ -40,6 +56,7 @@ template = `
 </div>
 `;
 
+
 function submit() {
     // TBD
     // Requries validation and token testing
@@ -53,7 +70,8 @@ function submit() {
     var city = $("#city").val();
     var url = $("#url").val();
     var textArea = $("#textArea").val();
-    var option = $(":checked").val();
+    var option = $("#type :checked").val();
+    var terms = $("#terms :checked").val();
     var location = $("#location").val();
     var trans = $("#trans").val();
     var housing = $("#housing").val();
@@ -85,13 +103,18 @@ function submit() {
 
     id = "s" + id;
 
+    period = terms + " " + "(" + option + ")";
+    console.log(period);
+
     json = {
         "name": stuname,
         "supervisor": men_email,
         "company": company,
+        "period": period,
         // "major": major
     };
 
+    // add student's main pieces of information
     update2DB("students/" + id, json);
 
     json = {
@@ -115,9 +138,13 @@ function submit() {
         "supervisor fax": fax,
     };
 
+    // add to contracts
     update2DB("contracts/" + id, json);
 
+    // add to supervisor's list
+    update2DB("supervisors/" + men_email.split(".").join(" ") + "/students", { [id]: "" });
 
+    // Go to contract submitted page
     setTimeout(function () {
         window.location.href = "./contractSubmitted.html";
     }, 2500);
@@ -127,9 +154,8 @@ function testToken(token) {
     return true;
 }
 
-
 app_contract = {
-    template: template
+    template: template,
 };
 
 Vue.component("app-contract", app_contract);

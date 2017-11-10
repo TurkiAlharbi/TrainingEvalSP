@@ -9,41 +9,31 @@ app_availability_evaluations_template = `
 
         <template v-for="(eval,index) in evaluations">
         
-                    <tr data-toggle="collapse" data-parent="#accordion" :href="eval.hash">
-                        <td> {{ eval.id }} </td>
-                        <td> {{ eval.title }} </td>
-                        <td> {{ eval.terms }} 
-                            <!--
-                            <span v-for="(term, index) in eval.terms">
-                                <span v-if="!index">{{ term }}</span>
-                                <span v-else>, {{ term }}</span>
-                            </span>
-                            -->
-                        </td>
-                    </tr>
-                    
-                    <tr>
-                        <div :id="eval.id" class="panel-collapse collapse">
-                            <div class="panel-body">
-                                <p>Status: {{ eval.status }}</p>
-                                <p v-if="eval.status != 'Drafted'">Number of evaluations: {{ eval.numOfEvals }}</p>
-                                <button class="btn btn-info" v-if="eval.status == 'Drafted'" @click="open(coordinator+'/'+eval.id)">Save & Open</button>
-                                <button class="btn btn-success"  v-if="eval.status == 'Closed'" @click="open(coordinator+'/'+eval.id)">Open</button>
-                                <p v-if="eval.status =='Opened'">Will be closed automatically in {{eval.autoClose}} day(s)</p>
-                                <button class="btn btn-danger" v-if="eval.status == 'Opened'" @click="close(coordinator+'/'+eval.id)">Close now</button>
-                            </div>
-                        </div>
-                    </tr>
-                    <tr></tr>
-                    <tr></tr>
+            <tr data-toggle="collapse" data-parent="#accordion" :href="eval.hash" >
+                <td> {{ eval.title }} </td>
+                <td> {{ eval.terms }} </td>
+                <td> {{ eval.status }} </td>
+            </tr>
+            
+            <tr>
+                <div :id="eval.id" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <p v-if="eval.status != 'Drafted'">Number of evaluations: {{ eval.numOfEvals }}</p>
+                        <button class="btn btn-info" v-if="eval.status == 'Drafted'" @click="open(coordinator+'/'+eval.id)">Save & Open</button>
+                        <button class="btn btn-success"  v-if="eval.status == 'Closed'" @click="open(coordinator+'/'+eval.id)">Open</button>
+                        <p v-if="eval.status =='Opened'">Will be closed automatically in {{eval.autoClose}} day(s)</p>
+                        <button class="btn btn-danger" v-if="eval.status == 'Opened'" @click="close(coordinator+'/'+eval.id)">Close now</button>
+                    </div>
+                </div>
+            </tr>
         </template>
     </tbody>
 </table>
 `;
 
-headers = ["Id", "Title", "Terms"];
+headers = ["Title", "Terms", "Status"];
 
-evaluations = [];
+evaluations = [""];
 
 firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
@@ -69,13 +59,20 @@ function updateView() {
 
         // For each evaluation in the new list
         for (var eva in vals) {
-            evaluation = vals[eva];
-            evaluation.id = eva;
-            evaluation.hash = "#" + eva;
-            evaluation.numOfEvals = "TBD";
-            console.log(evaluation);
-            evaluations.push(evaluation);
+            getEval(vals, eva, coordinator)
         }
+    });
+}
+
+function getEval(vals, eva, coordinator) {
+    evaluation = vals[eva];
+    evaluation.id = eva;
+    evaluation.hash = "#" + eva;
+
+    firebase.database().ref("evaluation/" + coordinator + "/" + evaluation.terms + "/" + eva).once('value', function (snapshot2) {
+        vals = snapshot2.val();
+        evaluation.numOfEvals = Object.keys(vals).length;
+        evaluations.push(evaluation);
     });
 }
 

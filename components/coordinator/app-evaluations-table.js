@@ -9,17 +9,9 @@ app_evaluations_table_template = `
         <tr v-for="evaluation in evaluations">
             <td> {{ evaluation.id }} </td>
             <td> {{ evaluation.title }} </td>
-            <td> {{ evaluation.terms }} 
-                <!--
-                <span v-for="(term, index) in evaluation.terms">
-                    <span v-if="!index">{{ term }}</span>
-                    <span v-else>, {{ term }}</span>
-                </span>
-                -->
-            </td>
+            <td> {{ evaluation.terms }} </td>
             <td> {{ evaluation.status }} </td>
             <td> {{ evaluation.numOfEvals }} </td>
-            
         </tr>
     </tbody>
 </table>
@@ -51,14 +43,20 @@ function updateView() {
         // Gets the snapshot of the data (evaluations of the coordinator)
         vals = snapshot.val();
 
-        // For each evaluation in the new list
+        // add every evaluation in the new list
         for (var eva in vals) {
-            evaluation = vals[eva];
-            evaluation.id = eva;
-            evaluation.numOfEvals = "TBD";
-            
-            evaluations.push(evaluation);
+            getEval(vals, eva, coordinator)
         }
+    });
+}
+
+function getEval(vals, eva, coordinator) {
+    evaluation = vals[eva];
+    evaluation.id = eva;
+    firebase.database().ref("evaluation/" + coordinator + "/" + evaluation.terms + "/" + eva).once('value', function (snapshot2) {
+        vals = snapshot2.val();
+        evaluation.numOfEvals = Object.keys(vals).length;
+        evaluations.push(evaluation);
     });
 }
 
