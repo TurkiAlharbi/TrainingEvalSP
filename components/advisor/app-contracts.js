@@ -16,7 +16,7 @@ app_contracts_table_template = `
             </tr>
             
             <tr>
-                <div v-if="contract.company != ''" :id="contract.id" class="panel-collapse collapse">
+                <div v-if="contract.company != null" :id="contract.id" class="panel-collapse collapse">
                     <div class="panel-body">
                         <span v-for="(thing,i) in contract.contract">
                         <p v-if="thing!=''">{{i}} : {{thing}}</p>
@@ -91,7 +91,6 @@ function fetchStudent(stu, major, term, vals) {
             id: snapshot2.key,
             major: major.toUpperCase(),
             supervisor: vals[term][major][snapshot2.key].supervisor,
-            company: "TBD",
         };
 
         // Get students data
@@ -120,7 +119,7 @@ function fetchStudent(stu, major, term, vals) {
 
         // Highlight not submitting the contract yet
         if (student.name == undefined) {
-            student.name = " <no contract>";
+            student.name = stu + " <no contract>";
         }
 
         // Add to the list of students

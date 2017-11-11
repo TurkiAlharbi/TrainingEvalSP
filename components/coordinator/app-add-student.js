@@ -123,7 +123,7 @@ function addStudents() {
         if (id >= 201000000 && id <= 203000000) {
             json["s" + id] = "";
 
-            // Add to coordinator's students
+            // Add to students list
             student = "s" + id;
             update2DB("students/" + student, { advisor: coordinator, coordinator: coordinator });
         }
@@ -134,6 +134,9 @@ function addStudents() {
 
     // Add to coordinator's students
     update2DB("coordinatorStudent/" + coordinator + "/" + period + "/" + major, json);
+
+    // Add to advisor's (coordinator's) students
+    update2DB("advisorStudent/" + coordinator + "/" + period + "/" + major, json);
 
     //temp
     //Clears the input fields
