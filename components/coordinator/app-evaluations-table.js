@@ -7,7 +7,6 @@ app_evaluations_table_template = `
     </thead>
     <tbody>
         <tr v-for="evaluation in evaluations">
-            <td> {{ evaluation.id }} </td>
             <td> {{ evaluation.title }} </td>
             <td> {{ evaluation.terms }} </td>
             <td> {{ evaluation.status }} </td>
@@ -17,7 +16,7 @@ app_evaluations_table_template = `
 </table>
 `;
 
-headers = ["Id", "Title", "Terms", "Status", "Number of evaluations"];
+headers = ["Title", "Terms", "Status", "Number of evaluations"];
 
 evaluations = [];
 
@@ -51,11 +50,15 @@ function updateView() {
 }
 
 function getEval(vals, eva, coordinator) {
-    evaluation = vals[eva];
+    var evaluation = vals[eva];
     evaluation.id = eva;
-    firebase.database().ref("evaluation/" + coordinator + "/" + evaluation.terms + "/" + eva).once('value', function (snapshot2) {
+    firebase.database().ref("evaluation/" + coordinator + "/" + eva).once('value', function (snapshot2) {
         vals = snapshot2.val();
-        evaluation.numOfEvals = Object.keys(vals).length;
+        try {
+            evaluation.numOfEvals = Object.keys(vals).length;
+        } catch (err) {
+            evaluation.numOfEvals = 0;
+        }
         evaluations.push(evaluation);
     });
 }

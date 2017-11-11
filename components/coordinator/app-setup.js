@@ -4,9 +4,11 @@ app_setup_template = `
         <li class="active">
             <a data-toggle="pill" href="#new">Create a new form</a>
         </li>
+        <!--
         <li>
             <a data-toggle="pill" href="#modify">Modify a draft</a>
         </li>
+        -->
     </ul>
 
     <div class="tab-content">
@@ -14,9 +16,11 @@ app_setup_template = `
             <app-setup-new></app-setup-new>
         </div>
 
+        <!--
         <div id="modify" class="tab-pane fade">
             <app-setup-modify></app-setup-modify>
         </div>
+        -->
     </div>
 </div>
 `;

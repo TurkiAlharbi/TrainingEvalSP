@@ -153,43 +153,46 @@ function getAdvisors() {
 
         // For each advisor in the new list
         for (var adv in vals) {
-
-            // Connect to the advisors data
-            firebase.database().ref("advisorStudent/" + adv + "/" + term).once('value', function (snapshot2) {
-
-                // Gets the snapshot of the data (current advisor's data)
-                advisorVals = snapshot2.val();
-
-                var advisor = {
-                    email: adv,
-                    students: []
-                };
-
-                if (advisorVals != null) {
-                    for (var major in advisorVals) {
-                        for (var stu in advisorVals[major]) {
-
-                            firebase.database().ref("students/" + stu + "/name").once('value', function (snapshot3) {
-                                name = snapshot3.val();
-                                if (name == "null")
-                                    name = "<no contract>";
-                                advisor.students.push({ id: stu, name: name, major: major })
-                            });
-                        }
-                    }
-                }
-
-                firebase.database().ref("advisors/" + adv + "/name").once('value', function (snapshot4) {
-
-                    // Gets the snapshot of the data (current advisor's data)
-                    advisor.name = snapshot4.val();
-
-                    // Add to the list of advisors
-                    advisors.push(advisor);
-                })
-
-            });
+            getAdvisors2(adv, term)
         }
+    });
+}
+
+function getAdvisors2(adv, term) {
+    // Connect to the advisors data
+    firebase.database().ref("advisorStudent/" + adv + "/" + term).once('value', function (snapshot2) {
+
+        // Gets the snapshot of the data (current advisor's data)
+        advisorVals = snapshot2.val();
+
+        var advisor = {
+            email: adv,
+            students: []
+        };
+
+        if (advisorVals != null) {
+            for (var major in advisorVals) {
+                for (var stu in advisorVals[major]) {
+
+                    firebase.database().ref("students/" + stu + "/name").once('value', function (snapshot3) {
+                        name = snapshot3.val();
+                        if (name == "null")
+                            name = "<no contract>";
+                        advisor.students.push({ id: stu, name: name, major: major })
+                    });
+                }
+            }
+        }
+
+        firebase.database().ref("advisors/" + adv + "/name").once('value', function (snapshot4) {
+
+            // Gets the snapshot of the data (current advisor's data)
+            advisor.name = snapshot4.val();
+
+            // Add to the list of advisors
+            advisors.push(advisor);
+        })
+
     });
 }
 

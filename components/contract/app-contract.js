@@ -131,7 +131,8 @@ function submit() {
         "salary  transportation": trans,
         "salary - benefits": benefits,
 
-        // "supervisor name": mentor,
+        "supervisor email": men_email,
+        "supervisor name": mentor,
         "supervisor position": men_pos,
         "supervisor phone": men_phone,
         "supervisor mobile": men_mobile,

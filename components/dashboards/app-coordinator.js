@@ -15,7 +15,7 @@ template = `
 
     <app-dashboard-no-container title="Evaluations management">
         <app-option name="View evaluations" link="./Coordinator/viewEvaluations.html" done="true"></app-option>
-        <app-option name="Set up forms" link="./Coordinator/setup.html" wip="true"></app-option>
+        <app-option name="Set up forms" link="./Coordinator/setup.html" done="true"></app-option>
         <app-option name="Set up evaluation availability " link="./Coordinator/evaluationAvailability.html" done="true"></app-option>
         <app-option name="Get students' marks" link="./Coordinator/getMarks.html" wip="true"></app-option>
     </app-dashboard-no-container>

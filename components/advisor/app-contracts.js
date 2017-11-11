@@ -10,7 +10,8 @@ app_contracts_table_template = `
         <template v-for="(contract,index) in contracts">
 
             <tr v-if="contract" data-toggle="collapse" data-parent="#accordion" :href="'#'+contract.id">
-                <td> {{ contract.name }} </td>
+                <td v-if="contract.company == null"> {{ contract.name }} </td>
+                <td v-else style="color:#428bca;cursor:pointer"> {{ contract.name }} </td>
                 <td> {{ contract.company }} </td>
                 <td> {{ contract.supervisor }} </td>
             </tr>

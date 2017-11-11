@@ -65,13 +65,16 @@ function updateView() {
 }
 
 function getEval(vals, eva, coordinator) {
-    evaluation = vals[eva];
+    var evaluation = vals[eva];
     evaluation.id = eva;
     evaluation.hash = "#" + eva;
-
     firebase.database().ref("evaluation/" + coordinator + "/" + evaluation.terms + "/" + eva).once('value', function (snapshot2) {
         vals = snapshot2.val();
-        evaluation.numOfEvals = Object.keys(vals).length;
+        try {
+            evaluation.numOfEvals = Object.keys(vals).length;
+        } catch (err) {
+            evaluation.numOfEvals = 0;
+        }
         evaluations.push(evaluation);
     });
 }

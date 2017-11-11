@@ -48,17 +48,19 @@
             var email = $('#email').val();
             var password = email;//temp
 
-            //Create an advisor account
+            // Creates an advisor account
             createUser(email, password, "Advisor");
+
+
             write2DB("advisors/" + email.split(".").join(" "), { name: name });
 
-            //append to the coordinator's advisors
+            // Appends to the coordinator's advisors
             coordinator = firebase.auth().currentUser.email.split(".").join(" ");
             advisor = email.split(".").join(" ");
             update2DB("coordinators/" + coordinator + "/advisors", { [advisor]: "" });
 
             //temp
-            //Clears the input fields
+            // Clears the input fields
             setTimeout(function () {
                 $('#name').val("");
                 $('#email').val("");

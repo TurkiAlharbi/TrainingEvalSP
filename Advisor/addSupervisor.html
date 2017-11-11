@@ -29,6 +29,11 @@
             </div>
             <br>
             <div class="input-group">
+                <span class="input-group-addon" style="min-width: 150px;"> Mobile: </span>
+                <input id="mobile" type="text" class="form-control">
+            </div>
+            <br>
+            <div class="input-group">
                 <span class="input-group-addon" style="min-width: 150px;"> Email: </span>
                 <input id="email" type="text" class="form-control">
             </div>
@@ -41,12 +46,20 @@
     <script>
         function addSuper() {
             var name = $('#name').val();
+            var mobile = $('#mobile').val();
             var email = $('#email').val();
             var password = email;//temp
+
+            // Create the account for supervisor
             createUser(email, password, "Supervisor");
-            write2DB("supervisors/" + email.split(".").join(" "), { name: name });
+
+            // Add to the supervisor's list of students
+            update2DB("supervisors/" + email.split(".").join(" "), { name: name, mobile: mobile });
+
+            // Clears the form
             setTimeout(function () {
                 $('#name').val("");
+                $('#mobile').val("");
                 $('#email').val("");
             }, 1000);
         }
