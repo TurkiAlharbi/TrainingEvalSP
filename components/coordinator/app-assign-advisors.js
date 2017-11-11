@@ -1,70 +1,87 @@
 app_assign_advisors_template = `
 <div>
-<!-- 
-<button class="btn btn-info" disabled @click="distribute">Distribute students over advisors</button>
-<hr/>
--->
-
-<div>
-    <p>Click to select multiple students, drag to the new advisor</p>
-    <div class="row">
-
-        <div class="col-xs-12" v-if="coord.students.length != 0">
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <h1 class="panel-title">( without advisor )</h1>
-                </div>
-                <div class="panel-body" style="background: #eee">
-                    <ol class="draggable" :id="coord.email">
-                        <template v-for="student in coord.students">
-                            <li :id="student.id">{{ student.name }} ({{student.major}})</li>
-                        </template>
-                    </ol>
-                </div>
-            </div>
-        </div>
-        
-        <div v-for="advisor in advisors" class="col-xs-12 col-sm-6 col-md-4 col-md-3">
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <h1 class="panel-title">{{ advisor.name }}</h1>
-                </div>
-                <div class="panel-body" style="background: #eee">
-                    <ol class="draggable" :id="advisor.email">
-                        <template v-for="student in advisor.students">
-                            <li :id="student.id">{{ student.name }} ({{student.major}})</li>
-                        </template>
-                    </ol>
-                </div>
-            </div>
-        </div>
-
+    <div class="input-group">
+    <span class="input-group-addon" style="min-width: 150px;"> Period: </span>
+        <select class="form-control" id="periods">
+            <option v-for="period in periods">{{ period }}</option>
+        </select>
     </div>
-</div>
+    <br/>
+    <button class="btn btn-success" @click="viewPeriod">Show</button>
+    <hr/>
+    <div>
+        <p>Click to select multiple students, drag to the new advisor</p>
+        <div class="row">
 
-<button class="btn btn-success" @click="setState">Save</button>
+            <div class="col-xs-12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h1 class="panel-title">( without advisor )</h1>
+                    </div>
+                    <div class="panel-body" style="background: #eee">
+                        <ol class="draggable" :id="coord.email">
+                            <template v-for="student in coord.students">
+                                <li :id="student.id">{{ student.name }} ({{student.major}})</li>
+                            </template>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+            
+            <div v-for="advisor in advisors" class="col-xs-12 col-sm-6 col-md-4 col-md-3">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h1 class="panel-title">{{ advisor.name }}</h1>
+                    </div>
+                    <div class="panel-body" style="background: #eee">
+                        <ol class="draggable" :id="advisor.email">
+                            <template v-for="student in advisor.students">
+                                <li :id="student.id">{{ student.name }} ({{student.major}})</li>
+                            </template>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <button class="btn btn-success" @click="setState">Save</button>
 </div>
 `;
 
-var students = [];
 var advisors = [];
-// var coord = { email: "coordinator@kfupm.edu.sa", name: "Husni" };
 var coord = { students: [] };
+var periods = [];
+var term = "172 (internship)";
 
 app_assign_advisors = {
     template: app_assign_advisors_template,
     data() {
         return {
-            students: students,
+            periods: periods,
             advisors: advisors
         }
     },
 };
 
-//TBD
-term = "172 (internship)";
+Vue.component('app-assign-advisors', app_assign_advisors);
+
+firebase.auth().onAuthStateChanged(function (user) {
+    if (user) {
+        console.log("updating view")
+        updateView();
+    }
+});
+
+function updateView() {
+    getPeriods();
+}
 
 function getCoordinator() {
+
+    // Clears the old list
+    coord.students = [];
 
     // Gets the cooridnator identifier (email)
     coord.email = firebase.auth().currentUser.email.split(".").join(" ");
@@ -79,41 +96,15 @@ function getCoordinator() {
             for (var stu in coordVals[major]) {
 
                 firebase.database().ref("students/" + stu + "/name").once('value', function (snapshot3) {
-
-                    coord.students.push({ id: stu, name: snapshot3.val(), major: major })
+                    name = snapshot3.val();
+                    if (name == "null")
+                        name = "<no contract>";
+                    coord.students.push({ id: stu, name: name, major: major })
 
                 });
             }
         }
     });
-
-
-
-
-
-
-
-
-
-
-    // students2 = [
-    //     { id: "s111", name: "Student 1", major: "ICS" },
-    //     { id: "s222", name: "Student 2", major: "SWE" },
-    //     { id: "s333", name: "Student 3", major: "SWE" },
-    //     { id: "s444", name: "Student 4", major: "SWE" },
-    //     { id: "s555", name: "Student 5", major: "SWE" },
-    //     { id: "s666", name: "Student 6", major: "SWE" },
-    //     { id: "s777", name: "Student 7", major: "ICS" },
-    // ];
-
-    // // Clears the old lists
-    // while (students.length > 0)
-    //     students.pop();
-
-    // // Add the new ones
-    // students2.forEach(function (element) {
-    //     students.push(element);
-    // }, this);
 
     setTimeout(function () {
         makeDraggable();
@@ -121,17 +112,29 @@ function getCoordinator() {
 
 }
 
-firebase.auth().onAuthStateChanged(function (user) {
-    if (user) {
-        console.log("updating view")
-        updateView();
-    }
-});
-
-function updateView() {
-
+function viewPeriod() {
+    term = $("#periods").val();
     getAdvisors();
     getCoordinator();
+}
+
+function getPeriods() {
+    // Gets email (identifier)
+    coordinator = firebase.auth().currentUser.email.split(".").join(" ");
+
+    // Connects to the coordinator data
+    firebase.database().ref("coordinators/" + coordinator + "/terms").on('value', function (snapshot) {
+
+        // Clears the old list
+        while (periods.length > 0)
+            periods.pop();
+
+        // Gets the snapshot of the data (periods of the coordinator)
+        vals = snapshot.val();
+
+        for (var i in vals)
+            periods.push(i);
+    });
 }
 
 function getAdvisors() {
@@ -150,23 +153,29 @@ function getAdvisors() {
 
         // For each advisor in the new list
         for (var adv in vals) {
-            
+
             // Connect to the advisors data
             firebase.database().ref("advisorStudent/" + adv + "/" + term).once('value', function (snapshot2) {
 
                 // Gets the snapshot of the data (current advisor's data)
                 advisorVals = snapshot2.val();
+
                 var advisor = {
                     email: adv,
                     students: []
                 };
 
-                for (var major in advisorVals) {
-                    for (var stu in advisorVals[major]) {
-                        
-                        firebase.database().ref("students/" + stu + "/name").once('value', function (snapshot3) {
-                            advisor.students.push({ id: stu, name: snapshot3.val(), major: major })
-                        });
+                if (advisorVals != null) {
+                    for (var major in advisorVals) {
+                        for (var stu in advisorVals[major]) {
+
+                            firebase.database().ref("students/" + stu + "/name").once('value', function (snapshot3) {
+                                name = snapshot3.val();
+                                if (name == "null")
+                                    name = "<no contract>";
+                                advisor.students.push({ id: stu, name: name, major: major })
+                            });
+                        }
                     }
                 }
 
@@ -183,8 +192,6 @@ function getAdvisors() {
         }
     });
 }
-
-Vue.component('app-assign-advisors', app_assign_advisors);
 
 function setState() {
     lists = $("ol");
