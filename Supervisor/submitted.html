@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="../lib/bootstrap/bootstrap.3.3.0.min.css" rel="stylesheet">
+
+    <style>
+        [v-cloak] {
+            display: none
+        }
+    </style>
+
+    <title>Evaluate student</title>
+</head>
+
+<body>
+    <div id="app" v-cloak>
+
+        <app-page-header></app-page-header>
+
+        <app-dashboard title="Submitted">
+            <br/>
+            <p class="h2">Evaluation submitted!</p>
+            <p class="h2">Thank you ☺</p>
+            <br/>
+            <a href="./evaluate.html">
+                <button class="btn btn-success">Do another evaluation</button>
+            </a>
+            <br/>
+            <br/>
+        </app-dashboard>
+
+    </div>
+
+    <script src="../lib/vue/vue-2.5.0.min.js "></script>
+
+    <!-- Firebase -->
+    <script src="../lib/firebase/firebase-4.6.0.min.js"></script>
+    <script src="../login/config.js"></script>
+    <script src="../login/functions.js"></script>
+
+    <script src="../components/page-dashboard/app-dashboard.js "></script>
+    <script src="../components/page-dashboard/app-page-header.js "></script>
+
+    <script src="../components/app.js "></script>
+
+    <script src="../lib/jquery/jquery-3.2.1.min.js "></script>
+    <script src="../lib/bootstrap/bootstrap.3.3.0.min.js "></script>
+</body>
+
+</html>
