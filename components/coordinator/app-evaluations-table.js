@@ -1,24 +1,77 @@
 app_evaluations_table_template = `
-<table class="table table-bordered table-striped table-hover">
-    <thead>
-        <tr>
-            <th v-for="header in headers">{{ header }}</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr v-for="evaluation in evaluations">
-            <td> {{ evaluation.title }} </td>
-            <td> {{ evaluation.terms }} </td>
-            <td> {{ evaluation.status }} </td>
-            <td> {{ evaluation.numOfEvals }} </td>
-        </tr>
-    </tbody>
-</table>
+<div>
+    <div>
+        <div class="form-group col-sm-12">
+            <div class="input-group">
+                <span class="input-group-addon">Form</span>
+                <select class="form-control" id="forms">
+                    <template v-for="form in forms">
+                        <option :value="form.id">{{ form.key }}</option>
+                    </template>
+                </select>
+            </div>
+            <br/>
+            
+            <button class="btn btn-success" @click="viewForm();view = true">View form</button>
+
+            <p v-show="false">{{form}}</p>
+            
+            <div class="table-responsive" v-if="view">
+                <hr/>
+                <table class="table table-striped table-hover table-condensed table-bordered table-responsive">
+                    <thead>
+                        <tr>
+                            <th style="text-align:center;font-size:.95em" rowspan="2">Student</th>
+                            <th style="text-align:center;font-size:.95em" rowspan="2">Brief description</th>
+                            <th style="text-align:center;font-size:.95em" rowspan="2">Comments</th>
+                            <th style="text-align:center;font-size:.95em" rowspan="2">Rating</th>
+                            <th style="text-align:center;font-size:.95em" :colspan="100">Questions</th>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center;font-size:.8em" v-for="question in questions">
+                                {{ question }}
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template v-for="(student,index) in form.students">
+                            <tr>
+                                <td style="text-align:center;font-size:.8em">{{ form.students[index].name }}</td>
+                                <td style="text-align:center;font-size:.8em">{{ form.students[index].brief }}</td>
+                                <td style="text-align:center;font-size:.8em">{{ form.students[index].comments }}</td>
+                                <td style="text-align:center;font-size:.8em">{{ form.students[index].rating }}</td>
+                                <td style="text-align:center" v-for="question in form.students[index].questions">
+                                    {{ question }}
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+            <br/>
+        </div>
+    </div>
+</div>
 `;
 
-headers = ["Title", "Terms", "Status", "Number of evaluations"];
+var forms = [];
+var view = false;
+questions = [
+    "Enthusiasm and interest in work",
+    "Attitude towards delivering accurate work",
+    "Quality of work output",
+    "Initiative in taking tasks to complete",
+    "Dependability and reliability",
+    "Ability to learn and search for information",
+    "Judgment and decision making",
+    "Maintaining effective relations with co-workers",
+    "Ability of reporting and presenting his work",
+    "Attendance",
+    "Punctuality",
+];
 
-evaluations = [];
+var students = [];
+var form = { demo: "demo" };
 
 firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
@@ -29,45 +82,57 @@ firebase.auth().onAuthStateChanged(function (user) {
 
 function updateView() {
 
-    // Gets the cooridnator identifier (email)
-    coordinator = firebase.auth().currentUser.email.split(".").join(" ");
+    // Gets email (identifier)
+    supervisor = firebase.auth().currentUser.email.split(".").join(" ");
 
-    // Connects to get the coordinator forms
-    firebase.database().ref("evaluation forms/" + coordinator).once('value', function (snapshot) {
+    // Connects to the evaluations
+    firebase.database().ref("evaluation/" + supervisor).once('value', function (snapshot) {
 
-        // Clears the old list
-        while (evaluations.length > 0)
-            evaluations.pop();
-
-        // Gets the snapshot of the data (evaluations of the coordinator)
         vals = snapshot.val();
 
-        // add every evaluation in the new list
-        for (var eva in vals) {
-            getEval(vals, eva, coordinator)
+        while (forms.length != 0)
+            forms.pop();
+
+        var x = 0;
+
+        for (var i in vals) {
+            addForm(vals[i], i, x);
+            x++;
         }
     });
 }
 
-function getEval(vals, eva, coordinator) {
-    var evaluation = vals[eva];
-    evaluation.id = eva;
-    firebase.database().ref("evaluation/" + coordinator + "/" + eva).once('value', function (snapshot2) {
-        vals = snapshot2.val();
-        try {
-            evaluation.numOfEvals = Object.keys(vals).length;
-        } catch (err) {
-            evaluation.numOfEvals = 0;
-        }
-        evaluations.push(evaluation);
-    });
+function addForm(vals, i, x) {
+
+    for (var s in vals) {
+        firebase.database().ref("students/" + s + "/name").once('value', function (snapshot2) {
+            name = snapshot2.val();
+            vals[s].name = name;
+        });
+    }
+
+    newForm = { students: vals, key: i, id: x };
+    forms.push(newForm);
 }
+
+function viewForm() {
+    console.log("new view");
+
+    formID = $("#forms").val();
+    form.students = forms[formID].students;
+    form.id = forms[formID].id;
+    form.key = forms[formID].key;
+    form.demo = form.demo + "1";
+}
+
 
 app_evaluations_table = {
     template: app_evaluations_table_template,
     data() {
         return {
-            evaluations: evaluations
+            forms: forms,
+            form: form,
+            view: view
         }
     }
 };
