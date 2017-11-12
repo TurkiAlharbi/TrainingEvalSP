@@ -17,10 +17,10 @@ app_assign_advisors_template = `
             <div class="col-xs-12">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
-                        <h1 class="panel-title">( without advisor )</h1>
+                        <h1 class="panel-title">Advised by you</h1>
                     </div>
                     <div class="panel-body" style="background: #eee">
-                        <ol class="draggable" :id="coord.email">
+                        <ol class="draggable" :id="coord.email" id="students">
                             <template v-for="student in coord.students">
                                 <li :id="student.id">{{ student.name }} ({{student.major}})</li>
                             </template>
@@ -112,7 +112,7 @@ function addCoordStudent(major, stu) {
     firebase.database().ref("students/" + stu + "/name").once('value', function (snapshot3) {
         name = snapshot3.val();
         if (name == "null")
-            name = "<no contract>";
+            name = stu;
         coord.students.push({ id: stu, name: name, major: major });
 
     });
@@ -120,20 +120,25 @@ function addCoordStudent(major, stu) {
 
 function viewPeriod() {
     term = $("#periods").val();
+
+    // Clears the old coordinator's list
+    $("#students").html("");
+
     getAdvisors();
     getCoordinator();
 }
 
 function getPeriods() {
+
+    // Clears the old list
+    while (periods.length > 0)
+        periods.pop();
+
     // Gets email (identifier)
     coordinator = firebase.auth().currentUser.email.split(".").join(" ");
 
     // Connects to the coordinator data
-    firebase.database().ref("coordinators/" + coordinator + "/terms").on('value', function (snapshot) {
-
-        // Clears the old list
-        while (periods.length > 0)
-            periods.pop();
+    firebase.database().ref("coordinators/" + coordinator + "/terms").once('value', function (snapshot) {
 
         // Gets the snapshot of the data (periods of the coordinator)
         vals = snapshot.val();
@@ -201,7 +206,7 @@ function getAdvisors4(stu, major, advisor) {
     firebase.database().ref("students/" + stu + "/name").once('value', function (snapshot3) {
         name = snapshot3.val();
         if (name == "null")
-            name = "<no contract>";
+            name = stu;
         advisor.students.push({ id: stu, name: name, major: major });
     });
 }
