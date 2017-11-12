@@ -25,7 +25,7 @@ template = `
         <app-option name="Add a supervisor" link="../Advisor/addSupervisor.html" popup="true" done="true"></app-option>
         <app-option name="View students" link="../Advisor/viewStudents.html" popup="true" done="true"></app-option>
         <app-option name="View contracts" link="../Advisor/viewContracts.html" popup="true" done="true"></app-option>
-        <app-option name="Generate a report" link="../Advisor/generateReport.html" popup="true"></app-option>
+        <app-option name="Generate a report" link="../Advisor/generateReport.html" popup="true" done="true"></app-option>
     </app-dashboard-no-container>
     <!--  -->
 
