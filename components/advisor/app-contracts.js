@@ -12,6 +12,8 @@ app_contracts_table_template = `
             <tr v-if="contract" data-toggle="collapse" data-parent="#accordion" :href="'#'+contract.id">
                 <td v-if="contract.company == null"> {{ contract.name }} </td>
                 <td v-else style="color:#428bca;cursor:pointer"> {{ contract.name }} </td>
+                <td> {{ contract.major }} </td>
+                <td> {{ contract.period }} </td>
                 <td> {{ contract.company }} </td>
                 <td> {{ contract.supervisor }} </td>
             </tr>
@@ -38,8 +40,7 @@ app_contracts_table_template = `
 
 `;
 
-// headers = ["Student Name", "Type", "Company"];
-headers = ["Student Name", "Company", "Supervisor"];
+headers = ["Student Name", "Major", "Period", "Company", "Supervisor"];
 
 var students = [];
 

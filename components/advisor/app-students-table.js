@@ -9,6 +9,7 @@ app_students_table_template = `
         <tr v-for="student in students">
             <td> {{ student.name }} </td>
             <td> {{ student.major }} </td>
+            <td> {{ student.period }} </td>
             <td> {{ student.company }} </td>
             <td> {{ student.supervisor }} </td>
         </tr>
@@ -16,7 +17,7 @@ app_students_table_template = `
 </table>
 `;
 
-var headers = ["Name", "Major", "Company", "Supervisor"];
+var headers = ["Name", "Major", "Period", "Company", "Supervisor"];
 
 var students = [];
 
@@ -75,6 +76,7 @@ function fetchStudent(stu, major, term, vals) {
         for (var key in studentVals)
             student[key] = studentVals[key];
 
+        console.log(student);
         // Trying to get the student's supervisor's data
         try {
             firebase.database().ref("supervisors/" + student.supervisor.split(".").join(" ")).once('value', function (snapshot4) {
@@ -87,7 +89,7 @@ function fetchStudent(stu, major, term, vals) {
 
         // Highlight not submitting the contract yet
         if (student.name == undefined) {
-            student.name = " <no contract>";
+            student.name = stu + " <no contract>";
         }
 
         // Add to the list of students
