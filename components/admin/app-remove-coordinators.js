@@ -14,14 +14,17 @@ app_remove_coordinators_template = `
                     <span v-else>, {{ major }}</span>
                 </span>
             </td>
+            <!--
             <td> {{ coordinator.students }} </td>
+            -->
             <td> <button class="btn btn-danger" style="padding:0px 5px;" @click="remCoord(coordinator.key)">X</button> </td>
         </tr>
     </tbody>
 </table>
 `;
 
-headers = ["Name", "Majors", "Numbr of students", "Remove"];
+// headers = ["Name", "Majors", "Numbr of students", "Remove"];
+headers = ["Name", "Majors", "Remove"];
 
 var coordRef = firebase.database().ref('coordinators/');
 var coordinators = [];

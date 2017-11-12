@@ -14,13 +14,16 @@ app_coordinators_table_template = `
                     <span v-else>, {{ major }}</span>
                 </span>
             </td>
+            <!--
             <td> {{ coordinator.students }} </td>
+            -->
         </tr>
     </tbody>
 </table>
 `;
 
-headers = ["Name", "Majors", "Numbr of students"];
+// headers = ["Name", "Majors", "Numbr of students"];
+headers = ["Name", "Majors"];
 
 var coordRef = firebase.database().ref('coordinators/');
 var coordinators = [];
