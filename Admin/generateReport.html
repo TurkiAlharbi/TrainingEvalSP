@@ -22,47 +22,19 @@
         <app-page-header></app-page-header>
 
         <app-dashboard title="Generate a Report">
-            <form>
-                <fieldset>
-                    <legend>Report Specification:</legend>
-
-                    <div class="input-group">
-                        <span class="input-group-addon" style="min-width: 150px;"> Period: </span>
-                        <div class="form-group" data-toggle="tooltip" data-placement="top" title="hold ctrl to select more than one">
-                            <select multiple class="form-control" id="periods">
-                                <option value="P163">163</option>
-                                <option value="P163-171">163-171</option>
-                                <option value="P172-173">172-173</option>
-                                <option value="P173">173</option>
-                                <option value="P173-181">173-181</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <br/>
-                    <div class="input-group">
-                        <span class="input-group-addon" style="min-width: 150px;"> Majors: </span>
-                        <div class="form-group" data-toggle="tooltip" data-placement="top" title="hold ctrl to select more than one">
-                            <select multiple class="form-control" id="majors">
-                                <option value="ICS">ICS</option>
-                                <option value="SWE">SWE</option>
-                                <option value="COE">COE</option>
-                                <option value="ME">ME</option>
-                                <option value="EE">EE</option>
-                            </select>
-                        </div>
-                    </div>
-                </fieldset>
-                <br/>
-                <button class="btn btn-success">Request</button>
-            </form>
+            <app-report></app-report>
         </app-dashboard>
 
     </div>
 
     <script src="../lib/vue/vue-2.5.0.min.js "></script>
 
-    <script src="../components/admin/app-remove-coordinators.js "></script>
+    <!-- Firebase -->
+    <script src="../lib/firebase/firebase-4.6.0.min.js"></script>
+    <script src="../login/config.js"></script>
+    <script src="../login/functions.js"></script>
+
+    <script src="../components/admin/app-report.js "></script>
     <script src="../components/page-dashboard/app-dashboard.js "></script>
     <script src="../components/page-dashboard/app-page-header.js "></script>
 
