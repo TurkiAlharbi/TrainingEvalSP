@@ -7,9 +7,10 @@ app_assign_advisors_template = `
         </select>
     </div>
     <br/>
-    <button class="btn btn-success" @click="viewPeriod">Show</button>
-    <hr/>
-    <div>
+    <button class="btn btn-success" @click="viewPeriod();view = true">Show</button>
+    
+    <div v-if="view">
+        <hr/>
         <p>Click to select multiple students, drag to the new advisor</p>
         <div class="row">
 
@@ -44,9 +45,9 @@ app_assign_advisors_template = `
             </div>
 
         </div>
+        <button class="btn btn-success" @click="setState">Save</button>
     </div>
 
-    <button class="btn btn-success" @click="setState">Save</button>
 </div>
 `;
 
@@ -54,14 +55,16 @@ var advisors = [];
 var coord = { students: [] };
 var periods = [];
 var term = "172 (internship)";
+var view = false;
 
 app_assign_advisors = {
     template: app_assign_advisors_template,
     data() {
         return {
             periods: periods,
-            advisors: advisors
-        }
+            advisors: advisors,
+            view: view
+        };
     },
 };
 
@@ -69,7 +72,7 @@ Vue.component('app-assign-advisors', app_assign_advisors);
 
 firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
-        console.log("updating view")
+        console.log("updating view");
         updateView();
     }
 });
@@ -94,14 +97,7 @@ function getCoordinator() {
 
         for (var major in coordVals) {
             for (var stu in coordVals[major]) {
-
-                firebase.database().ref("students/" + stu + "/name").once('value', function (snapshot3) {
-                    name = snapshot3.val();
-                    if (name == "null")
-                        name = "<no contract>";
-                    coord.students.push({ id: stu, name: name, major: major })
-
-                });
+                addCoordStudent(major, stu);
             }
         }
     });
@@ -110,6 +106,16 @@ function getCoordinator() {
         makeDraggable();
     }, 2500);
 
+}
+
+function addCoordStudent(major, stu) {
+    firebase.database().ref("students/" + stu + "/name").once('value', function (snapshot3) {
+        name = snapshot3.val();
+        if (name == "null")
+            name = "<no contract>";
+        coord.students.push({ id: stu, name: name, major: major });
+
+    });
 }
 
 function viewPeriod() {
@@ -152,47 +158,51 @@ function getAdvisors() {
         vals = snapshot.val();
 
         // For each advisor in the new list
-        for (var adv in vals) {
-            getAdvisors2(adv, term)
-        }
+        for (var adv in vals)
+            getAdvisors2(adv, term);
+
     });
 }
 
 function getAdvisors2(adv, term) {
+
     // Connect to the advisors data
     firebase.database().ref("advisorStudent/" + adv + "/" + term).once('value', function (snapshot2) {
+        getAdvisors3(snapshot2.val(), adv);
+    });
+
+}
+
+function getAdvisors3(advisorVals, adv) {
+
+    var advisor = {
+        email: adv,
+        students: []
+    };
+
+    if (advisorVals != null)
+        for (var major in advisorVals)
+            for (var stu in advisorVals[major])
+                getAdvisors4(stu, major, advisor);
+
+    firebase.database().ref("advisors/" + adv + "/name").once('value', function (snapshot4) {
 
         // Gets the snapshot of the data (current advisor's data)
-        advisorVals = snapshot2.val();
+        advisor.name = snapshot4.val();
 
-        var advisor = {
-            email: adv,
-            students: []
-        };
+        // Add to the list of advisors
+        advisors.push(advisor);
 
-        if (advisorVals != null) {
-            for (var major in advisorVals) {
-                for (var stu in advisorVals[major]) {
+    });
 
-                    firebase.database().ref("students/" + stu + "/name").once('value', function (snapshot3) {
-                        name = snapshot3.val();
-                        if (name == "null")
-                            name = "<no contract>";
-                        advisor.students.push({ id: stu, name: name, major: major })
-                    });
-                }
-            }
-        }
+}
 
-        firebase.database().ref("advisors/" + adv + "/name").once('value', function (snapshot4) {
-
-            // Gets the snapshot of the data (current advisor's data)
-            advisor.name = snapshot4.val();
-
-            // Add to the list of advisors
-            advisors.push(advisor);
-        })
-
+function getAdvisors4(stu, major, advisor) {
+    firebase.database().ref("students/" + stu + "/name").once('value', function (snapshot3) {
+        name = snapshot3.val();
+        if (name == "null")
+            name = "<no contract>";
+        advisor.students.push({ id: stu, name: name, major: major });
     });
 }
 
@@ -204,7 +214,7 @@ function setState() {
     for (i = 0; i < lists.length; i++) {
         children = lists[i].children;
         for (s = 0; s < children.length; s++) {
-            major = $("ol")[i].children[s].innerHTML.replace(new RegExp(".*[(]", 'g'), "").replace(new RegExp("[)].*", 'g'), "")
+            major = $("ol")[i].children[s].innerHTML.replace(new RegExp(".*[(]", 'g'), "").replace(new RegExp("[)].*", 'g'), "");
             stud.push({ id: children[s].id, major: major });
         }
     }
@@ -224,7 +234,7 @@ function setState() {
     for (i = 0; i < lists.length; i++) {
         children = lists[i].children;
         for (s = 0; s < children.length; s++) {
-            major = $("ol")[i].children[s].innerHTML.replace(new RegExp(".*[(]", 'g'), "").replace(new RegExp("[)].*", 'g'), "")
+            major = $("ol")[i].children[s].innerHTML.replace(new RegExp(".*[(]", 'g'), "").replace(new RegExp("[)].*", 'g'), "");
             advisor = lists[i].id.split(".").join(" ");
             student = children[s].id;
             update2DB("advisorStudent/" + advisor + "/" + term + "/" + major, { [student]: "" });
