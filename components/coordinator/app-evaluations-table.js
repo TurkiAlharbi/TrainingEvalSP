@@ -6,7 +6,7 @@ app_evaluations_table_template = `
                 <span class="input-group-addon">Form</span>
                 <select class="form-control" id="forms">
                     <template v-for="form in forms">
-                        <option :value="form.id">{{ form.key }}</option>
+                        <option :value="form.id">{{ form.title }}</option>
                     </template>
                 </select>
             </div>
@@ -16,37 +16,41 @@ app_evaluations_table_template = `
 
             <p v-show="false">{{form}}</p>
             
-            <div class="table-responsive" v-if="view">
-                <hr/>
-                <table class="table table-striped table-hover table-condensed table-bordered table-responsive">
-                    <thead>
-                        <tr>
-                            <th style="text-align:center;font-size:.95em" rowspan="2">Student</th>
-                            <th style="text-align:center;font-size:.95em" rowspan="2">Brief description</th>
-                            <th style="text-align:center;font-size:.95em" rowspan="2">Comments</th>
-                            <th style="text-align:center;font-size:.95em" rowspan="2">Rating</th>
-                            <th style="text-align:center;font-size:.95em" :colspan="100">Questions</th>
-                        </tr>
-                        <tr>
-                            <td style="text-align:center;font-size:.8em" v-for="question in questions">
-                                {{ question }}
-                            </td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <template v-for="(student,index) in form.students">
+            <div v-if="view">
+                <br/>
+                <p>For the period of {{ form_meta.terms }}</p>
+                <div class="table-responsive">
+                    <hr/>
+                    <table class="table table-striped table-hover table-condensed table-bordered table-responsive">
+                        <thead>
                             <tr>
-                                <td style="text-align:center;font-size:.8em">{{ form.students[index].name }}</td>
-                                <td style="text-align:center;font-size:.8em">{{ form.students[index].brief }}</td>
-                                <td style="text-align:center;font-size:.8em">{{ form.students[index].comments }}</td>
-                                <td style="text-align:center;font-size:.8em">{{ form.students[index].rating }}</td>
-                                <td style="text-align:center" v-for="question in form.students[index].questions">
+                                <th style="text-align:center;font-size:.95em" rowspan="2">Student</th>
+                                <th style="text-align:center;font-size:.95em" rowspan="2">Brief description</th>
+                                <th style="text-align:center;font-size:.95em" rowspan="2">Comments</th>
+                                <th style="text-align:center;font-size:.95em" rowspan="2">Rating</th>
+                                <th style="text-align:center;font-size:.95em" :colspan="100">Questions</th>
+                            </tr>
+                            <tr>
+                                <td style="text-align:center;font-size:.8em" v-for="question in questions">
                                     {{ question }}
                                 </td>
                             </tr>
-                        </template>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            <template v-for="(student,index) in form.students">
+                                <tr>
+                                    <td style="text-align:center;font-size:.8em">{{ form.students[index].name }}</td>
+                                    <td style="text-align:center;font-size:.8em">{{ form.students[index].brief }}</td>
+                                    <td style="text-align:center;font-size:.8em">{{ form.students[index].comments }}</td>
+                                    <td style="text-align:center;font-size:.8em">{{ form.students[index].rating }}</td>
+                                    <td style="text-align:center" v-for="question in form.students[index].questions">
+                                        {{ question }}
+                                    </td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <br/>
         </div>
@@ -83,10 +87,10 @@ firebase.auth().onAuthStateChanged(function (user) {
 function updateView() {
 
     // Gets email (identifier)
-    supervisor = firebase.auth().currentUser.email.split(".").join(" ");
+    coordinator = firebase.auth().currentUser.email.split(".").join(" ");
 
     // Connects to the evaluations
-    firebase.database().ref("evaluation/" + supervisor).once('value', function (snapshot) {
+    firebase.database().ref("evaluation/" + coordinator).once('value', function (snapshot) {
 
         vals = snapshot.val();
 
@@ -111,8 +115,13 @@ function addForm(vals, i, x) {
         });
     }
 
-    newForm = { students: vals, key: i, id: x };
-    forms.push(newForm);
+    firebase.database().ref("evaluation forms/" + coordinator + "/" + i).once('value', function (snapshot3) {
+        form_meta = snapshot3.val();
+        newForm = { students: vals, key: i, id: x, title: form_meta.title };
+        forms.push(newForm);
+    });
+
+
 }
 
 function viewForm() {
