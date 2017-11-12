@@ -69,7 +69,6 @@ function fetchStudent(stu, major, term, vals) {
             id: snapshot2.key,
             major: major.toUpperCase(),
             supervisor: vals[term][major][snapshot2.key].supervisor,
-            company: "TBD",
         };
 
         // Get students data

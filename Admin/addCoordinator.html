@@ -60,8 +60,13 @@
             var email = $('#email').val();
             var majors = $('#majors').val();
             var password = email;//temp
+            
             createUser(email, password, "Coordinator");
+            
+            write2DB("advisors/" + email.split(".").join(" "), { name: name });
+
             write2DB("coordinators/" + email.split(".").join(" "), { name: name, majors: majors });
+
             setTimeout(function () {
                 $('#name').val("");
                 $('#email').val("");
