@@ -26,6 +26,10 @@ firebase.auth().onAuthStateChanged(function (user) {
 });
 
 function updateView() {
+    getAdvisors();
+}
+
+function getAdvisors() {
 
     // Gets the cooridnator identifier (email)
     coordinator = firebase.auth().currentUser.email.split(".").join(" ");
@@ -41,24 +45,42 @@ function updateView() {
 
         // For each advisor in the new list
         for (var adv in vals) {
-
-            // Connect to the advisors data
-            firebase.database().ref("advisors/" + adv).once('value', function (snapshot2) {
-
-                // Gets the snapshot of the data (current advisor's data)
-                advisorVals = snapshot2.val();
-                var advisor = {};
-                for (var key in advisorVals) {
-                    advisor[key] = advisorVals[key];
-                }
-
-                //temp //TBD
-                advisor.students = "TBD";
-
-                // Add to the list of advisors
-                advisors.push(advisor);
-            });
+            getAdvisors2(adv);
         }
+    });
+}
+
+function getAdvisors2(adv) {
+
+    // Connect to the advisors data
+    firebase.database().ref("advisors/" + adv).once('value', function (snapshot2) {
+
+        // Gets the snapshot of the data (current advisor's data)
+        advisorVals = snapshot2.val();
+        
+        var advisor = {};
+        for (var key in advisorVals)
+            advisor[key] = advisorVals[key];
+
+        getAdvisors3(advisor, adv);
+    });
+}
+
+function getAdvisors3(advisor, adv) {
+
+    // Get the number of students for advisor 'adv'
+    firebase.database().ref("advisorStudent/" + adv).once('value', function (snapshot3) {
+        terms = snapshot3.val();
+
+        var count = 0;
+        for (var term in terms)
+            for (var student in terms[term])
+                count += Object.keys(terms[term][student]).length;
+
+        advisor.students = count;
+
+        // Add to the list of advisors
+        advisors.push(advisor);
     });
 }
 
