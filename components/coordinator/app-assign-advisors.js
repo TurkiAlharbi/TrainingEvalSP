@@ -17,10 +17,10 @@ app_assign_advisors_template = `
             <div class="col-xs-12">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
-                        <h1 class="panel-title">Advised by you</h1>
+                        <h1 class="panel-title">{{ coord.name }}</h1>
                     </div>
                     <div class="panel-body" style="background: #eee">
-                        <ol class="draggable" :id="coord.email" id="students">
+                        <ol class="draggable" :id="coord.email">
                             <template v-for="student in coord.students">
                                 <li :id="student.id">{{ student.name }} ({{student.major}})</li>
                             </template>
@@ -100,6 +100,10 @@ function getCoordinator() {
                 addCoordStudent(major, stu);
             }
         }
+    });
+
+    firebase.database().ref("coordinators/" + coord.email + "/" + "name").once('value', function (snapshot2) {
+        coord.name = snapshot2.val();
     });
 
     setTimeout(function () {
@@ -243,6 +247,7 @@ function setState() {
             advisor = lists[i].id.split(".").join(" ");
             student = children[s].id;
             update2DB("advisorStudent/" + advisor + "/" + term + "/" + major, { [student]: "" });
+            update2DB("students/" + student, { "advisor": advisor });
         }
     }
 
