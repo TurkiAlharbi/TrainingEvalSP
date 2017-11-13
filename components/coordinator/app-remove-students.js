@@ -1,32 +1,39 @@
 app_remove_students_template = `
-<table class="table table-bordered table-striped table-hover">
-    <thead>
-        <tr>
-            <th v-for="header in headers">{{ header }}</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr v-for="student in students" v-if="student.show">
-            <td> {{ student.period }} </td>
-            <td> {{ student.id }} </td>
-            <td> {{ student.name }} </td>
-            <td> {{ student.major }} </td>
-            <td> {{ student.advisor }} </td>
-            <td> {{ student.company }} </td>
-            <td> {{ student.supervisor }} </td>
-            <td> <button class="btn btn-danger" style="padding:0px 5px;" @click="remStudent(student)">X</button> </td> 
-        </tr>
-    </tbody>
-</table>
+<div class="table-responsive">
+    <table class="table table-bordered table-striped table-hover" style="margin-bottom:25px">
+        <thead>
+            <tr>
+                <th v-for="header in headers">{{ header }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="student in students" v-if="student.show">
+                <td> {{ student.period }} </td>
+                <td> {{ student.id }} </td>
+                <td> {{ student.name }} </td>
+                <td> {{ student.mobile }} </td>
+                <td> {{ student.major }} </td>
+                <td> {{ student.advisor }} </td>
+                <td> {{ student.company }} </td>
+                <td> {{ student.supervisor }} </td>
+                <td> {{ student.supervisorMobile }} </td>
+                <td> <button class="btn btn-danger" style="padding:0px 5px;" @click="remStudent(student)">X</button> </td> 
+            </tr>
+        </tbody>
+    </table>
+</div>
 `;
 
-headers = ["Term (Type)", "ID", "Name", "Major", "Advisor", "Company", "Supervisor", "Remove"];
+headers = ["Term (Type)", "ID", "Name","Mobile", "Major", "Advisor", "Company", "Supervisor","Mobile", "Remove"];
 
 function remStudent(student) {
 
     // Remove from coordinator's list
     coordinator = firebase.auth().currentUser.email.split(".").join(" ");
     firebase.database().ref('coordinatorStudent/' + coordinator + '/' + student.period + "/" + student.major + "/" + student.id).remove();
+
+    // Remove from advisor's list
+    firebase.database().ref('advisorStudent/' + student.advisorEmail.split(".").join(" ") + '/' + student.period + "/" + student.major + "/" + student.id).remove();
 
     // Remove from students list
     // firebase.database().ref('students/' + student.id).remove();
@@ -86,8 +93,8 @@ function fetchStudent(stu, major, term, vals) {
             period: term,
             id: snapshot2.key,
             major: major.toUpperCase(),
-            advisor: vals[term][major][snapshot2.key].advisor,
-            supervisor: vals[term][major][snapshot2.key].supervisor,
+            advisorEmail: studentVals.advisor,
+            mobile: studentVals.mobile,
         };
 
         // Get students data
@@ -96,7 +103,7 @@ function fetchStudent(stu, major, term, vals) {
 
         // Trying to get the student's advisor's data
         try {
-            firebase.database().ref("advisors/" + student.advisor.split(".").join(" ")).once('value', function (snapshot3) {
+            firebase.database().ref("advisors/" + student.advisorEmail.split(".").join(" ")).once('value', function (snapshot3) {
                 advVals = snapshot3.val();
                 student.advisor = advVals.name;
             });
@@ -109,6 +116,7 @@ function fetchStudent(stu, major, term, vals) {
             firebase.database().ref("supervisors/" + student.supervisor.split(".").join(" ")).once('value', function (snapshot4) {
                 supVals = snapshot4.val();
                 student.supervisor = supVals.name;
+                student.supervisorMobile = supVals.mobile;
             });
         } catch (err) {
             console.log(err.name);
