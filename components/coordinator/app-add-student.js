@@ -11,7 +11,11 @@ template = `
     </div>
     <div class="input-group">
         <span class="input-group-addon" style="min-width: 150px;"> Term(s): </span>
-        <input id="terms" type="text" class="form-control" placeholder="173 or 173 + 181">
+        <div class="form-group" data-toggle="tooltip">
+            <select class="form-control" id="terms">
+                <option v-for="term in terms" :value="term">{{term}}</option>
+            </select>
+        </div>
     </div>
     <br/>
     <button class="btn btn-success" @click="addPeriods">Add period</button>
@@ -41,6 +45,10 @@ template = `
 
 var periods = [];
 var majors = [];
+var terms = [
+    "171", "172", "172 + 173", "173", "173 + 181",
+    "181", "182", "182 + 183", "183", "183 + 191",
+];
 
 firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
