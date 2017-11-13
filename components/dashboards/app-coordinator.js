@@ -19,6 +19,13 @@ template = `
         <app-option name="Get students' marks" link="./Coordinator/getMarks.html" wip="true"></app-option>
     </app-dashboard-no-container>
 
+    <app-dashboard-no-container title="Other utilities">
+        <app-option name="Generate a report" link="../Advisor/generateReport.html" wip="true"></app-option>
+    </app-dashboard-no-container>
+
+    <hr/>
+    <hr/>
+    
     <!-- Advisor's view -->
     <app-dashboard-no-container title="Advisor's roles">
         <app-option name="Add a supervisor" link="../Advisor/addSupervisor.html" popup="true" done="true"></app-option>
