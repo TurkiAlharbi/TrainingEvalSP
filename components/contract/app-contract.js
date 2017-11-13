@@ -6,20 +6,9 @@ template = `
 <div>
     <legend>Student Information</legend>
     <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Name: </span><input id="stuname" type="text" class="form-control"></div><br>
+    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Mobile: </span><input id="stumobile" type="text" class="form-control"></div><br>
     <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Major: </span><input id="major" type="text" class="form-control"></div><br>
     <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> ID: </span><input id="id" type="text" class="form-control"></div><br>
-    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Token: </span><input id="token" type="text" class="form-control"></div><br>
-    <hr>
-    <legend>Company Information</legend>
-    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Company Name: </span><input id="company" type="text" class="form-control"></div><br/>
-    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Address: </span><input id="address" type="text" class="form-control"></div><br/>
-    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Country: </span><input id="country" type="text" class="form-control"></div><br/>
-    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Zip code: </span><input id="zip" type="text" class="form-control"></div><br/>
-    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> City: </span><input id="city" type="text" class="form-control"></div><br/>
-    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> URL: </span><input id="url" type="text" class="form-control"></div><br/>
-    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Company business<br/>in brief:  </span><textarea id="textArea" rows=2 class="form-control"></textarea></div><br/>                    
-    <hr>
-    <legend>Training Opportunity</legend>
     <div class="input-group">
         <span class="input-group-addon" style="min-width: 150px;"> Type: </span>
         <div class="form-group" data-toggle="tooltip">
@@ -38,6 +27,18 @@ template = `
             </select>
         </div>
     </div><br/>
+    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Token: </span><input id="token" type="text" class="form-control"></div><br>
+    <hr>
+    <legend>Company Information</legend>
+    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Company Name: </span><input id="company" type="text" class="form-control"></div><br/>
+    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Address: </span><input id="address" type="text" class="form-control"></div><br/>
+    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Country: </span><input id="country" type="text" class="form-control"></div><br/>
+    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Zip code: </span><input id="zip" type="text" class="form-control"></div><br/>
+    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> City: </span><input id="city" type="text" class="form-control"></div><br/>
+    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> URL: </span><input id="url" type="text" class="form-control"></div><br/>
+    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Company business<br/>in brief:  </span><textarea id="textArea" rows=2 class="form-control"></textarea></div><br/>                    
+    <hr>
+    <legend>Training Opportunity</legend>
     <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Location: </span><input id="location" type="text" class="form-control"></div><br>
     <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Transportation: </span><input id="trans" type="text" class="form-control"></div><br>
     <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Housing: </span><input id="housing" type="text" class="form-control"></div><br>
@@ -61,6 +62,7 @@ function submit() {
     // TBD
     // Requries validation and token testing
     var stuname = $("#stuname").val();
+    var mobile = $("#stumobile").val();
     var major = $("#major").val();
     var id = $("#id").val();
     var company = $("#company").val();
@@ -111,6 +113,7 @@ function submit() {
         "supervisor": men_email,
         "company": company,
         "period": period,
+        "mobile": mobile,
         // "major": major
     };
 
