@@ -1,25 +1,46 @@
-app_students_table_template = `
-<table class="table table-bordered table-striped table-hover">
+app_contracts_table_template = `
+<table class="table table-bordered">
     <thead>
         <tr>
             <th v-for="header in headers">{{ header }}</th>
         </tr>
     </thead>
-    <tbody>
-        <tr v-for="student in students">
-            <td> {{ student.period }} </td>
-            <td> {{ student.id }} </td>
-            <td> {{ student.name }} </td>
-            <td> {{ student.major }} </td>
-            <td> {{ student.advisor }} </td>
-            <td> {{ student.company }} </td>
-            <td> {{ student.supervisor }} </td>
-        </tr>
+    <tbody v-if="contracts.length!=0">
+
+        <template v-for="(contract,index) in contracts">
+
+            <tr v-if="contract" data-toggle="collapse" data-parent="#accordion" :href="'#'+contract.id">
+                <td v-if="contract.company == null"> {{ contract.name }} </td>
+                <td v-else style="color:#428bca;cursor:pointer"> {{ contract.name }} </td>
+                <td> {{ contract.major }} </td>
+                <td> {{ contract.period }} </td>
+                <td> {{ contract.company }} </td>
+                <td> {{ contract.supervisor }} </td>
+            </tr>
+            
+            <tr>
+                <div v-if="contract.company != null" :id="contract.id" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <span v-for="(thing,i) in contract.contract">
+                        <p v-if="thing!=''">{{i}} : {{thing}}</p>
+                        </span>
+                    </div>
+                </div>
+            </tr>
+
+            <tr>
+            
+            </tr>
+            
+        </template>
+
     </tbody>
 </table>
+
+
 `;
 
-headers = ["Term (Type)", "ID", "Name", "Major", "Advisor", "Company", "Supervisor"];
+headers = ["Student Name", "Major", "Period", "Company", "Supervisor"];
 
 var students = [];
 
@@ -44,7 +65,7 @@ function updateView() {
 
         // Gets the snapshot of the data (students of the coordinator)
         vals = snapshot.val();
-
+        console.log(vals);
         // For each term
         for (var term in vals) {
             // For each major
@@ -71,23 +92,12 @@ function fetchStudent(stu, major, term, vals) {
             period: term,
             id: snapshot2.key,
             major: major.toUpperCase(),
-            advisor: vals[term][major][snapshot2.key].advisor,
             supervisor: vals[term][major][snapshot2.key].supervisor,
         };
 
         // Get students data
         for (var key in studentVals)
             student[key] = studentVals[key];
-
-        // Trying to get the student's advisor's data
-        try {
-            firebase.database().ref("advisors/" + student.advisor.split(".").join(" ")).once('value', function (snapshot3) {
-                advVals = snapshot3.val();
-                student.advisor = advVals.name;
-            });
-        } catch (err) {
-            console.log(err.name);
-        }
 
         // Trying to get the student's supervisor's data
         try {
@@ -99,9 +109,19 @@ function fetchStudent(stu, major, term, vals) {
             console.log(err.name);
         }
 
+        // Trying to get the student's supervisor's data
+        try {
+            firebase.database().ref("contracts/" + stu).once('value', function (snapshot5) {
+                conVals = snapshot5.val();
+                student.contract = conVals;
+            });
+        } catch (err) {
+            console.log(err.name);
+        }
+
         // Highlight not submitting the contract yet
         if (student.name == undefined) {
-            student.name = " <no contract>";
+            student.name = stu + " <no contract>";
         }
 
         // Add to the list of students
@@ -109,13 +129,14 @@ function fetchStudent(stu, major, term, vals) {
     });
 }
 
-app_students_table = {
-    template: app_students_table_template,
+
+app_contracts_table = {
+    template: app_contracts_table_template,
     data() {
         return {
-            students: students
+            contracts: students
         }
     }
 };
 
-Vue.component('app-students-table', app_students_table);
+Vue.component('app-contracts-table', app_contracts_table);
