@@ -1,21 +1,22 @@
 app_students_table_template = `
-<table class="table table-bordered table-striped table-hover">
-    <thead>
-        <tr>
-            <th v-for="header in headers">{{ header }}</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr v-for="student in students">
-            <td> {{ student.name }} </td>
-            <td> {{ student.coordinator }} </td>
-            <td> {{ student.advisor }} </td>
-        </tr>
-    </tbody>
-</table>
+<div>
+<v-text-field append-icon="search" label="Search" v-model="search"></v-text-field>
+
+<v-data-table v-bind:headers="headers" :items="students" v-bind:search="search" hide-actions class="elevation-1">
+    <template slot="items" slot-scope="props">
+        <td class="text-xs-center">{{ props.item.name }}</td>
+        <td class="text-xs-center">{{ props.item.coordinator }}</td>
+        <td class="text-xs-center">{{ props.item.advisor }}</td>
+    </template>
+</v-data-table>
+</div>
 `;
 
-headers = ["Name", "Coordinator", "Advisor"];
+var headers = [
+    { text: 'Name', value: 'name', align: "center" },
+    { text: 'Coordinator', value: 'coordinator', align: "center" },
+    { text: 'Advisor', value: 'advisor', align: "center" },
+];
 
 var students = [];
 
@@ -95,7 +96,8 @@ app_students_table = {
     template: app_students_table_template,
     data() {
         return {
-            students: students
+            students: students,
+            search: ''
         }
     }
 };

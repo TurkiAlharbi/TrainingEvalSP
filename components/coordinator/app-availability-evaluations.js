@@ -1,37 +1,58 @@
 app_availability_evaluations_template = `
-<table class="table table-bordered table-striped">
-    <thead>
-        <tr>
-            <th v-for="header in headers">{{ header }}</th>
-        </tr>
-    </thead>
-    <tbody>
-
-        <template v-for="(eval,index) in evaluations">
-        
-            <tr data-toggle="collapse" data-parent="#accordion" :href="eval.hash" >
-                <td style="color:#428bca;cursor:pointer"> {{ eval.title }} </td>
-                <td> {{ eval.terms }} </td>
-                <td> {{ eval.status }} </td>
-            </tr>
-            
-            <tr>
-                <div :id="eval.id" class="panel-collapse collapse">
-                    <div class="panel-body">
-                        <p v-if="eval.status != 'Drafted'">Number of evaluations: {{ eval.numOfEvals }}</p>
-                        <button class="btn btn-info" v-if="eval.status == 'Drafted'" @click="open(coordinator+'/'+eval.id)">Save & Open</button>
-                        <button class="btn btn-success"  v-if="eval.status == 'Closed'" @click="open(coordinator+'/'+eval.id)">Open</button>
-                        <p v-if="eval.status =='Opened'">Will be closed in {{eval.autoClose}} day(s)</p>
-                        <button class="btn btn-danger" v-if="eval.status == 'Opened'" @click="close(coordinator+'/'+eval.id)">Close now</button>
-                    </div>
-                </div>
+<div>
+    <v-text-field append-icon="search" label="Search" v-model="search"></v-text-field>
+    
+    <v-data-table v-bind:headers="headers" :items="evaluations" v-bind:search="search" hide-actions class="elevation-1">
+        <template slot="items" slot-scope="props">
+            <tr @click="props.expanded = !props.expanded" :class="{'blue--text':props.item.contract}">
+                <td class="text-xs-center">{{ props.item.title }}</td>
+                <td class="text-xs-center">{{ props.item.terms }}</td>
+                <td class="text-xs-center">{{ props.item.status }}</td>
+                <td class="text-xs-center">
+                    <template v-if="props.item.status != 'Drafted'">
+                        {{ props.item.numOfEvals }}
+                    </template>
+                    <template v-else>
+                        -
+                    </template>
+                </td>
+                <td class="text-xs-center">
+                    <template v-if="props.item.status == 'Opened'">
+                        <span v-if="props.item.autoClose>1">{{props.item.autoClose}}</span><span v-else>1</span> day<span v-if="props.item.autoClose>1">s</span>
+                    </template>
+                    <template v-else>
+                        -
+                    </template>
+                </td>
+                <td class="text-xs-center">
+                    <v-btn v-if="props.item.status == 'Drafted'" class="cyan  white--text" @click="open(coordinator+'/'+props.item.id)">
+                        Save & Open
+                        <v-icon dark right>library_books</v-icon>
+                    </v-btn>
+                    <v-btn v-if="props.item.status == 'Closed'" class="green white--text" @click="open(coordinator+'/'+props.item.id)">
+                        Open
+                        <v-icon dark right>lock_open</v-icon>
+                    </v-btn>
+                    
+                    <v-btn v-if="props.item.status == 'Opened'" class="red white--text" @click="close(coordinator+'/'+props.item.id)">
+                        Close now
+                        <v-icon dark right>lock</v-icon>
+                    </v-btn>
+                </td>
             </tr>
         </template>
-    </tbody>
-</table>
+    </v-data-table>
+</div>
 `;
 
-headers = ["Title", "Period", "Status"];
+var headers = [
+    { text: 'Title', value: 'title', align: "center" },
+    { text: 'Period', value: 'terms', align: "center" },
+    { text: 'Status', value: 'status', align: "center" },
+    { text: 'Number of evaluations', value: 'numOfEvals', align: "center" },
+    { text: 'Close in', value: 'autoClose', align: "center" },
+    { text: 'Action', value: 'action', align: "center", sortable: false },
+];
 
 evaluations = [""];
 
@@ -92,8 +113,9 @@ app_availability_evaluations = {
     template: app_availability_evaluations_template,
     data() {
         return {
-            evaluations: evaluations
-        }
+            evaluations: evaluations,
+            search: ''
+        };
     }
 };
 

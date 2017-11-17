@@ -1,70 +1,52 @@
 app_setup_new_template = `
 <div>
-    
-        <h3>New form</h3>
-        <hr/>
-        <div class="form-group col-sm-6">
-            <div class="input-group">
-                <span class="input-group-addon">Name</span>
-                <input id="name" type="text" class="form-control">
-            </div>
-        </div>
+        <v-layout wrap>
+            <v-flex xs5>
+                <v-text-field label="Name" id="name" v-model="name" required></v-text-field>
+            </v-flex>
+            <v-flex xs2>
+            </v-flex>
+            <v-flex xs5>
+                <v-select label="Period" v-bind:items="periods" v-model="period" required></v-select>
+            </v-flex>
+            <v-flex xs5>
+                <v-text-field label="Opened for" id="autoClose" v-model="autoClose" required suffix="day(s) "></v-text-field>
+            </v-flex>
+            <v-flex xs2>
+            </v-flex>
+            <v-flex xs5>
+                <v-text-field label="Form number" id="formNumber" v-model="formNumber" required></v-text-field>
+            </v-flex>
 
-        <div class="form-group col-sm-6">
-            <div class="input-group">
-                <span class="input-group-addon">Periods</span>
-                <select class="form-control" id="periods">
-                    <option v-for="period in periods">{{ period }}</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="form-group col-sm-6">
-            <div class="input-group">
-                <span class="input-group-addon">Opened for</span>
-                <input id="autoClose" type="text" class="form-control">
-                <span class="input-group-addon">Day(s)</span>
-            </div>
-        </div>
-
-        <div class="form-group col-sm-6">
-            <div class="input-group">
-                <span class="input-group-addon">Form number</span>
-                <input id="formNumber" type="text" class="form-control">
-            </div>
-        </div>
-
-        <div class="form-group col-sm-12">
-            <div class="panel panel-primary">
-                <div class="panel-heading ">Questions</div>
-                    <table class="table">
-                        <tbody>
-                            <template v-for="question in newQuestions">
-                                <tr class="col-xl-12" style="text-align:center">
-                                    <td class="col-xl-5">
-                                        <input id="name" type="text" class="form-control" style="text-align: center;" :value="question" disabled>
-                                    </td>
-                                    <td class="col-xl-1">
-                                        <button class="btn btn-danger disabled">X</button>
-                                    </td>
-                                </tr>
-                            </template>
-                        </tbody>
-                    </table>
-                    <br/>
-                    <button class="btn btn-primary disabled">Add extra question</button>
-                    <br/>
-                    <br/>
-                </div>
-            </div>
-            <br/>
-        <button class="btn btn-success" @click="saveOpen">Save and open</button>
-        <button class="btn btn-success" @click="saveDraft" disabled>Save as draft</button>
-    </div>
+            <app-dashboard title="Questions">
+                <table>
+                    <tbody>
+                        <template v-for="question in newQuestions">
+                            <tr>
+                                <td style="width:95%;height:10px">
+                                    <v-text-field :value="question" :id="name"></v-text-field>
+                                </td>
+                                <td>
+                                    <v-btn color="red" flat icon><v-icon>cancel</v-icon></v-btn>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+                <v-flex xs12 class="text-xs-center">
+                    <v-btn class="cyan white--text">Add extra question</v-btn>
+                </v-flex>
+            </app-dashboard>
+            
+            <v-flex xs12 class="text-xs-center">
+                <v-btn class="green white--text" @click="saveOpen(name,period,autoClose,formNumber)">Save and open</v-btn>
+                <v-btn class="green white--text" @click="saveDraft(name,period,autoClose,formNumber)">Save as draft</v-btn>
+            </v-flex>
+        </v-layout>
 </div>
 `;
 
-newQuestions = [
+var newQuestions = [
     "Enthusiasm and interest in work",
     "Attitude towards delivering accurate work",
     "Quality of work output",
@@ -78,19 +60,23 @@ newQuestions = [
     "Punctuality",
 ];
 
+var periods = [];
+
 app_setup_new = {
     template: app_setup_new_template,
     data() {
         return {
             newQuestions: newQuestions,
-            periods: periods
-        }
+            periods: periods,
+            period: '',
+            name: '',
+            autoClose: '',
+            formNumber: ''
+        };
     }
 };
 
 Vue.component('app-setup-new', app_setup_new);
-
-periods = [];
 
 firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
@@ -124,12 +110,8 @@ function getPeriods() {
     });
 }
 
-function saveOpen() {
+function saveOpen(name, period, autoClose, formNumber) {
 
-    var name = $("#name").val();
-    var period = $("#periods").val();
-    var autoClose = $("#autoClose").val();
-    var formNumber = $("#formNumber").val();
     var status = "Opened";
 
     // TBD
@@ -137,14 +119,11 @@ function saveOpen() {
     coordinator = firebase.auth().currentUser.email.split(".").join(" ");
 
     update2DB("evaluation forms/" + coordinator + "/" + evalID, { autoClose: autoClose, status: status, terms: period, title: name });
+    alert("Saved as open");
 }
 
-function saveDraft() {
+function saveDraft(name, period, autoClose, formNumber) {
 
-    var name = $("#name").val();
-    var period = $("#periods").val();
-    var autoClose = $("#autoClose").val();
-    var formNumber = $("#formNumber").val();
     var status = "Drafted";
 
     // TBD
@@ -152,5 +131,6 @@ function saveDraft() {
     coordinator = firebase.auth().currentUser.email.split(".").join(" ");
 
     update2DB("evaluation forms/" + coordinator + "/" + evalID, { autoClose: autoClose, status: status, terms: period, title: name });
+    alert("Saved as a draft");
 }
 

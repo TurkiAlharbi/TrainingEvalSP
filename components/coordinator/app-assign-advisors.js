@@ -1,51 +1,46 @@
 app_assign_advisors_template = `
 <div>
-    <div class="input-group">
-    <span class="input-group-addon" style="min-width: 150px;"> Period: </span>
-        <select class="form-control" id="periods">
-            <option v-for="period in periods">{{ period }}</option>
-        </select>
-    </div>
-    <br/>
-    <button class="btn btn-success" @click="viewPeriod();view = true">Show</button>
+    <v-layout wrap row>
+        <v-flex xs12>
+            <v-select label="Periods" v-bind:items="periods" v-model="period" id="periods" required></v-select>
+        </v-flex>
+        <v-flex xs12>
+            <v-btn class="green white--text" @click="if(viewPeriod(period))view = true">Show
+                <v-icon dark right>list</v-icon>
+            </v-btn>
+        </v-flex>
+    </v-layout>
     
     <div v-if="view">
-        <hr/>
-        <p>Click to select multiple students, drag to the new advisor</p>
-        <div class="row">
-
-            <div class="col-xs-12">
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        <h1 class="panel-title">{{ coord.name }}</h1>
-                    </div>
-                    <div class="panel-body" style="background: #eee">
-                        <ol class="draggable" :id="coord.email">
-                            <template v-for="student in coord.students">
-                                <li :id="student.id">{{ student.name }} ({{student.major}})</li>
-                            </template>
-                        </ol>
-                    </div>
-                </div>
-            </div>
+        <v-layout wrap>
+            <v-flex xs12>
+                <p>Click to select multiple students, drag to the new advisor</p>
+            </v-flex>
+        
+            <v-flex xs12>
+                <app-dashboard :title="coord.name">
+                    <ol class="draggable" :id="coord.email" style="padding: 25px;">
+                        <template v-for="student in coord.students">
+                            <li :id="student.id">{{ student.name }} ({{student.major}})</li>
+                        </template>
+                    </ol>
+                </app-dashboard>
+            </v-flex>
             
-            <div v-for="advisor in advisors" class="col-xs-12 col-sm-6 col-md-4 col-md-3">
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        <h1 class="panel-title">{{ advisor.name }}</h1>
-                    </div>
-                    <div class="panel-body" style="background: #eee">
-                        <ol class="draggable" :id="advisor.email">
-                            <template v-for="student in advisor.students">
-                                <li :id="student.id">{{ student.name }} ({{student.major}})</li>
-                            </template>
-                        </ol>
-                    </div>
-                </div>
-            </div>
+            <v-flex v-for="advisor in advisors" xs12 sm6 md4 lg3>
+                <app-dashboard :title="advisor.name">
+                    <ol class="draggable" :id="advisor.email" style="padding: 25px;">
+                        <template v-for="student in advisor.students">
+                            <li :id="student.id">{{ student.name }} ({{student.major}})</li>
+                        </template>
+                    </ol>
+                </app-dashboard>
+            </v-flex>
 
-        </div>
-        <button class="btn btn-success" @click="setState">Save</button>
+        </v-layout>
+        <v-btn class="green white--text" @click="setState">Save
+            <v-icon dark right>save</v-icon>
+        </v-btn>
     </div>
 
 </div>
@@ -54,6 +49,7 @@ app_assign_advisors_template = `
 var advisors = [];
 var coord = { students: [] };
 var periods = [];
+var period = "";
 var term = "172 (internship)";
 var view = false;
 
@@ -62,6 +58,7 @@ app_assign_advisors = {
     data() {
         return {
             periods: periods,
+            period: period,
             advisors: advisors,
             view: view
         };
@@ -97,6 +94,7 @@ function getCoordinator() {
 
         for (var major in coordVals) {
             for (var stu in coordVals[major]) {
+                console.log(coordVals[major][stu]);
                 addCoordStudent(major, stu);
             }
         }
@@ -122,14 +120,19 @@ function addCoordStudent(major, stu) {
     });
 }
 
-function viewPeriod() {
-    term = $("#periods").val();
+function viewPeriod(period) {
+    if (period == "")
+        return;
+    
+    term = period;
 
     // Clears the old coordinator's list
     $("#students").html("");
 
     getAdvisors();
     getCoordinator();
+    
+    return true;
 }
 
 function getPeriods() {
@@ -147,8 +150,9 @@ function getPeriods() {
         // Gets the snapshot of the data (periods of the coordinator)
         vals = snapshot.val();
 
-        for (var i in vals)
+        for (var i in vals) {
             periods.push(i);
+        }
     });
 }
 

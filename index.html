@@ -6,115 +6,98 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link href="../lib/bootstrap/bootstrap.3.3.0.min.css" rel="stylesheet">
-    <script src="./lib/jquery/jquery-3.2.1.min.js"></script>
-    <link href="./css/index.css" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
+    <link href="../lib/vuetify/vuetify-0.17.0.min.css" rel="stylesheet">
+
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+    </style>
 
     <title>EvaluateMe</title>
 </head>
 
 <body>
-    <div id="app" v-cloak>
-        <nav class="navbar bg-primary" style="margin-bottom:50px;border-radius: 0;">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <a id="brand" class="navbar-brand" href="/" style="color:white">EvaluateMe</a>
-                </div>
-                <ul class="nav navbar-nav navbar-right" v-if="isAuthenticated">
-                    <li>
-                        <a id="signout" href="#" @click="signOut" style="color:white">
-                            Sign out
-                            <span class="glyphicon glyphicon-log-out"></span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
+    <v-app id="app" v-cloak>
 
-        <div v-if="loadAuth" class="container">
+        <v-toolbar dense class="blue">
+            <v-toolbar-title>
+                <a href="/" class="white--text" style="text-decoration: none">EvaluateMe</a>
+            </v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-toolbar-items v-if="isAuthenticated">
+                <v-btn flat id="signout" @click="signOut" class="white--text">Sign out</v-btn>
+            </v-toolbar-items>
+        </v-toolbar>
 
-            <div class="outer">
-                <div class="middle">
+        <v-container v-if="loadAuth" fill-height class="mb-5">
+            <v-container>
 
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-md-6 col-md-offset-3">
-                                <div class="panel panel-success">
-                                    <div class="panel-body">
-                                        <div id="login" class="tab-pane fade in active register">
-                                            <div class="container-fluid">
-                                                <div class="row">
-                                                    <h2 class="text-center" style="color: rgb(92, 184, 92);">
-                                                        <strong> Login </strong>
-                                                    </h2>
-                                                    <hr>
-                                                    <div class="row">
-                                                        <div class="col-xs-12 col-sm-12 col-md-12">
-                                                            <div class="form-group">
-                                                                <div class="input-group">
-                                                                    <div class="input-group-addon">
-                                                                        <span class="glyphicon glyphicon-user"></span>
-                                                                    </div>
-                                                                    <input v-model:email="auth.email" type="text" placeholder="Username" name="uname" class="form-control" @keydown.enter="newLogin">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-xs-12 col-sm-12 col-md-12">
-                                                            <div class="form-group">
-                                                                <div class="input-group">
-                                                                    <div class="input-group-addon">
-                                                                        <span class="glyphicon glyphicon-lock"></span>
-                                                                    </div>
-                                                                    <input v-model:password="auth.password" type="password" placeholder="Password" name="pass" class="form-control" @keydown.enter="newLogin">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!-- <div class="col-xs-12 col-sm-12 col-md-12">
-                                                <div class="col-xs-6 col-sm-6 col-md-6">
-                                                    <div class="form-group">
-                                                        <input type="checkbox" name="check" checked="checked"> Remember Me
-                                                    </div>
-                                                </div>
-                                                <div class="col-xs-6 col-sm-6 col-md-6">
-                                                    <div class="form-group">
-                                                        <a href="#forgot" data-toggle="modal"> Forgot Password? </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <hr> -->
-                                                    <hr>
-                                                    <div class="row">
-                                                        <div class="col-xs-12 col-sm-12 col-md-12">
-                                                            <button type="submit" @click="newLogin" class="btn btn-success btn-block btn-lg"> Login </button>
-                                                            <div v-if="auth.message !== ''" class="alert" role="alert" :class="{'alert-danger': auth.hasErrors, 'alert-success': !auth.hasErrors}">
-                                                                <button @click="dismissAlert" type="button" class="close">
-                                                                    <span aria-hidden="true">×</span>
-                                                                </button>
-                                                                <p>{{ auth.message }}</p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                <v-flex sm8 offset-sm2 md6 offset-md3>
+                    <v-card>
+                        <v-card-text>
+                            <div id="login" class="tab-pane fade in active register">
+                                <v-container fluid>
+                                    <v-layout row wrap>
+                                        <v-flex class="green--text">
+                                            <v-layout class="justify-center">
+                                                <h1>Login</h1>
+                                            </v-layout>
+                                        </v-flex>
+
+                                        <v-flex xs12>
+                                            <v-text-field name="uname" label="Email" prepend-icon="email" v-model:email="auth.email" @keydown.enter="newLogin" single-line></v-text-field>
+                                        </v-flex>
+
+                                        <v-flex xs12>
+                                            <v-text-field name="pass" label="Password" prepend-icon="work" v-model:password="auth.password" @keydown.enter="newLogin"
+                                                single-line :append-icon="e1 ? 'visibility' : 'visibility_off'" :append-icon-cb="() => (e1 = !e1)"
+                                                :type="e1 ? 'password' : 'text'"></v-text-field>
+                                        </v-flex>
+                                    </v-layout>
+                                </v-container>
+                            </div>
+                            <!--
+                                    <div class="col-xs-6 col-sm-6 col-md-6">
+                                        <div class="form-group">
+                                            <input type="checkbox" name="check" checked="checked"> Remember Me
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                                    <div class="col-xs-6 col-sm-6 col-md-6">
+                                        <div class="form-group">
+                                            <a href="#forgot" data-toggle="modal"> Forgot Password? </a>
+                                        </div>
+                                    </div>
+                                <hr>
+                            -->
+                        </v-card-text>
+                        <v-card-actions class="pb-3">
+                            <v-layout row wrap>
+                                <v-layout class="justify-center" sm12>
+                                    <v-btn @click="newLogin" class="green white--text">
+                                        Login
+                                        <v-icon>forward</v-icon>
+                                    </v-btn>
+                                </v-layout>
 
-                </div>
-            </div>
+                        </v-card-actions>
+                    </v-card>
 
-        </div>
+                    <v-flex v-if="auth.message !== ''" @click="dismissAlert" :class="{'red': auth.hasErrors, 'green': !auth.hasErrors}">
+                        <v-btn flat>
+                            <p>{{ auth.message }}</p>
+                        </v-btn>
+                    </v-flex>
+                </v-flex>
 
-        <div v-if="isAuthenticated" id="content" class="container">
+            </v-container>
+        </v-container>
+
+        <v-container v-else-if="isAuthenticated" id="content" class="container">
 
             <div v-if="auth.message !== ''">
-                <div class="alert" role="alert" :class="{'alert-danger': auth.hasErrors, 'alert-success': !auth.hasErrors}">
+                <div :class="{'red white--text': auth.hasErrors, 'green white--text': !auth.hasErrors}">
                     <button @click="dismissAlert" type="button" class="close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -141,54 +124,57 @@
             </div>
 
             <div v-else-if="auth.type == 'disabled'">
-                <p>Your account is disabled, contact system's admin!</p>
+                <p style="text-align:center">Your account is disabled, contact system's admin!</p>
             </div>
 
-        </div>
+            <div v-else-if="!loaded">
+                <p style="text-align:center">Loading!</p>
+                <!-- //TBD: more visual loading screen -->
+            </div>
+        </v-container>
 
-        <div v-if="!loaded">
-            <p style="text-align:center">Loading!</p>
-            <!-- //TBD: more visual loading screen -->
-        </div>
-        <div style="margin:75px"></div>
-        <footer class="footer navbar-fixed-bottom" style="background-color:#428bca !important; text-align: center;margin-top:100px">
-            <p style="padding: 10px;color: white;">EvaluateMe © 2017</p>
-        </footer>
-    </div>
+        <app-footer></app-footer>
+    </v-app>
 
+    <js>
+        <!-- Libraries -->
+        <script src="./lib/jquery/jquery-3.2.1.min.js"></script>
+        <script src="../lib/vue/vue-2.5.0.min.js"></script>
+        <script src="../lib/vuetify/vuetify-0.17.0.min.js"></script>
 
-    <script src="../lib/vue/vue-2.5.0.min.js"></script>
+        <!-- Firebase -->
+        <script src="../lib/firebase/firebase-4.6.0.min.js"></script>
+        <script src="./login/config.js"></script>
+        <script src="./login/functions.js"></script>
 
-    <!-- Firebase -->
-    <script src="../lib/firebase/firebase-4.6.0.min.js"></script>
-    <script src="./login/config.js"></script>
-    <script src="./login/functions.js"></script>
+        <script>
+            function newLogin() {
+                app.login();
+            };
+        </script>
 
-    <script>
-        function newLogin() {
-            app.login();
-        };
-    </script>
+        <!-- Login's -->
+        <script src="./components/login/app-field.js"></script>
+        <script src="./components/login/app-container.js"></script>
+        <script src="./components/login/app-login.js"></script>
+        <script src="./components/login/app-forget-modal.js"></script>
 
-    <!-- Login's -->
-    <script src="./components/login/app-field.js"></script>
-    <script src="./components/login/app-container.js"></script>
-    <script src="./components/login/app-login.js"></script>
-    <script src="./components/login/app-forget-modal.js"></script>
+        <!-- Dashboards -->
+        <script src="./components/dashboards/app-admin.js"></script>
+        <script src="./components/dashboards/app-advisor.js"></script>
+        <script src="./components/dashboards/app-coordinator.js"></script>
+        <script src="./components/dashboards/app-supervisor.js"></script>
 
-    <!-- Dashboards -->
-    <script src="./components/dashboards/app-admin.js "></script>
-    <script src="./components/dashboards/app-advisor.js "></script>
-    <script src="./components/dashboards/app-coordinator.js "></script>
-    <script src="./components/dashboards/app-supervisor.js "></script>
+        <!-- Common -->
+        <script src="./components/vuetify-dashboard/app-option.js"></script>
+        <script src="./components/vuetify-dashboard/app-dashboard.js"></script>
+        <script src="./components/vuetify-dashboard/app-dashboard-no-container.js"></script>
+        <script src="./components/vuetify-dashboard/app-footer.js"></script>
 
-    <!-- Common -->
-    <script src="./components/page-dashboard/app-option.js "></script>
-    <script src="./components/page-dashboard/app-dashboard.js "></script>
-    <script src="./components/page-dashboard/app-dashboard-no-container.js "></script>
+        <!-- Vue main -->
+        <script src="./login/app.js"></script>
+    </js>
 
-    <!-- Vue main -->
-    <script src="./login/app.js"></script>
 </body>
 
 </html>

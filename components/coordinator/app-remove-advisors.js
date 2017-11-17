@@ -1,22 +1,39 @@
 app_remove_advisors_template = `
-<table class="table table-bordered table-striped table-hover">
-    <thead>
-        <tr>
-            <th v-for="header in headers">{{ header }}</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr v-for="advisor in advisors" v-if="advisor.show">
-            <td> {{ advisor.name }} </td>
-            <td> {{ advisor.students }} </td>
-            <td> <button class="btn btn-danger" style="padding:0px 5px;" @click="remAdv(advisor)">X</button> </td>
-        </tr>
-    </tbody>
-</table>
+<div>
+    <v-text-field append-icon="search" label="Search" v-model="search"></v-text-field>
+    
+    <v-data-table v-bind:headers="headers" :items="advisors" v-bind:search="search" hide-actions class="elevation-1">
+        <template slot="items" slot-scope="props">
+            <td class="text-xs-center">{{ props.item.name }}</td>
+            <td class="text-xs-center">{{ props.item.email }}</td>
+            <td class="text-xs-center">{{ props.item.students }}</td>
+
+            <td class="text-xs-center" v-if="!props.item.students">
+                <v-btn color="red" flat icon @click="remAdv(props.item)">
+                    <v-icon>cancel</v-icon>
+                </v-btn>
+            </td>
+            <td class="text-xs-center" v-else>
+                <v-btn color="red" flat icon disabled>
+                    <v-icon>cancel</v-icon>
+                </v-btn>
+            </td>
+        </template>
+    </v-data-table>
+</div>
 `;
-headers = ["Name", "Numbr of students", "Remove"];
+
+var headers = [
+    { text: 'Name', value: 'name', align: "center" },
+    { text: 'Email', value: 'email', align: "center" },
+    { text: 'Number of students', value: 'number', align: "center" },
+    { text: 'Remove', align: "center", sortable: false },
+];
 
 function remAdv(adv) {
+
+    // Remove from the current view
+    advisors.splice(advisors.indexOf(adv), 1);
 
     // Remove from advisors list
     firebase.database().ref('advisors/' + adv.id).remove();
@@ -30,8 +47,6 @@ function remAdv(adv) {
     //TODO // Removes account
     // removeUser()
 
-    // Hide from table
-    adv.show = false;
 }
 
 var advisors = [];
@@ -98,8 +113,8 @@ function getAdvisors3(advisor, adv, id) {
 
         advisor.students = count;
         advisor.id = id;
-        advisor.show = true;
-
+        advisor.email = id.split(" ").join(".");
+        
         // Add to the list of advisors
         advisors.push(advisor);
     });
@@ -109,7 +124,9 @@ app_remove_advisors = {
     template: app_remove_advisors_template,
     data() {
         return {
-            advisors: advisors
+            advisors: advisors,
+            headers: headers,
+            search: '',
         }
     }
 };

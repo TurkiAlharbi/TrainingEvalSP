@@ -1,46 +1,37 @@
 app_contracts_table_template = `
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th v-for="header in headers">{{ header }}</th>
-        </tr>
-    </thead>
-    <tbody v-if="contracts.length!=0">
-
-        <template v-for="(contract,index) in contracts">
-
-            <tr v-if="contract" data-toggle="collapse" data-parent="#accordion" :href="'#'+contract.id">
-                <td v-if="contract.company == null"> {{ contract.name }} </td>
-                <td v-else style="color:#428bca;cursor:pointer"> {{ contract.name }} </td>
-                <td> {{ contract.major }} </td>
-                <td> {{ contract.period }} </td>
-                <td> {{ contract.company }} </td>
-                <td> {{ contract.supervisor }} </td>
+<div>
+    <v-text-field append-icon="search" label="Search" v-model="search"></v-text-field>
+    
+    <v-data-table v-bind:headers="headers" :items="contracts" v-bind:search="search" hide-actions class="elevation-1">
+        <template slot="items" slot-scope="props">
+            <tr @click="props.expanded = !props.expanded" :class="{'blue--text':props.item.contract}">
+                <td class="text-xs-center">{{ props.item.name }}</td>
+                <td class="text-xs-center">{{ props.item.major }}</td>
+                <td class="text-xs-center">{{ props.item.period }}</td>
+                <td class="text-xs-center">{{ props.item.company }}</td>
+                <td class="text-xs-center">{{ props.item.supervisor }}</td>
             </tr>
-            
-            <tr>
-                <div v-if="contract.company != null" :id="contract.id" class="panel-collapse collapse">
-                    <div class="panel-body">
-                        <span v-for="(thing,i) in contract.contract">
-                        <p v-if="thing!=''">{{i}} : {{thing}}</p>
-                        </span>
-                    </div>
-                </div>
-            </tr>
-
-            <tr>
-            
-            </tr>
-            
         </template>
-
-    </tbody>
-</table>
-
-
+        <template slot="expand" slot-scope="props">
+            <v-card flat>
+                <v-card-text>
+                    <span v-for="(thing,i) in  props.item.contract">
+                        <p v-if="thing!=''" style="margin-bottom: 8px;">{{i}} : {{thing}}</p>
+                    </span>
+                </v-card-text>
+            </v-card>
+        </template>
+    </v-data-table>
+</div>
 `;
 
-headers = ["Student Name", "Major", "Period", "Company", "Supervisor"];
+var headers = [
+    { text: 'Name', value: 'name', align: "center" },
+    { text: 'Major', value: 'major', align: "center" },
+    { text: 'Period', value: 'period', align: "center" },
+    { text: 'Company', value: 'company', align: "center" },
+    { text: 'Supervisor', value: 'supervisor', align: "center" },
+];
 
 var students = [];
 
@@ -121,7 +112,7 @@ function fetchStudent(stu, major, term, vals) {
 
         // Highlight not submitting the contract yet
         if (student.name == undefined) {
-            student.name = stu + " <no contract>";
+            student.name = stu;
         }
 
         // Add to the list of students
@@ -134,7 +125,8 @@ app_contracts_table = {
     template: app_contracts_table_template,
     data() {
         return {
-            contracts: students
+            contracts: students,
+            search: ''
         }
     }
 };

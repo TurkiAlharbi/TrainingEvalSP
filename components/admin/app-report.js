@@ -1,6 +1,5 @@
 template = `
-<div>
-    <div class="container" style="text-align:left">
+    <v-container>
         <p v-show="false">{{ info.demo }}</p>
         <p v-if="info.students">Number of students: {{ info.students }}</p>
         <p v-if="info.contracts">Number of submitted contracts: {{ info.contracts }}</p>
@@ -13,25 +12,39 @@ template = `
         <p v-if="info.forms">Number of evaluation forms: {{ info.forms }}</p>
         <p v-if="info.submissions">Number of evaluation submissions: {{ info.submissions }}</p>
 
-        <div v-if="info.majors">
-            <span>Majors:
-                <ul>
-                    <li v-for="major in Object.keys(info.majors).sort()">{{ major }} : {{ info.majors[major]}} student<span v-if="info.majors[major]!=1">s</span></li>
-                </ul>
-            </span>
-        </div>
+        <app-dashboard title="Majors" v-if="info.majors">
+            <v-data-table v-bind:headers="periodHeaders" :items="majorsTable" hide-actions class="elevation-1">
+                <template slot="items" slot-scope="props">
+                    <td class="text-xs-center">{{ props.item.name }}</td>
+                    <td class="text-xs-center">{{ props.item.number }}</td>
+                </template>
+            </v-data-table>
+        </app-dashboard>
 
-        <div v-if="info.periods">
-            <span>Periods:
-                <ul>
-                    <li v-for="period in Object.keys(info.periods).sort()">{{ period }} : {{ info.periods[period]}} student<span v-if="info.periods[period]!=1">s</span></li>
-                </ul>
-            </span>
-        </div>
+        <br/>
+        <app-dashboard title="Periods" v-if="info.periods">
+            <v-data-table v-bind:headers="periodHeaders" :items="periodsTable" hide-actions class="elevation-1">
+                <template slot="items" slot-scope="props">
+                    <td class="text-xs-center">{{ props.item.name }}</td>
+                    <td class="text-xs-center">{{ props.item.number }}</td>
+                </template>
+            </v-data-table>
+        </app-dashboard>
 
-    </div>
-</div>
+    </v-container>
 `;
+
+var majorsTable = [];
+var majorHeaders = [
+    { text: 'Name', value: 'name', align: "center" },
+    { text: 'Number of students', value: 'number', align: "center" },
+];
+
+var periodsTable = [];
+var periodHeaders = [
+    { text: 'Name', value: 'name', align: "center" },
+    { text: 'Number of students', value: 'number', align: "center" },
+];
 
 var info = { demo: "" };
 
@@ -115,7 +128,11 @@ function updateView() {
 
         info.periods = periods;
         info.majors = majors;
+        for (var thisMajor in majors)
+            majorsTable.push({ name: thisMajor, number: majors[thisMajor] });
 
+        for (var thisPeriod in periods)
+            periodsTable.push({ name: thisPeriod, number: periods[thisPeriod] });
         renderView();
     });
 
@@ -130,6 +147,11 @@ app_report = {
     data() {
         return {
             info: info,
+            majorHeaders: majorHeaders,
+            majorsTable: majorsTable,
+            periodHeaders: periodHeaders,
+            periodsTable: periodsTable,
+
         };
     }
 };

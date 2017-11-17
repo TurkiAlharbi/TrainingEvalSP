@@ -11,7 +11,8 @@ var app = new Vue({
             type: '',
             hasErrors: false
         },
-        loaded: false
+        loaded: false,
+        e1: true,
     },
 
     methods: {
@@ -103,4 +104,5 @@ var app = new Vue({
 // Allows the page to load without showing login transtion
 setTimeout(function () {
     app.loaded = true;
-}, 1500);
+}, 0);
+// }, 1500);

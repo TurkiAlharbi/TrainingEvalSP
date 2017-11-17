@@ -1,23 +1,26 @@
 app_students_table_template = `
-<table class="table table-bordered table-striped table-hover">
-    <thead>
-        <tr>
-            <th v-for="header in headers">{{ header }}</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr v-for="student in students">
-            <td> {{ student.name }} </td>
-            <td> {{ student.major }} </td>
-            <td> {{ student.period }} </td>
-            <td> {{ student.company }} </td>
-            <td> {{ student.supervisor }} </td>
-        </tr>
-    </tbody>
-</table>
+<div>
+    <v-text-field append-icon="search" label="Search" v-model="search"></v-text-field>
+
+    <v-data-table v-bind:headers="headers" :items="students" v-bind:search="search" hide-actions class="elevation-1">
+        <template slot="items" slot-scope="props">
+            <td class="text-xs-center">{{ props.item.name }}</td>
+            <td class="text-xs-center">{{ props.item.major }}</td>
+            <td class="text-xs-center">{{ props.item.period }}</td>
+            <td class="text-xs-center">{{ props.item.company }}</td>
+            <td class="text-xs-center">{{ props.item.supervisor }}</td>
+        </template>
+    </v-data-table>
+</div>
 `;
 
-var headers = ["Name", "Major", "Period", "Company", "Supervisor"];
+var headers = [
+    { text: 'Name', value: 'name', align: "center" },
+    { text: 'Major', value: 'major', align: "center" },
+    { text: 'Period', value: 'period', align: "center" },
+    { text: 'Company', value: 'company', align: "center" },
+    { text: 'Supervisor', value: 'supervisor', align: "center" },
+];
 
 var students = [];
 
@@ -101,8 +104,9 @@ app_students_table = {
     template: app_students_table_template,
     data() {
         return {
-            students: students
-        }
+            students: students,
+            search: ''
+        };
     }
 };
 

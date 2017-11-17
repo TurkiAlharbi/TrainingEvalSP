@@ -5,43 +5,53 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link href="../lib/bootstrap/bootstrap.3.3.0.min.css" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
+    <link href="../lib/vuetify/vuetify-0.17.0.min.css" rel="stylesheet">
 
     <style>
         [v-cloak] {
             display: none
         }
+
+        tbody tr:nth-child(2n+1) {
+            background-color: #f9f9f9;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+        }
     </style>
 
-    <title>View Coordinators</title>
+    <title>View and remove Coordinators</title>
 </head>
 
 <body>
-    <div id="app" v-cloak>
+    <v-app id="app" v-cloak>
 
         <app-page-header></app-page-header>
 
-        <app-dashboard title="View coordinators">
+        <app-dashboard title="View and remove coordinators">
             <app-coordinators-table></app-coordinators-table>
         </app-dashboard>
 
-    </div>
+    </v-app>
 
     <script src="../lib/vue/vue-2.5.0.min.js "></script>
+    <script src="../lib/vuetify/vuetify-0.17.0.min.js"></script>
 
     <!-- Firebase -->
     <script src="../lib/firebase/firebase-4.6.0.min.js"></script>
     <script src="../login/config.js"></script>
     <script src="../login/functions.js"></script>
-    
+
     <script src="../components/admin/app-coordinators-table.js "></script>
-    <script src="../components/page-dashboard/app-dashboard.js "></script>
-    <script src="../components/page-dashboard/app-page-header.js "></script>
+    <script src="../components/vuetify-dashboard/app-dashboard.js "></script>
+    <script src="../components/vuetify-dashboard/app-page-header.js "></script>
 
     <script src="../components/app.js "></script>
 
     <script src="../lib/jquery/jquery-3.2.1.min.js "></script>
-    <script src="../lib/bootstrap/bootstrap.3.3.0.min.js "></script>
 </body>
 
 </html>

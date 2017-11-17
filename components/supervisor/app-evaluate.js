@@ -1,86 +1,46 @@
 app_evaluate_template = `
 <div>
-    <div>
-        <div class="form-group col-sm-12">
-            <div class="input-group">
-                <span class="input-group-addon">Student</span>
-                <select class="form-control" id="students">
-                    <template v-for="student in students">
-                        <option :value="student.id">{{student.name}}</option>
-                    </template>
-                </select>
-            </div>
-            <br/>
-            <button class="btn btn-success" @click="viewForms();view = false">View forms</button>
-            
-            <hr/>
-
-            <div class="input-group">
-                <span class="input-group-addon">Form</span>
-                <select class="form-control" id="forms">
-                    <template v-for="form in forms">
-                        <option :value="form.id">{{ form.name }}</option>
-                    </template>
-                </select>
-            </div>
-            <br/>
-            <button class="btn btn-success" @click="viewForm();view=true">View form</button>
-        </div>
+    <v-layout row wrap>
+        <v-flex xs12 class="text-xs-center">
+            <v-select label="Student" v-bind:items="students" item-text="name" item-value="id" v-model="student" id="student" required></v-select>
+            <v-btn class="green white--text" @click="viewForms(student);view = false">Choose student</v-btn>
+            <v-select label="Form" v-bind:items="forms" item-text="name" item-value="id" v-model="form" id="form" required></v-select>
+            <v-btn class="green white--text" @click="viewForm(form);view=true">View form</v-btn>
+        </v-flex>
         
-        <div class="form-group col-sm-12" v-if="view">
-            <hr/>
-            <div class="panel panel-primary">
-            
-                <div class="panel-heading ">Questions</div>
-                    <div class="panel-body">
-                        <div class="input-group">
-                            <span class="input-group-addon" style="min-width: 150px;">
-                                Brief Training Description:
-                            </span>
-                            <textarea rows=2 class="form-control" id="brief"></textarea>
-                        </div>
-                        <br/>
+        <v-flex xs12 v-if="view">
+            <app-dashboard title="Evaluation">
+                <v-layout wrap row>
+                    <v-flex sm12 class="text-xs-center">
+                        <v-text-field name="brief" label="Brief Training Description" v-model="brief" textarea rows=3></v-text-field>
+
                         <p class="h5">Each question is in scale of 0-10</p>
-                        <hr/>
-                        <div id="questions">
-                            <div class="form-group" v-for="q in questions">
-                                <label class="col-sm-5 control-label">{{ q }}</label>
-                                <div class="col-sm-1">
-                                    <input class="form-control" type="number" min=0 max=10>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-12">
-                            <hr/>
-                        </div>
-                        <div class="input-group col-sm-12">
-                            <span class="input-group-addon" style="min-width: 150px;"> Overall rating for the student’s performance: </span>
-                            <div class="form-group" data-toggle="tooltip">
-                                <select class="form-control" id="rating">
-                                    <option value="Excellent">Excellent</option>
-                                    <option value="Very Good">Very Good</option>
-                                    <option value="Good">Good</option>
-                                    <option value="Marginal">Marginal</option>
-                                    <option value="Poor">Poor</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-sm-12">
-                            <hr/>
-                        </div>
-                        <div class="input-group">
-                            <span class="input-group-addon" style="min-width: 150px;">
-                            Comments (if any):
-                            </span>
-                        <textarea rows=2 class="form-control" id="comments"></textarea>
-                    </div>
-                    </div>
-                        
-                </div>
-                <button class="btn btn-success" @click="submit">Submit evaluation</button>
-            </div>
-        </div>
-    </div>
+                    </v-flex>
+                    <v-flex sm12>
+                        <v-layout wrap row>
+                            <v-flex xs12 sm6 md4 v-for="question in questions">
+                                <v-layout wrap row>
+                                    <v-flex xs11>
+                                        <v-subheader>{{ question.text }}</v-subheader>
+                                    </v-flex>
+                                    <v-flex xs1>
+                                        <v-text-field type="number" min=0 max=10 v-model="question.value"></v-text-field>
+                                    </v-flex>
+                                </v-layout>
+                            </v-flex>
+                        </v-layout>
+                    </v-flex>
+                    <v-flex sm12>
+                        <v-select label="Overall rating for the student’s performance" v-bind:items="ratings" v-model="rating" id="ratings" required></v-select>
+                        <v-text-field name="comments" v-model="comments" label="Comments (if any)" textarea rows=3></v-text-field>
+                    </v-flex>
+                    <v-flex sm12 class="text-xs-center">
+                        <v-btn class="green white--text" @click="submit(student, form, brief, comments, rating)">Submit evaluation</v-btn>
+                    </v-flex>
+                </v-layout>
+            </app-dashboard>
+        </v-flex>
+    </v-layout>
 </div>
 `;
 
@@ -88,17 +48,17 @@ app_evaluate_template = `
 name = "Summer training form #1";
 forms = [];
 questions = [
-    "Enthusiasm and interest in work",
-    "Attitude towards delivering accurate work",
-    "Quality of work output",
-    "Initiative in taking tasks to complete",
-    "Dependability and reliability",
-    "Ability to learn and search for information",
-    "Judgment and decision making",
-    "Maintaining effective relations with co-workers",
-    "Ability of reporting and presenting his work",
-    "Attendance",
-    "Punctuality",
+    { text: "Enthusiasm and interest in work", value: '', id: "Q1" },
+    { text: "Attitude towards delivering accurate work", value: '', id: "Q2" },
+    { text: "Quality of work output", value: '', id: "Q3" },
+    { text: "Initiative in taking tasks to complete", value: '', id: "Q4" },
+    { text: "Dependability and reliability", value: '', id: "Q5" },
+    { text: "Ability to learn and search for information", value: '', id: "Q6" },
+    { text: "Judgment and decision making", value: '', id: "Q7" },
+    { text: "Maintaining effective relations with co-workers", value: '', id: "Q8" },
+    { text: "Ability of reporting and presenting his work", value: '', id: "Q9" },
+    { text: "Attendance", value: '', id: "Q10" },
+    { text: "Punctuality", value: '', id: "Q11" },
 ];
 
 var view = false;
@@ -162,26 +122,25 @@ app_evaluate = {
         return {
             questions: questions,
             students: students,
+            student: '',
             forms: forms,
-            view: view
+            form: '',
+            view: view,
+            ratings: ["Excellent", "Very Good", "Good", "Marginal", "Poor"],
+            rating: '',
+            brief: '',
+            comments: ''
         };
     }
 };
 
 Vue.component('app-evaluate', app_evaluate);
 
-function submit() {
-    student = $("#students :checked").val();
-    form = $("#forms :checked").val();
-    brief = $("#brief").val();
-    comments = $("#comments").val();
-    rating = $("#rating").val();
-    questions = $("#questions input").length;
+function submit(student, form, brief, comments, rating) {
 
     jsonQuestions = {};
-
-    for (var i = 0; i < questions; i++)
-        jsonQuestions["Q" + (i + 1)] = $("#questions input")[i].value;
+    for (var q in questions)
+        jsonQuestions[questions[q].id] = questions[q].value;
 
     json = {
         brief: brief,
@@ -198,13 +157,13 @@ function submit() {
     }, 1500);
 }
 
-function viewForms() {
+function viewForms(student) {
     console.log("view");
 
     while (forms.length != 0)
         forms.pop();
 
-    var student = $("#students").val();
+    // var student = $("#students").val();
     for (var i in students) {
         if (students[i].id == student) {
             student = students[i];
@@ -216,13 +175,13 @@ function viewForms() {
         vals = snapshot.val();
         for (var i in vals) {
             if (student.period == vals[i].terms) {
-                console.log(vals[i]);
-                forms.push({ id: i, name: vals[i].title });
+                if (vals[i].status == "Opened")
+                    forms.push({ id: i, name: vals[i].title });
             }
         }
     });
 }
 
-function viewForm() {
+function viewForm(form) {
     console.log("new view");
 }

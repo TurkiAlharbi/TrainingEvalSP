@@ -5,7 +5,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link href="../lib/bootstrap/bootstrap.3.3.0.min.css" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
+    <link href="../lib/vuetify/vuetify-0.17.0.min.css" rel="stylesheet">
 
     <style>
         [v-cloak] {
@@ -17,30 +18,30 @@
 </head>
 
 <body>
-    <div id="app" v-cloak>
+    <v-app id="app" v-cloak>
 
         <app-page-header></app-page-header>
 
         <app-dashboard title="Add advisor">
-            <form>
-                <fieldset>
+            <v-layout wrap>
+                <v-flex xs12>
                     <legend>Advisor Information:</legend>
-                    <div class="input-group">
-                        <span class="input-group-addon" style="min-width: 150px;"> Name: </span>
-                        <input id="name" type="text" class="form-control">
-                    </div>
-                    <br>
-                    <div class="input-group">
-                        <span class="input-group-addon" style="min-width: 150px;"> Email: </span>
-                        <input id="email" type="text" class="form-control">
-                    </div>
-                </fieldset>
-                <br/>
-            </form>
-            <button class="btn btn-success" @click="addAdvisor">Add</button>
+                </v-flex>
+                <v-flex xs12>
+                    <v-text-field label="Name" id="name" required></v-text-field>
+                </v-flex>
+                <v-flex xs12>
+                    <v-text-field label="Email" id="email" required></v-text-field>
+                </v-flex>
+                <v-flex xs12>
+                    <v-btn class="green white--text" @click="addAdvisor">Add
+                        <v-icon dark right>check_circle</v-icon>
+                    </v-btn>
+                </v-flex>
+            </v-layout>
         </app-dashboard>
 
-    </div>
+    </v-app>
 
     <script>
         function addAdvisor() {
@@ -50,7 +51,6 @@
 
             // Creates an advisor account
             createUser(email, password, "Advisor");
-
 
             write2DB("advisors/" + email.split(".").join(" "), { name: name });
 
@@ -68,19 +68,19 @@
         }
     </script>
     <script src="../lib/vue/vue-2.5.0.min.js "></script>
+    <script src="../lib/vuetify/vuetify-0.17.0.min.js"></script>
 
     <!-- Firebase -->
     <script src="../lib/firebase/firebase-4.6.0.min.js"></script>
     <script src="../login/config.js"></script>
     <script src="../login/functions.js"></script>
 
-    <script src="../components/page-dashboard/app-dashboard.js "></script>
-    <script src="../components/page-dashboard/app-page-header.js "></script>
+    <script src="../components/vuetify-dashboard/app-dashboard.js "></script>
+    <script src="../components/vuetify-dashboard/app-page-header.js "></script>
 
     <script src="../components/app.js "></script>
 
     <script src="../lib/jquery/jquery-3.2.1.min.js "></script>
-    <script src="../lib/bootstrap/bootstrap.3.3.0.min.js "></script>
 </body>
 
 </html>

@@ -5,7 +5,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link href="../lib/bootstrap/bootstrap.3.3.0.min.css" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
+    <link href="../lib/vuetify/vuetify-0.17.0.min.css" rel="stylesheet">
 
     <style>
         [v-cloak] {
@@ -17,7 +18,7 @@
 </head>
 
 <body>
-    <div id="app" v-cloak>
+    <v-app id="app" v-cloak>
 
         <app-page-header></app-page-header>
 
@@ -25,9 +26,10 @@
             <app-setup></app-setup>
         </app-dashboard>
 
-    </div>
+    </v-app>
 
     <script src="../lib/vue/vue-2.5.0.min.js "></script>
+    <script src="../lib/vuetify/vuetify-0.17.0.min.js"></script>
 
     <!-- Firebase -->
     <script src="../lib/firebase/firebase-4.6.0.min.js"></script>
@@ -37,13 +39,13 @@
     <script src="../components/coordinator/app-setup-new.js "></script>
     <script src="../components/coordinator/app-setup-modify.js "></script>
     <script src="../components/coordinator/app-setup.js "></script>
-    <script src="../components/page-dashboard/app-dashboard.js "></script>
-    <script src="../components/page-dashboard/app-page-header.js "></script>
+
+    <script src="../components/vuetify-dashboard/app-dashboard.js "></script>
+    <script src="../components/vuetify-dashboard/app-page-header.js "></script>
 
     <script src="../components/app.js "></script>
 
     <script src="../lib/jquery/jquery-3.2.1.min.js "></script>
-    <script src="../lib/bootstrap/bootstrap.3.3.0.min.js "></script>
 </body>
 
 </html>

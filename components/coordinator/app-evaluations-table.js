@@ -1,81 +1,71 @@
 app_evaluations_table_template = `
 <div>
     <div>
-        <div class="form-group col-sm-12">
-            <div class="input-group">
-                <span class="input-group-addon">Form</span>
-                <select class="form-control" id="forms">
-                    <template v-for="form in forms">
-                        <option :value="form.id">{{ form.title }}</option>
-                    </template>
-                </select>
-            </div>
-            <br/>
-            
-            <button class="btn btn-success" @click="viewForm();view = true">View form</button>
-
+        <v-flex xs12>
+            <v-select label="Form" v-bind:items="forms" item-text="title" item-value="id" v-model="form" required></v-select>
+        </v-flex>
+        <v-flex xs12>
+            <v-btn class="green white--text" @click="viewForm(form);view = true">View form 
+                <v-icon dark right>format_list_numbered</v-icon>
+            </v-btn>
+        </v-flex>
+        <v-flex xs12>
             <p v-show="false">{{form}}</p>
             
             <div v-if="view">
-                <br/>
-                <p>For the period of {{ form_meta.terms }}</p>
-                <div class="table-responsive">
-                    <hr/>
-                    <table class="table table-striped table-hover table-condensed table-bordered table-responsive">
-                        <thead>
-                            <tr>
-                                <th style="text-align:center;font-size:.95em" rowspan="2">Student</th>
-                                <th style="text-align:center;font-size:.95em" rowspan="2">Brief description</th>
-                                <th style="text-align:center;font-size:.95em" rowspan="2">Comments</th>
-                                <th style="text-align:center;font-size:.95em" rowspan="2">Rating</th>
-                                <th style="text-align:center;font-size:.95em" :colspan="100">Questions</th>
-                            </tr>
-                            <tr>
-                                <td style="text-align:center;font-size:.8em" v-for="question in questions">
-                                    {{ question }}
-                                </td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <template v-for="(student,index) in form.students">
-                                <tr>
-                                    <td style="text-align:center;font-size:.8em">{{ form.students[index].name }}</td>
-                                    <td style="text-align:center;font-size:.8em">{{ form.students[index].brief }}</td>
-                                    <td style="text-align:center;font-size:.8em">{{ form.students[index].comments }}</td>
-                                    <td style="text-align:center;font-size:.8em">{{ form.students[index].rating }}</td>
-                                    <td style="text-align:center" v-for="question in form.students[index].questions">
-                                        {{ question }}
-                                    </td>
-                                </tr>
-                            </template>
-                        </tbody>
-                    </table>
-                </div>
+                
+                <v-text-field append-icon="search" label="Search" v-model="search"></v-text-field>
+                {{ form.students }}
+                <v-data-table v-bind:headers="headers.concat(questions)" :items="formStudents" v-bind:search="search" hide-actions class="elevation-1">
+                    <template slot="headerCell" slot-scope="props">
+                        <v-tooltip bottom>
+                            <span slot="activator">{{ props.header.pop }}</span>
+                            <span>{{ props.header.text }}</span>
+                        </v-tooltip>
+                    </template>
+                    <template slot="items" slot-scope="props">
+                        <td class="text-xs-center">{{ props.item.name }}</td>
+                        <td class="text-xs-center">{{ props.item.brief }}</td>
+                        <td class="text-xs-center">{{ props.item.comments }}</td>
+                        <td class="text-xs-center">{{ props.item.rating }}</td>
+                        <td class="text-xs-center" v-for="(question,i,b) in props.item.questions">
+                            {{props.item.questions['Q'+(b+1)]}}
+                        </td>
+                    </template>
+                </v-data-table>
             </div>
-            <br/>
-        </div>
+        </v-flex>
     </div>
 </div>
 `;
 
 var forms = [];
 var view = false;
-questions = [
-    "Enthusiasm and interest in work",
-    "Attitude towards delivering accurate work",
-    "Quality of work output",
-    "Initiative in taking tasks to complete",
-    "Dependability and reliability",
-    "Ability to learn and search for information",
-    "Judgment and decision making",
-    "Maintaining effective relations with co-workers",
-    "Ability of reporting and presenting his work",
-    "Attendance",
-    "Punctuality",
+var questions = [
+
+    { text: "Enthusiasm and interest in work", sortable: false, pop: "Q1" },
+    { text: "Attitude towards delivering accurate work", sortable: false, pop: "Q2" },
+    { text: "Quality of work output", sortable: false, pop: "Q3" },
+    { text: "Initiative in taking tasks to complete", sortable: false, pop: "Q4" },
+    { text: "Dependability and reliability", sortable: false, pop: "Q5" },
+    { text: "Ability to learn and search for information", sortable: false, pop: "Q6" },
+    { text: "Judgment and decision making", sortable: false, pop: "Q7" },
+    { text: "Maintaining effective relations with co-workers", sortable: false, pop: "Q8" },
+    { text: "Ability of reporting and presenting his work", sortable: false, pop: "Q9" },
+    { text: "Attendance", sortable: false, pop: "Q10" },
+    { text: "Punctuality", sortable: false, pop: "Q11" },
+];
+
+var headers = [
+    { text: 'Name', pop: 'Name', value: 'name', align: "center" },
+    { text: 'Brief', pop: 'Brief', value: 'brief', align: "center" },
+    { text: 'Comments', pop: 'Comments', value: 'comments', align: "center" },
+    { text: 'Rating', pop: 'Rating', value: 'rating', align: "center" },
 ];
 
 var students = [];
-var form = { demo: "demo" };
+var form = { demo: "demo", students: [] };
+var formStudents = [];
 
 firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
@@ -99,14 +89,14 @@ function updateView() {
 
         var x = 0;
 
-        for (var i in vals) {
-            addForm(vals[i], i, x);
+        for (var key in vals) {
+            addForm(vals[key], key, x);
             x++;
         }
     });
 }
 
-function addForm(vals, i, x) {
+function addForm(vals, key, x) {
 
     for (var s in vals) {
         firebase.database().ref("students/" + s + "/name").once('value', function (snapshot2) {
@@ -115,22 +105,35 @@ function addForm(vals, i, x) {
         });
     }
 
-    firebase.database().ref("evaluation forms/" + coordinator + "/" + i).once('value', function (snapshot3) {
+    firebase.database().ref("evaluation forms/" + coordinator + "/" + key).once('value', function (snapshot3) {
         form_meta = snapshot3.val();
-        newForm = { students: vals, key: i, id: x, title: form_meta.title };
+        var newForm = { students: vals, key: key, id: x, title: form_meta.title };
+        console.log(newForm);
         forms.push(newForm);
     });
 
 
 }
 
-function viewForm() {
+function viewForm(formID) {
     console.log("new view");
 
-    formID = $("#forms").val();
-    form.students = forms[formID].students;
+    // Clears old list
+    while (formStudents.length != 0)
+        formStudents.pop();
+
+    for (var stu in forms[formID].students) {
+        var brief = forms[formID].students[stu].brief;
+        var comments = forms[formID].students[stu].comments;
+        var rating = forms[formID].students[stu].rating;
+        var questions = forms[formID].students[stu].questions;
+        console.log({ name: stu, brief: brief, comments: comments, rating: rating, questions: questions })
+        formStudents.push({ name: stu, brief: brief, comments: comments, rating: rating, questions: questions });
+    }
+
     form.id = forms[formID].id;
     form.key = forms[formID].key;
+    form = forms[formID];
     form.demo = form.demo + "1";
 }
 
@@ -139,10 +142,14 @@ app_evaluations_table = {
     template: app_evaluations_table_template,
     data() {
         return {
+            students: students,
+            questions: questions,
             forms: forms,
             form: form,
-            view: view
-        }
+            formStudents: formStudents,
+            view: view,
+            search: ''
+        };
     }
 };
 

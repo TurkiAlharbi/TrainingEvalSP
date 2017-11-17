@@ -1,32 +1,46 @@
 app_remove_students_template = `
-<div class="table-responsive">
-    <table class="table table-bordered table-striped table-hover" style="margin-bottom:25px">
-        <thead>
-            <tr>
-                <th v-for="header in headers">{{ header }}</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr v-for="student in students" v-if="student.show">
-                <td> {{ student.period }} </td>
-                <td> {{ student.id }} </td>
-                <td> {{ student.name }} </td>
-                <td> {{ student.mobile }} </td>
-                <td> {{ student.major }} </td>
-                <td> {{ student.advisor }} </td>
-                <td> {{ student.company }} </td>
-                <td> {{ student.supervisor }} </td>
-                <td> {{ student.supervisorMobile }} </td>
-                <td> <button class="btn btn-danger" style="padding:0px 5px;" @click="remStudent(student)">X</button> </td> 
-            </tr>
-        </tbody>
-    </table>
+<div>
+    <v-text-field append-icon="search" label="Search" v-model="search"></v-text-field>
+
+    <v-data-table v-bind:headers="headers" :items="students" v-bind:search="search" hide-actions class="elevation-1">
+        <template slot="items" slot-scope="props">
+            <td class="text-xs-center">{{ props.item.period }} </td>
+            <td class="text-xs-center">{{ props.item.id }} </td>
+            <td class="text-xs-center">{{ props.item.name }} </td>
+            <td class="text-xs-center">{{ props.item.mobile }} </td>
+            <td class="text-xs-center">{{ props.item.major }} </td>
+            <td class="text-xs-center">{{ props.item.advisor }} </td>
+            <td class="text-xs-center">{{ props.item.company }} </td>
+            <td class="text-xs-center">{{ props.item.supervisor }} </td>
+            <td class="text-xs-center">{{ props.item.supervisorMobile }} </td>
+            <td class="text-xs-center"><v-btn color="red" flat icon @click="remStudent(props.item)">
+                <v-icon>cancel</v-icon>
+            </v-btn></td>
+        </template>
+    </v-data-table>
 </div>
 `;
 
-headers = ["Term (Type)", "ID", "Name","Mobile", "Major", "Advisor", "Company", "Supervisor","Mobile", "Remove"];
+var headers = [
+    { text: "Term (Type)", value: "period", align: "center" },
+    { text: "ID", value: "id", align: "center" },
+    { text: 'Name', value: 'name', align: "center" },
+    { text: 'Mobile', value: 'mobile', align: "center" },
+    { text: 'Major', value: 'major', align: "center" },
+    { text: 'Advisor', value: 'advisor', align: "center" },
+    { text: 'Company', value: 'company', align: "center" },
+    { text: 'Supervisor', value: 'supervisor', align: "center" },
+    { text: 'Mobile', value: 'supervisorMobile', align: "center" },
+    { text: 'Remove', align: "center", sortable: false },
+];
+
+var students = [];
+var advisors = [];
 
 function remStudent(student) {
+
+    // Remove from the current view
+    students.splice(students.indexOf(student), 1);
 
     // Remove from coordinator's list
     coordinator = firebase.auth().currentUser.email.split(".").join(" ");
@@ -41,8 +55,6 @@ function remStudent(student) {
     // Hide from table
     student.show = false;
 }
-
-var students = [];
 
 firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
@@ -124,7 +136,7 @@ function fetchStudent(stu, major, term, vals) {
 
         // Highlight not submitting the contract yet
         if (student.name == undefined) {
-            student.name = " <no contract>";
+            student.name = "<no contract>";
         }
 
         // Add to the list of students
@@ -137,7 +149,9 @@ app_remove_students = {
     template: app_remove_students_template,
     data() {
         return {
-            students: students
+            students: students,
+            search: "",
+            advisors: advisors,
         };
     }
 };

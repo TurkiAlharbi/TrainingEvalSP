@@ -1,45 +1,35 @@
 template = `
 <div>
-
-    <div class="input-group">
-        <span class="input-group-addon" style="min-width: 150px;"> Type: </span>
-            <select class="form-control" id="options">
-                <option>summer</option>
-                <option>coop</option>
-                <option>internship</option>
-            </select>
-    </div>
-    <div class="input-group">
-        <span class="input-group-addon" style="min-width: 150px;"> Term(s): </span>
-        <div class="form-group" data-toggle="tooltip">
-            <select class="form-control" id="terms">
-                <option v-for="term in terms" :value="term">{{term}}</option>
-            </select>
-        </div>
-    </div>
-    <br/>
-    <button class="btn btn-success" @click="addPeriods">Add period</button>
-
+    <v-layout wrap>
+        <v-flex xs12>
+            <v-select label="Type" v-bind:items="types" v-model="type" required></v-select>
+        </v-flex>
+        <v-flex xs12>
+            <v-select label="Term(s)" v-bind:items="terms" v-model="term" required></v-select>
+        </v-flex>
+        <v-flex xs12>
+            <v-btn class="green white--text" @click="addPeriods(type,term)">Add period
+                <v-icon dark right>check_circle</v-icon>
+            </v-btn>
+        </v-flex>
+    </v-layout>
     <hr/>
-
-    <div class="input-group">
-        <span class="input-group-addon" style="min-width: 150px;"> Period: </span>
-            <select class="form-control" id="periods">
-                <option v-for="period in periods">{{ period }}</option>
-            </select>
-    </div>
-    <div class="input-group">
-        <span class="input-group-addon" style="min-width: 150px;"> Major: </span>
-            <select class="form-control" id="majors">
-                <option v-for="major in majors">{{ major }}</option>
-            </select>
-    </div>
-    <div class="input-group">
-        <span class="input-group-addon" style="min-width: 150px;"> IDs: </span>
-        <input id="names" type="text" class="form-control" placeholder="Seperate by ,">
-    </div>
-    <br/>
-    <button class="btn btn-success" @click="addStudents">Add students</button>
+    <v-layout wrap>
+        <v-flex xs12>
+            <v-select label="Periods" v-bind:items="periods" v-model="period" required></v-select>
+        </v-flex>
+        <v-flex xs12>
+            <v-select label="Major" v-bind:items="majors" v-model="major" required></v-select>
+        </v-flex>
+        <v-flex xs12>
+            <v-text-field label="IDs" v-model="names" placeholder="Seperate by ," required></v-text-field>
+        </v-flex>
+        <v-flex xs12>
+            <v-btn class="green white--text" @click="addStudents(names,major,period)">Add
+                <v-icon dark right>check_circle</v-icon>
+            </v-btn>
+        </v-flex>
+    </v-layout>
 </div>
 `;
 
@@ -49,6 +39,7 @@ var terms = [
     "171", "172", "172 + 173", "173", "173 + 181",
     "181", "182", "182 + 183", "183", "183 + 191",
 ];
+var types = ["summer", "coop", "internship"];
 
 firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
@@ -96,19 +87,25 @@ app_add_student = {
     template: template,
     data() {
         return {
-            periods: periods
+            periods: periods,
+            period: '',
+            types: types,
+            type: types[0],
+            terms: terms,
+            term: terms[0],
+            majors: majors,
+            major: '',
+            names: ''
         }
     }
 }
 
 Vue.component("app-add-student", app_add_student);
 
-
-
-function addStudents() {
-    var names = $('#names').val();
-    var period = $("#periods :checked").val();
-    var major = $("#majors :checked").val();
+function addStudents(names, major, period) {
+    // var names = $('#names').val();
+    // var period = $("#periods :checked").val();
+    // var major = $("#majors :checked").val();
 
     if (names == "" || period == undefined || major == undefined)
         return;
@@ -120,7 +117,6 @@ function addStudents() {
         .replace(new RegExp("s", 'g'), "")
         .replace(new RegExp("S", 'g'), "")
         .split(",");
-
 
     coordinator = firebase.auth().currentUser.email.split(".").join(" ");
 
@@ -159,11 +155,9 @@ function addStudents() {
     }, 1000);
 }
 
-function addPeriods() {
-    var option = $("#options :checked").val();
-    var terms = $("#terms").val();
-    period = terms + " " + "(" + option + ")";
-    if (terms == "")
+function addPeriods(type, term) {
+    period = term + " " + "(" + type + ")";
+    if (term == "" || type == "")
         return;
 
     var json = { [period]: "" };
