@@ -87,6 +87,9 @@ var app = new Vue({
 
                     firebase.database().ref('/users/' + userId).once('value').then(function (snapshot) {
                         app.auth.type = snapshot.val() && snapshot.val().type;
+                        firebase.database().ref(app.auth.type.toLowerCase() + "s/" + userId + "/name").once('value').then(function (snapshot2) {
+                            app.auth.userName = snapshot2.val();
+                        });
                     });
                 } else {
                     this.auth.user = null;
