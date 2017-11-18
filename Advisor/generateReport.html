@@ -12,9 +12,18 @@
         [v-cloak] {
             display: none
         }
+
+        tbody tr:nth-child(2n+1) {
+            background-color: #f9f9f9;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+        }
     </style>
 
-    <title>Generate a Report</title>
+    <title>Report</title>
 </head>
 
 <body>
@@ -22,7 +31,7 @@
 
         <app-page-header></app-page-header>
 
-        <app-dashboard title="Generate a Report">
+        <app-dashboard title="Report">
             <app-report></app-report>
         </app-dashboard>
 
