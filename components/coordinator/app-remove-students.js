@@ -22,7 +22,7 @@ app_remove_students_template = `
 `;
 
 var headers = [
-    { text: "Term (Type)", value: "period", align: "center" },
+    { text: "Period", value: "period", align: "center" },
     { text: "ID", value: "id", align: "center" },
     { text: 'Name', value: 'name', align: "center" },
     { text: 'Mobile', value: 'mobile', align: "center" },
