@@ -20,11 +20,11 @@ template = `
     </app-dashboard-no-container>
 
     <app-dashboard-no-container title="Other utilities">
-        <app-option name="Generate a report" link="../Advisor/generateReport.html" wip="true"></app-option>
+        <app-option name="Generate a report" link="../Coordinator/generateReport.html" done="true"></app-option>
     </app-dashboard-no-container>
 
-    <hr/>
-    <hr/>
+    <br/>
+    <br/>
     
     <!-- Advisor's view -->
     <app-dashboard-no-container title="Advisor's roles">
