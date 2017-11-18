@@ -21,15 +21,22 @@
 <body>
     <v-app id="app" v-cloak>
 
-        <v-toolbar dense class="blue">
+        <v-toolbar class="blue" dense fixed>
             <v-toolbar-title>
                 <a href="/" class="white--text" style="text-decoration: none">EvaluateMe</a>
             </v-toolbar-title>
             <v-spacer></v-spacer>
-            <v-toolbar-items v-if="isAuthenticated">
-                <v-btn flat id="signout" @click="signOut" class="white--text">Sign out</v-btn>
-            </v-toolbar-items>
+            <template v-if="isAuthenticated">
+                <v-toolbar-title>
+                    <a v-if="auth.userName" class="blue white--text" style="cursor:default">Welcome {{ auth.userName }}</a>
+                </v-toolbar-title>
+                <v-spacer></v-spacer>
+                <v-toolbar-items>
+                    <v-btn flat id="signout" @click="signOut" class="white--text">Sign out</v-btn>
+                </v-toolbar-items>
+            </template>
         </v-toolbar>
+        <div class="ma-5"></div>
 
         <v-container v-if="loadAuth" fill-height class="mb-5">
             <v-container>
