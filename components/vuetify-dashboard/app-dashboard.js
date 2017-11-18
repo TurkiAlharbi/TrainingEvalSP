@@ -10,14 +10,15 @@ app_dashboard_template = `
 
         
         <v-card-text class="white black--text">
-            <v-layout row wrap justify-center>
+            <v-container row wrap justify-center>
                 <slot></slot>
-            </v-layout>
+            </v-container>
         </v-card-text>        
 
     </v-card>
 </v-container>
-`
+`;
+
 app_dashboard = {
     template: app_dashboard_template,
     props: {
