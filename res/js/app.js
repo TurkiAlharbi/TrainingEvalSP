@@ -107,5 +107,5 @@ var app = new Vue({
 // Allows the page to load without showing login transtion
 setTimeout(function () {
     app.loaded = true;
-}, 0);
-// }, 1500);
+    // }, 0);
+}, 1500);
