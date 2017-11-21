@@ -27,9 +27,9 @@
             </v-toolbar-title>
             <v-spacer></v-spacer>
             <template v-if="isAuthenticated">
-                <v-toolbar-title v-if="auth.userName" class="text-xs-center">
-                    <p class="blue white--text" style="cursor:default;font-size:0.75em;margin:0">Welcome {{ auth.userName }}</p>
-                    <p v-if="auth.type" class="blue white--text" style="cursor:default;font-size:0.75em;margin:0">Account type: {{ auth.type }}</p>
+                <v-toolbar-title v-if="auth.userName" class="text-xs-center" style="cursor:default;">
+                    <p class="blue white--text" style="font-size:0.75em;margin:0 25px 0 0">Welcome {{ auth.userName }}</p>
+                    <p v-if="auth.type" class="blue white--text" style="font-size:0.75em;margin:0 25px 0 0">Account type: {{ auth.type }}</p>
                 </v-toolbar-title>
                 <v-spacer></v-spacer>
                 <v-toolbar-items>
