@@ -4,8 +4,8 @@ app_evaluate_template = `
         <v-flex xs12 class="text-xs-center">
             <v-select label="Student" v-bind:items="students" item-text="name" item-value="id" v-model="student" id="student" required></v-select>
             <v-btn class="green white--text" @click="viewForms(student);view = false">Choose student</v-btn>
-            <v-select label="Form" v-bind:items="forms" item-text="name" item-value="id" v-model="form" id="form" required></v-select>
-            <v-btn class="green white--text" @click="viewForm(form);view=true">View form</v-btn>
+            <v-select label="Form" v-bind:items="forms" item-text="name" v-model="form" id="form" required></v-select>
+            <v-btn class="green white--text" @click="if(viewForm(form)){view=true;viewQuestions(form.questions)}">View form</v-btn>
         </v-flex>
         
         <v-flex xs12 v-if="view">
@@ -21,7 +21,7 @@ app_evaluate_template = `
                             <v-flex xs12 sm6 md4 v-for="question in questions">
                                 <v-layout wrap row>
                                     <v-flex xs11>
-                                        <v-subheader>{{ question.text }}</v-subheader>
+                                        <v-subheader>{{ question.title }}</v-subheader>
                                     </v-flex>
                                     <v-flex xs1>
                                         <v-text-field type="number" min=0 max=10 v-model="question.value"></v-text-field>
@@ -45,21 +45,9 @@ app_evaluate_template = `
 `;
 
 
-name = "Summer training form #1";
-forms = [];
-questions = [
-    { text: "Enthusiasm and interest in work", value: '', id: "Q1" },
-    { text: "Attitude towards delivering accurate work", value: '', id: "Q2" },
-    { text: "Quality of work output", value: '', id: "Q3" },
-    { text: "Initiative in taking tasks to complete", value: '', id: "Q4" },
-    { text: "Dependability and reliability", value: '', id: "Q5" },
-    { text: "Ability to learn and search for information", value: '', id: "Q6" },
-    { text: "Judgment and decision making", value: '', id: "Q7" },
-    { text: "Maintaining effective relations with co-workers", value: '', id: "Q8" },
-    { text: "Ability of reporting and presenting his work", value: '', id: "Q9" },
-    { text: "Attendance", value: '', id: "Q10" },
-    { text: "Punctuality", value: '', id: "Q11" },
-];
+var name = "Summer training form #1";
+var forms = [];
+var questions = [];
 
 var view = false;
 var students = [];
@@ -139,9 +127,9 @@ Vue.component('app-evaluate', app_evaluate);
 function submit(student, form, brief, comments, rating) {
 
     jsonQuestions = {};
-    for (var q in questions)
-        jsonQuestions[questions[q].id] = questions[q].value;
-
+    for (var q = 0; q < questions.length; q++) {
+        jsonQuestions["Q" + (q + 1)] = questions[q].value;
+    }
     json = {
         brief: brief,
         comments: comments,
@@ -149,7 +137,7 @@ function submit(student, form, brief, comments, rating) {
         questions: jsonQuestions
     };
 
-    write2DB("evaluation" + "/" + coordinator.split(".").join(" ") + "/" + form + "/" + student, json);
+    write2DB("evaluation" + "/" + coordinator.split(".").join(" ") + "/" + form.id + "/" + student, json);
 
     // Go to submitted page
     setTimeout(function () {
@@ -176,12 +164,27 @@ function viewForms(student) {
         for (var i in vals) {
             if (student.period == vals[i].terms) {
                 if (vals[i].status == "Opened")
-                    forms.push({ id: i, name: vals[i].title });
+                    forms.push({ id: i, name: vals[i].title, questions: vals[i].questions });
             }
         }
     });
 }
 
 function viewForm(form) {
+    if (form == "")
+        return false;
+
     console.log("new view");
+    return true;
+}
+
+function viewQuestions(newQuestions) {
+    console.log("view questions");
+
+    while (questions.length != 0)
+        questions.pop();
+
+    for (var q in newQuestions) {
+        questions.push(newQuestions[q]);
+    }
 }
