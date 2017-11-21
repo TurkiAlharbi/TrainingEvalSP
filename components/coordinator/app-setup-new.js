@@ -15,7 +15,7 @@ app_setup_new_template = `
         </v-flex>
 
         <app-dashboard title="Questions">
-            <table>
+            <table v-if="newQuestions.length!=0">
                 <thead class="text-xs-center">
                     <tr>
                         <td>Question</td>
