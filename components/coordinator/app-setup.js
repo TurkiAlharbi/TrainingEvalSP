@@ -1,10 +1,10 @@
 app_setup_template = `
 <div>
-    <v-tabs centered grow>
+    <v-tabs centered>
         <v-tabs-bar class="blue" dark>
             <v-tabs-slider class="yellow"></v-tabs-slider>
             <v-tabs-item href="#new">Create a new form</v-tabs-item>
-            <v-tabs-item href="#modify" disabled>Modify a draft</v-tabs-item>
+            <v-tabs-item href="#modify">Modify a drafted form</v-tabs-item>
         </v-tabs-bar>
 
         <v-tabs-items>
