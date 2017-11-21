@@ -1,63 +1,61 @@
 app_setup_new_template = `
 <div>
-        <v-layout wrap>
-            <v-flex xs5>
-                <v-text-field label="Name" id="name" v-model="name" required></v-text-field>
-            </v-flex>
-            <v-flex xs2>
-            </v-flex>
-            <v-flex xs5>
-                <v-select label="Period" v-bind:items="periods" v-model="period" required></v-select>
-            </v-flex>
-            <v-flex xs5>
-                <v-text-field label="Opened for" id="autoClose" v-model="autoClose" required suffix="day(s) "></v-text-field>
-            </v-flex>
-            <v-flex xs2>
-            </v-flex>
-            <v-flex xs5>
-                <v-text-field label="Form number" id="formNumber" v-model="formNumber" required></v-text-field>
-            </v-flex>
+    <v-layout wrap>
+        <v-flex xs12 sm5>
+            <v-text-field label="Name" id="name" v-model="name" required></v-text-field>
+        </v-flex>
+        <v-flex xs12 sm5 offset-sm2>
+            <v-select label="Period" v-bind:items="periods" v-model="period" required></v-select>
+        </v-flex>
+        <v-flex xs12 sm5>
+            <v-text-field label="Opened for" id="autoClose" v-model="autoClose" required suffix="day(s) "></v-text-field>
+        </v-flex>
+        <v-flex xs12 sm5 offset-sm2>
+            <v-text-field label="Form number" id="formNumber" v-model="formNumber" required></v-text-field>
+        </v-flex>
 
-            <app-dashboard title="Questions">
-                <table>
-                    <tbody>
-                        <template v-for="question in newQuestions">
-                            <tr>
-                                <td style="width:95%;height:10px">
-                                    <v-text-field :value="question" :id="name"></v-text-field>
-                                </td>
-                                <td>
-                                    <v-btn color="red" flat icon><v-icon>cancel</v-icon></v-btn>
-                                </td>
-                            </tr>
-                        </template>
-                    </tbody>
-                </table>
-                <v-flex xs12 class="text-xs-center">
-                    <v-btn class="cyan white--text">Add extra question</v-btn>
-                </v-flex>
-            </app-dashboard>
-            
+        <app-dashboard title="Questions">
+            <table>
+                <thead class="text-xs-center">
+                    <tr>
+                        <td>Question</td>
+                        <td>Weight</td>
+                        <td>Remove</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template v-for="(question,index) in newQuestions">
+                        <tr>
+                            <td style="width:95%" class="pl-5 pr-5">
+                                <v-text-field v-model="question.title"></v-text-field>
+                            </td>
+                            <td class="pl-5 pr-5 ma-5" >
+                                <v-text-field v-model="question.weight" type="number" min=0 max=100></v-text-field>
+                            </td>
+                            <td>
+                                <v-btn color="red" flat icon @click="removeQ(index)"><v-icon>cancel</v-icon></v-btn>
+                            </td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
             <v-flex xs12 class="text-xs-center">
-                <v-btn class="green white--text" @click="saveOpen(name,period,autoClose,formNumber)">Save and open</v-btn>
-                <v-btn class="green white--text" @click="saveDraft(name,period,autoClose,formNumber)">Save as draft</v-btn>
+                <v-btn class="cyan white--text" @click="addNewQ">Add extra question</v-btn>
             </v-flex>
-        </v-layout>
+        </app-dashboard>
+        
+        <v-flex xs12 class="text-xs-center">
+            <v-btn class="green white--text" @click="saveOpen(name,period,autoClose,formNumber)">Save and open</v-btn>
+            <v-btn class="green white--text" @click="saveDraft(name,period,autoClose,formNumber)">Save as draft</v-btn>
+        </v-flex>
+    </v-layout>
 </div>
 `;
 
 var newQuestions = [
-    "Enthusiasm and interest in work",
-    "Attitude towards delivering accurate work",
-    "Quality of work output",
-    "Initiative in taking tasks to complete",
-    "Dependability and reliability",
-    "Ability to learn and search for information",
-    "Judgment and decision making",
-    "Maintaining effective relations with co-workers",
-    "Ability of reporting and presenting his work",
-    "Attendance",
-    "Punctuality",
+    { title: "", weight: 1 },
+    { title: "", weight: 1 },
+    { title: "", weight: 1 },
 ];
 
 var periods = [];
@@ -111,26 +109,35 @@ function getPeriods() {
 }
 
 function saveOpen(name, period, autoClose, formNumber) {
-
-    var status = "Opened";
-
-    // TBD
-    evalID = period.split(")").join("_").split("(").join("_").split("#").join("_").split(" ").join("_") + "_form" + formNumber;
-    coordinator = firebase.auth().currentUser.email.split(".").join(" ");
-
-    update2DB("evaluation forms/" + coordinator + "/" + evalID, { autoClose: autoClose, status: status, terms: period, title: name });
-    alert("Saved as open");
+    save(name, period, autoClose, formNumber, "Opened", "Saved as a open");
 }
 
 function saveDraft(name, period, autoClose, formNumber) {
-
-    var status = "Drafted";
-
-    // TBD
-    evalID = period.split(")").join("_").split("(").join("_").split("#").join("_").split(" ").join("_") + "_form" + formNumber;
-    coordinator = firebase.auth().currentUser.email.split(".").join(" ");
-
-    update2DB("evaluation forms/" + coordinator + "/" + evalID, { autoClose: autoClose, status: status, terms: period, title: name });
-    alert("Saved as a draft");
+    save(name, period, autoClose, formNumber, "Drafted", "Saved as a draft");
 }
 
+function save(name, period, autoClose, formNumber, status, message) {
+
+    // TBD
+    var evalID = period.split(")").join("_").split("(").join("_").split("#").join("_").split(" ").join("_") + "_form" + formNumber;
+    var coordinator = firebase.auth().currentUser.email.split(".").join(" ");
+
+    var jsonNewQuestions = {};
+    for (var q = 0; q < newQuestions.length; q++)
+        if (newQuestions[q].title != "")
+            jsonNewQuestions["Q" + (q + 1)] = newQuestions[q];
+
+    var json = { autoClose: autoClose, status: status, terms: period, title: name, questions: jsonNewQuestions };
+
+    update2DB("evaluation forms/" + coordinator + "/" + evalID, json);
+
+    alert(message);
+}
+
+function addNewQ() {
+    newQuestions.push({ title: "", weight: 1 });
+}
+
+function removeQ(index) {
+    newQuestions.splice(index, 1);
+}
