@@ -13,7 +13,7 @@ app_dashboard_no_container_template = `
             <v-layout row wrap justify-center>
                 <slot></slot>
             </v-layout>
-        </v-card-text>        
+        </v-card-text>
 
     </v-card>
 </v-container>
