@@ -15,22 +15,26 @@ app_evaluations_table_template = `
             <div v-if="view">
                 
                 <v-text-field append-icon="search" label="Search" v-model="search"></v-text-field>
-                {{ form.students }}
+                
                 <v-data-table v-bind:headers="headers.concat(questions)" :items="formStudents" v-bind:search="search" hide-actions class="elevation-1">
-                    <template slot="headerCell" slot-scope="props">
-                        <v-tooltip bottom>
-                            <span slot="activator">{{ props.header.pop }}</span>
-                            <span>{{ props.header.text }}</span>
-                        </v-tooltip>
-                    </template>
                     <template slot="items" slot-scope="props">
-                        <td class="text-xs-center">{{ props.item.name }}</td>
-                        <td class="text-xs-center">{{ props.item.brief }}</td>
-                        <td class="text-xs-center">{{ props.item.comments }}</td>
-                        <td class="text-xs-center">{{ props.item.rating }}</td>
-                        <td class="text-xs-center" v-for="(question,i,b) in props.item.questions">
-                            {{props.item.questions['Q'+(b+1)]}}
-                        </td>
+                        <tr @click="props.expanded = !props.expanded">
+                            <td class="text-xs-center ma-0 pa-0">{{ props.item.name }}</td>
+                            <td class="text-xs-center ma-0 pa-0">{{ props.item.brief }}</td>
+                            <td class="text-xs-center ma-0 pa-0">{{ props.item.comments }}</td>
+                            <td class="text-xs-center ma-0 pa-0">{{ props.item.rating }}</td>
+                            <td class="text-xs-center ma-0 pa-0" v-for="(question,i,b) in props.item.questions">
+                                {{props.item.questions['Q'+(b+1)]}}
+                            </td>
+                        </tr>
+                    </template>
+                    <template slot="expand" slot-scope="props">
+                        <v-card flat>
+                            <v-card-text>
+                                Brief: {{ props.item.brief }}
+                                Comments: {{ props.item.comments }}
+                            </v-card-text>
+                        </v-card>
                     </template>
                 </v-data-table>
             </div>
@@ -41,20 +45,7 @@ app_evaluations_table_template = `
 
 var forms = [];
 var view = false;
-var questions = [
-
-    { text: "Enthusiasm and interest in work", sortable: false, pop: "Q1" },
-    { text: "Attitude towards delivering accurate work", sortable: false, pop: "Q2" },
-    { text: "Quality of work output", sortable: false, pop: "Q3" },
-    { text: "Initiative in taking tasks to complete", sortable: false, pop: "Q4" },
-    { text: "Dependability and reliability", sortable: false, pop: "Q5" },
-    { text: "Ability to learn and search for information", sortable: false, pop: "Q6" },
-    { text: "Judgment and decision making", sortable: false, pop: "Q7" },
-    { text: "Maintaining effective relations with co-workers", sortable: false, pop: "Q8" },
-    { text: "Ability of reporting and presenting his work", sortable: false, pop: "Q9" },
-    { text: "Attendance", sortable: false, pop: "Q10" },
-    { text: "Punctuality", sortable: false, pop: "Q11" },
-];
+var questions = [];
 
 var headers = [
     { text: 'Name', pop: 'Name', value: 'name', align: "center" },
@@ -107,8 +98,13 @@ function addForm(vals, key, x) {
 
     firebase.database().ref("evaluation forms/" + coordinator + "/" + key).once('value', function (snapshot3) {
         form_meta = snapshot3.val();
-        var newForm = { students: vals, key: key, id: x, title: form_meta.title };
-        console.log(newForm);
+        var jsonQuestions = [];
+        var numOfQuestions = Object.keys(form_meta.questions).length;
+        for (var q = 0; q < numOfQuestions; q++) {
+            var newQuestion = { text: form_meta.questions["Q" + (q + 1)].title, sortable: false };
+            jsonQuestions.push(newQuestion);
+        }
+        var newForm = { students: vals, key: key, id: x, title: form_meta.title, jsonQuestions: jsonQuestions };
         forms.push(newForm);
     });
 
@@ -126,14 +122,24 @@ function viewForm(formID) {
         var brief = forms[formID].students[stu].brief;
         var comments = forms[formID].students[stu].comments;
         var rating = forms[formID].students[stu].rating;
-        var questions = forms[formID].students[stu].questions;
-        console.log({ name: stu, brief: brief, comments: comments, rating: rating, questions: questions })
-        formStudents.push({ name: stu, brief: brief, comments: comments, rating: rating, questions: questions });
+        var stuQuestions = forms[formID].students[stu].questions;
+        var json = { name: stu, brief: brief, comments: comments, rating: rating, questions: stuQuestions };
+        formStudents.push(json);
     }
 
-    form.id = forms[formID].id;
-    form.key = forms[formID].key;
     form = forms[formID];
+
+    // Clears old list
+    while (questions.length != 0)
+        questions.pop();
+
+    for (var q = 0; q < forms[formID].jsonQuestions.length; q++)
+        questions.push(forms[formID].jsonQuestions[q]);
+
+    rerender();
+}
+
+function rerender() {
     form.demo = form.demo + "1";
 }
 
