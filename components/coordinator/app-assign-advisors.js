@@ -12,14 +12,14 @@ app_assign_advisors_template = `
     </v-layout>
     
     <div v-if="view">
-        <v-layout wrap>
+        <v-layout wrap>       
             <v-flex xs12>
                 <p>Click to select multiple students, drag to the new advisor</p>
             </v-flex>
-        
+
             <v-flex xs12>
                 <app-dashboard :title="coord.name">
-                    <ol class="draggable" :id="coord.email" style="padding: 25px;">
+                    <ol class="draggable text-xs-center" id="coordinator">
                         <template v-for="student in coord.students">
                             <li :id="student.id">{{ student.name }} ({{student.major}})</li>
                         </template>
@@ -29,7 +29,7 @@ app_assign_advisors_template = `
             
             <v-flex v-for="advisor in advisors" xs12 sm6 md4 lg3>
                 <app-dashboard :title="advisor.name">
-                    <ol class="draggable" :id="advisor.email" style="padding: 25px;">
+                    <ol class="draggable text-xs-center" :id="advisor.email">
                         <template v-for="student in advisor.students">
                             <li :id="student.id">{{ student.name }} ({{student.major}})</li>
                         </template>
@@ -47,6 +47,7 @@ app_assign_advisors_template = `
 `;
 
 var advisors = [];
+var allStudents = [];
 var coord = { students: [] };
 var periods = [];
 var period = "";
@@ -60,7 +61,8 @@ app_assign_advisors = {
             periods: periods,
             period: period,
             advisors: advisors,
-            view: view
+            view: view,
+            allStudents: allStudents,
         };
     },
 };
@@ -81,7 +83,13 @@ function updateView() {
 function getCoordinator() {
 
     // Clears the old list
-    coord.students = [];
+    while (coord.students.length > 0)
+        coord.students.pop();
+
+    $("#coordinator").html("")
+
+    while (allStudents.length > 0)
+        allStudents.pop();
 
     // Gets the cooridnator identifier (email)
     coord.email = firebase.auth().currentUser.email.split(".").join(" ");
@@ -100,13 +108,14 @@ function getCoordinator() {
         }
     });
 
+    // Gets the name of the coordinator
     firebase.database().ref("coordinators/" + coord.email + "/" + "name").once('value', function (snapshot2) {
         coord.name = snapshot2.val();
     });
 
-    setTimeout(function () {
+    setInterval(function () {
         makeDraggable();
-    }, 2500);
+    }, 500);
 
 }
 
@@ -116,14 +125,14 @@ function addCoordStudent(major, stu) {
         if (name == "null")
             name = stu;
         coord.students.push({ id: stu, name: name, major: major });
-
+        allStudents.push({ id: stu, name: name, major: major });
     });
 }
 
 function viewPeriod(period) {
     if (period == "")
         return;
-    
+
     term = period;
 
     // Clears the old coordinator's list
@@ -131,7 +140,7 @@ function viewPeriod(period) {
 
     getAdvisors();
     getCoordinator();
-    
+
     return true;
 }
 
@@ -216,12 +225,13 @@ function getAdvisors4(stu, major, advisor) {
         if (name == "null")
             name = stu;
         advisor.students.push({ id: stu, name: name, major: major });
+        allStudents.push({ id: stu, name: name, major: major });
     });
 }
 
 function setState() {
-    lists = $("ol");
-    stud = [];
+    var lists = $("ol");
+    var stud = [];
 
     // Get students
     for (i = 0; i < lists.length; i++) {
