@@ -22,17 +22,14 @@ template = `
     <app-dashboard-no-container title="Other utilities">
         <app-option name="Generate a report" link="../Coordinator/generateReport.html" done="true"></app-option>
     </app-dashboard-no-container>
-
-    <br/>
-    <br/>
     
     <!-- Advisor's view -->
-    <app-dashboard-no-container title="Advisor's roles">
+    <app-expandable title="Advisor's roles">
         <app-option name="Add a supervisor" link="../Advisor/addSupervisor.html" popup="true" done="true"></app-option>
         <app-option name="View students" link="../Advisor/viewStudents.html" popup="true" done="true"></app-option>
         <app-option name="View contracts" link="../Advisor/viewContracts.html" popup="true" done="true"></app-option>
         <app-option name="Generate a report" link="../Advisor/generateReport.html" popup="true" done="true"></app-option>
-    </app-dashboard-no-container>
+    </app-expandable>
     <!--  -->
 
 </div>

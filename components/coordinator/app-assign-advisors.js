@@ -14,6 +14,16 @@ app_assign_advisors_template = `
     <div v-if="view">
         <v-layout wrap>       
             <v-flex xs12>
+                <app-expandable :title="'All students in '+term">
+                    <v-layout row wrap class="black--text text-xs-center" justify-center>
+                        <v-flex v-for="(student,index) in allStudents" xs6 sm4 md3 lg2 xl1 >
+                            {{index+1}}. {{ student.name }} ({{student.major}})
+                        </v-flex>
+                    </v-layout>
+                </app-expandable>
+            </v-flex>
+
+            <v-flex xs12 class="text-xs-center">
                 <p>Click to select multiple students, drag to the new advisor</p>
             </v-flex>
 
