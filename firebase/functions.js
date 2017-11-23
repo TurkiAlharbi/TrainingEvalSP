@@ -1,16 +1,17 @@
-function write2DB(record, json) {
-    // Creates record if it dosent exist
-    // Sets the value for record as json
+function write2DB(reference, json) {
+    // Creates reference if it dosent exist
+    // Sets the value for reference as json
     // Removes the old json attributes
-    firebase.database().ref(record).set(json);
-};
+    firebase.database().ref(reference).set(json);
+}
 
-function update2DB(record, json) {
-    // Creates record if it dosent exist
-    // updates the value for record as json
+function update2DB(reference, json) {
+    // Creates reference if it dosent exist
+    // updates the value for reference as json
     // keeps the old json attributes if not updated
-    firebase.database().ref(record).update(json);
-};
+    firebase.database().ref(reference).update(json);
+}
+
 function moveRecord(from, to) {
     firebase.database().ref(from).once('value', function (snapshot) {
         write2DB(to, snapshot.val());
