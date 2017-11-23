@@ -3,6 +3,7 @@ template = `
     <app-dashboard-no-container title="Coordinators management">
         <app-option name="Add a coordinator" link="./Admin/addCoordinator.html" done="true"></app-option>
         <app-option name="View and remove coordinators" link="./Admin/viewCoordinators.html" done="true"></app-option>
+        <app-option name="Activate coordinators" link="./Admin/activateCoordinators.html" done="true"></app-option>
         <app-option name="Change majors" link="./Admin/changeMajors.html" done="true"></app-option>
     </app-dashboard-no-container>
 

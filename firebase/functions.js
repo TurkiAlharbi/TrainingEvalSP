@@ -11,6 +11,12 @@ function update2DB(record, json) {
     // keeps the old json attributes if not updated
     firebase.database().ref(record).update(json);
 };
+function moveRecord(from, to) {
+    firebase.database().ref(from).once('value', function (snapshot) {
+        write2DB(to, snapshot.val());
+        firebase.database().ref(from).remove();
+    });
+}
 
 
 var secondaryApp = firebase.initializeApp(config, "Secondary");
