@@ -15,7 +15,6 @@ app_coordinators_table_template = `
 </div>
 `;
 
-var coordRef = firebase.database().ref('coordinators/');
 var coordinators = [];
 var headers = [
     { text: 'Name', value: 'name', align: "center" },
@@ -32,7 +31,7 @@ firebase.auth().onAuthStateChanged(function (user) {
 });
 
 function updateView() {
-    coordRef.on('value', function (snapshot) {
+    firebase.database().ref('coordinators/').on('value', function (snapshot) {
         while (coordinators.length > 0)
             coordinators.pop();
 
@@ -51,14 +50,9 @@ function updateView() {
 
 function remCoord(coordKey) {
 
-    // Remove from coordinators list
-    firebase.database().ref('coordinators/' + coordKey).remove();
-
-    //temp // Disables account -> remove account
+    // in-activate coordinator
+    moveRecord('coordinators/' + coordKey, 'inactive/coordinators/' + coordKey);
     write2DB('users/' + coordKey, { type: "disabled" });
-
-    //TODO // Removes account
-    // removeUser()
 }
 
 app_coordinators_table = {
