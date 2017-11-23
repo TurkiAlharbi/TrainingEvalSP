@@ -29,7 +29,7 @@ app_assign_advisors_template = `
 
             <v-flex xs12>
                 <app-dashboard :title="coord.name">
-                    <ol class="draggable text-xs-center" id="coordinator">
+                    <ol class="draggable text-xs-center" :id="coord.email">
                         <template v-for="student in coord.students">
                             <li :id="student.id">{{ student.name }} ({{student.major}})</li>
                         </template>
@@ -96,7 +96,7 @@ function getCoordinator() {
     while (coord.students.length > 0)
         coord.students.pop();
 
-    $("#coordinator").html("")
+    $("ol").html("")
 
     while (allStudents.length > 0)
         allStudents.pop();
@@ -112,7 +112,6 @@ function getCoordinator() {
 
         for (var major in coordVals) {
             for (var stu in coordVals[major]) {
-                console.log(coordVals[major][stu]);
                 addCoordStudent(major, stu);
             }
         }
