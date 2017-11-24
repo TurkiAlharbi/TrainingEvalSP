@@ -1,7 +1,7 @@
 app_expandable_template = `
 <v-container>
     <v-expansion-panel expand>
-        <v-expansion-panel-content class="blue white--text" style="border: 1px solid #2196f3">
+        <v-expansion-panel-content class="blue white--text" style="border: 1px solid #2196f3" v-bind:value="expanded">
 
             <div slot="header" class="blue white--text" style="border:0">
                 <v-card-title primary-title class="justify-center ma-0 pa-0">
@@ -25,7 +25,8 @@ app_expandable_template = `
 app_expandable = {
     template: app_expandable_template,
     props: {
-        title: String
+        title: String,
+        expanded: Boolean
     }
 };
 
