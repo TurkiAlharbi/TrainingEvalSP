@@ -1,59 +1,115 @@
-terms = [
-    "171", "172", "172 + 173", "173", "173 + 181",
-    "181", "182", "182 + 183", "183", "183 + 191",];
-
 template = `
 <div>
-    <legend>Student Information</legend>
-    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Name: </span><input id="stuname" type="text" class="form-control"></div><br>
-    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Mobile: </span><input id="stumobile" type="text" class="form-control"></div><br>
-    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Major: </span><input id="major" type="text" class="form-control"></div><br>
-    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> ID: </span><input id="id" type="text" class="form-control"></div><br>
-    <div class="input-group">
-        <span class="input-group-addon" style="min-width: 150px;"> Type: </span>
-        <div class="form-group" data-toggle="tooltip">
-            <select class="form-control" id="type">
-                <option value="summer">Summer Training (8 Weeks)</option>
-                <option value="coop">Cooperative Work (28 Weeks)</option>
-                <option value="internship">Internship (18 Weeks)</option>
-            </select>
-        </div>
-    </div><br/>
-    <div class="input-group">
-        <span class="input-group-addon" style="min-width: 150px;"> Term(s): </span>
-        <div class="form-group" data-toggle="tooltip">
-            <select class="form-control" id="terms">
-                <option v-for="term in terms" :value="term">{{term}}</option>
-            </select>
-        </div>
-    </div><br/>
-    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Token: </span><input id="token" type="text" class="form-control"></div><br>
-    <hr>
-    <legend>Company Information</legend>
-    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Company Name: </span><input id="company" type="text" class="form-control"></div><br/>
-    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Address: </span><input id="address" type="text" class="form-control"></div><br/>
-    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Country: </span><input id="country" type="text" class="form-control"></div><br/>
-    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Zip code: </span><input id="zip" type="text" class="form-control"></div><br/>
-    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> City: </span><input id="city" type="text" class="form-control"></div><br/>
-    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> URL: </span><input id="url" type="text" class="form-control"></div><br/>
-    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Company business<br/>in brief:  </span><textarea id="textArea" rows=2 class="form-control"></textarea></div><br/>                    
-    <hr>
-    <legend>Training Opportunity</legend>
-    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Location: </span><input id="location" type="text" class="form-control"></div><br>
-    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Transportation: </span><input id="trans" type="text" class="form-control"></div><br>
-    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Housing: </span><input id="housing" type="text" class="form-control"></div><br>
-    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Salary: </span><input id="salary" type="text" class="form-control"></div><br>
-    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Other benefits: </span><input id="benefits" type="text" class="form-control"></div><br>
-    <hr>
-    <legend>Mentor</legend>
-    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Name: </span><input id="mentor" type="text" class="form-control"></div><br>
-    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Position: </span><input id="men_pos" type="text" class="form-control"></div><br>
-    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Email: </span><input id="men_email" type="text" class="form-control"></div><br>
-    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Phone: </span><input id="men_phone" type="tel" class="form-control"></div><br>
-    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Fax: </span><input id="fax" type="tel" class="form-control"></div><br>
-    <div class="input-group"><span class="input-group-addon" style="min-width: 150px;"> Mobile: </span><input id="men_mobile" type="tel" class="form-control"></div><br>
-    <br>
-    <button class="btn btn-success" @click="submit">Submit</button>
+    <v-form v-model="valid">
+        <v-btn @click='
+            if(window.location.hash != ""){
+                id = element(0);
+                type = element(1);
+                terms = element(2);
+                major = element(3);
+                token = element(4);
+            }
+        ' style="display:none"></v-btn>
+        <app-expandable title="Student Information" expanded="true">
+            <v-layout row wrap>
+                <v-flex xs12 sm6 md4 lg3 justify-center>
+                    <v-text-field style="width:90%" class="ml-2 mr-2" label="Name" id="stuname" v-model="stuname" prepend-icon="face" required :rules="nameRules"></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4 lg3>
+                    <v-text-field style="width:90%" class="ml-2 mr-2" label="Mobile Number" id="stumobile" v-model="stumobile" prepend-icon="smartphone" required :rules="required"></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4 lg3>
+                    <v-text-field style="width:90%" class="ml-2 mr-2" label="Major" id="major" v-model="major" prepend-icon="local_library" required :rules="required"></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4 lg3>
+                    <v-text-field style="width:90%" class="ml-2 mr-2" label="ID Number" id="id" v-model="id" prepend-icon="credit_card" required :rules="required"></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4 lg3>
+                    <v-text-field style="width:90%" class="ml-2 mr-2" label="Type" id="type" v-model="type" prepend-icon="school" required :rules="required"></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4 lg3>
+                    <v-text-field style="width:90%" class="ml-2 mr-2" label="Period" id="terms" v-model="terms" prepend-icon="av_timer" required :rules="required"></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4 lg3>
+                    <v-text-field style="width:90%" class="ml-2 mr-2" label="Token" id="token" v-model="token" prepend-icon="vpn_key" required :rules="required"></v-text-field>
+                </v-flex>
+            </v-layout>
+        </app-expandable>
+
+
+        <app-expandable title="Company Information" expanded="true">
+            <v-layout row wrap>
+                <v-flex xs12 sm6 md4>
+                    <v-text-field style="width:90%" class="ml-2 mr-2" label="Company Name" id="company" v-model="company" prepend-icon="location_city" required :rules="required"></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                    <v-text-field style="width:90%" class="ml-2 mr-2" label="Address" id="address" v-model="address" prepend-icon="location_searching"></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                    <v-text-field style="width:90%" class="ml-2 mr-2" label="Country" id="country" v-model="country" prepend-icon="flag"></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                    <v-text-field style="width:90%" class="ml-2 mr-2" label="City" id="city" v-model="city" prepend-icon="map"></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                    <v-text-field style="width:90%" class="ml-2 mr-2" label="Zip code" id="zip" v-model="zip" prepend-icon="move_to_inbox"></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                    <v-text-field style="width:90%" class="ml-2 mr-2" label="URL" id="url" v-model="url" prepend-icon="computer"></v-text-field>
+                </v-flex>
+                <v-flex xs12>
+                    <v-text-field label="Brief about company business" id="textArea" v-model="textArea" prepend-icon="message" multi-line rows=3></v-text-field>
+                </v-flex>
+            </v-layout>
+        </app-expandable>
+
+
+        <app-expandable title="Training Opportunity" expanded="true">
+            <v-layout row wrap>
+                <v-flex xs12 sm6 md4>
+                    <v-text-field style="width:90%" class="ml-2 mr-2" label="Location" id="location" v-model="location" prepend-icon="business" required :rules="required"></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                    <v-text-field style="width:90%" class="ml-2 mr-2" label="Salary" id="salary" v-model="salary" prepend-icon="attach_money" required :rules="required"></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                    <v-text-field style="width:90%" class="ml-2 mr-2" label="Transportation" id="trans" v-model="trans" prepend-icon="directions_run"></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                    <v-text-field style="width:90%" class="ml-2 mr-2" label="Housing" id="housing" v-model="housing" prepend-icon="home"></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                    <v-text-field style="width:90%" class="ml-2 mr-2" label="Other Benefits" id="benefits" v-model="benefits" prepend-icon="card_membership"></v-text-field>
+                </v-flex>
+            </v-layout>
+        </app-expandable>
+
+        <app-expandable title="Mentor" expanded="true">
+            <v-layout row wrap>
+                <v-flex xs12 sm6 md4>
+                    <v-text-field style="width:90%" class="ml-2 mr-2" label="Name" id="mentor" v-model="mentor" prepend-icon="supervisor_account" required :rules="nameRules"></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                    <v-text-field style="width:90%" class="ml-2 mr-2" label="Position" id="men_pos" v-model="men_pos" prepend-icon="credit_card" required :rules="required"></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                    <v-text-field style="width:90%" class="ml-2 mr-2" label="Mobile Number" id="men_mobile" v-model="men_mobile" prepend-icon="smartphone" required :rules="required"></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                    <v-text-field style="width:90%" class="ml-2 mr-2" label="Email" id="men_email" v-model="men_email" prepend-icon="email" required :rules="required"></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                    <v-text-field style="width:90%" class="ml-2 mr-2" label="Phone Number" id="men_phone" v-model="men_phone" prepend-icon="phone" required :rules="required"></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                    <v-text-field style="width:90%" class="ml-2 mr-2" label="Fax" id="fax" v-model="fax" prepend-icon="inbox"></v-text-field>
+                </v-flex>
+            </v-layout>
+        </app-expandable>
+        <v-layout justify-center>
+            <v-btn class="green white--text" @click="submit" :disabled="!valid">Submit</v-btn>
+        </v-layout>
+    <v-form>
 </div>
 `;
 
@@ -72,8 +128,8 @@ function submit() {
     var city = $("#city").val();
     var url = $("#url").val();
     var textArea = $("#textArea").val();
-    var option = $("#type :checked").val();
-    var terms = $("#terms :checked").val();
+    var option = $("#type").val();
+    var terms = $("#terms").val();
     var location = $("#location").val();
     var trans = $("#trans").val();
     var housing = $("#housing").val();
@@ -90,23 +146,9 @@ function submit() {
     if (!testToken(token))
         return;
 
-    if (id == "" || id == undefined)
-        return;
-
-    id = id.replace(new RegExp(" ", 'g'), "")
-        .replace(new RegExp("@kfupm.edu.sa", 'g'), "")
-        .replace(new RegExp("@KFUPM.EDU.SA", 'g'), "")
-        .replace(new RegExp("s", 'g'), "")
-        .replace(new RegExp("S", 'g'), "");
-
-    // Change it by 2030
-    if (id < 201000000 || id > 203000000)
-        return;
-
     id = "s" + id;
 
     period = terms + " " + "(" + option + ")";
-    console.log(period);
 
     json = {
         "name": stuname,
@@ -153,13 +195,59 @@ function submit() {
         window.location.href = "./contractSubmitted.html";
     }, 2500);
 }
+
 function testToken(token) {
     //TBD
     return true;
 }
 
+function element(i) {
+    return decodeURIComponent(window.location.hash.substr(1).split("&")[i].split("=")[1]);
+}
+
 app_contract = {
     template: template,
+    data() {
+        return {
+            valid: false,
+
+            stuname: '',
+            stumobile: '',
+            major: '',
+            id: '',
+            type: '',
+            terms: '',
+            token: '',
+            company: '',
+            address: '',
+            country: '',
+            zip: '',
+            city: '',
+            url: '',
+            textArea: '',
+            location: '',
+            trans: '',
+            housing: '',
+            salary: '',
+            benefits: '',
+            mentor: '',
+            men_pos: '',
+            men_email: '',
+            men_phone: '',
+            fax: '',
+            men_mobile: '',
+
+            required: [
+                (v) => !!v || 'Required',
+            ],
+            nameRules: [
+                (v) => !!v || 'Name is required',
+            ],
+        };
+    },
+    mounted() {
+        document.getElementsByTagName("button")[0].click();
+    }
 };
 
 Vue.component("app-contract", app_contract);

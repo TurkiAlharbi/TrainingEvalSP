@@ -5,7 +5,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link href="../lib/bootstrap/bootstrap.3.3.0.min.css" rel="stylesheet">
+    <!-- <link href='../lib/fonts/fonts.css' rel="stylesheet"> -->
+    <link href='../lib/fonts/material.css' rel="stylesheet">
+
+    <link href="../lib/vuetify/vuetify-0.17.0.min.css" rel="stylesheet">
 
     <style>
         [v-cloak] {
@@ -17,28 +20,31 @@
 </head>
 
 <body>
-    <div id="app" v-cloak>
+    <v-app id="app" v-cloak>
         <br/>
         <br/>
         <app-dashboard title="Training Contract">
             <app-contract></app-contract>
         </app-dashboard>
-    </div>
-    
+    </v-app>
+
     <script src="../lib/vue/vue-2.5.0.min.js "></script>
+    <script src="../lib/vuetify/vuetify-0.17.0.min.js"></script>
 
     <!-- Firebase -->
     <script src="../lib/firebase/firebase-4.6.0.min.js"></script>
     <script src="../firebase/config.js"></script>
     <script src="../firebase/functions.js"></script>
+    
+    <script src="../components/vuetify-dashboard/app-dashboard.js "></script>
+    <script src="../components/vuetify-dashboard/app-page-header.js "></script>
+    <script src="../components/vuetify-dashboard/app-expandable.js "></script>
 
-    <script src="../components/page-dashboard/app-dashboard.js "></script>
     <script src="../components/contract/app-contract.js"></script>
 
     <script src="../components/app.js "></script>
 
     <script src="../lib/jquery/jquery-3.2.1.min.js "></script>
-    <script src="../lib/bootstrap/bootstrap.3.3.0.min.js "></script>
 </body>
 
 </html>

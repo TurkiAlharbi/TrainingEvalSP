@@ -5,7 +5,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link href="../lib/bootstrap/bootstrap.3.3.0.min.css" rel="stylesheet">
+    <!-- <link href='../lib/fonts/fonts.css' rel="stylesheet"> -->
+    <link href='../lib/fonts/material.css' rel="stylesheet">
+
+    <link href="../lib/vuetify/vuetify-0.17.0.min.css" rel="stylesheet">
 
     <style>
         [v-cloak] {
@@ -17,22 +20,23 @@
 </head>
 
 <body>
-    <div id="app" v-cloak>
-        <br/>
-        <br/>
+    <v-app id="app" v-cloak>
         <app-dashboard title="Training Contract">
-            <br/>
-            <p class="h2">Contract submitted!</p>
-            <br/>
-            <p class="h2">Thank you ☺</p>
-            <br/>
-            <br/>
+            <div class="text-xs-center">
+                <p class="title">Contract submitted!</p>
+                
+                <p class="title">Thank you
+                    <v-icon>mood</v-icon>
+                </p>
+
+            </div>
         </app-dashboard>
-    </div>
+    </v-app>
 
     <script src="../lib/vue/vue-2.5.0.min.js "></script>
+    <script src="../lib/vuetify/vuetify-0.17.0.min.js"></script>
 
-    <script src="../components/page-dashboard/app-dashboard.js "></script>
+    <script src="../components/vuetify-dashboard/app-dashboard.js "></script>
 
     <script src="../components/app.js "></script>
 
