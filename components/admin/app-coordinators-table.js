@@ -40,9 +40,12 @@ function updateView() {
         for (var key in vals) {
             var coord = vals[key];
             coord.email = key.split(" ").join(".");
-            coord.majors = vals[key].majors.sort().join(", ");
             coord.key = key;
-
+            try {
+                coord.majors = vals[key].majors.sort().join(", ");
+            } catch (err) {
+                console.log(err.name);
+            }
             coordinators.push(coord);
         }
     })

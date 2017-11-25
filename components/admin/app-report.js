@@ -7,6 +7,7 @@ template = `
         <p v-if="info.supervisors">Number of supervisors: {{ info.supervisors }}</p>
 
         <p v-if="info.coordinators">Number of coordinators: {{ info.coordinators }}</p>
+        <p v-if="info.inactiveCoordinators">Number of inactived coordinators: {{ info.inactiveCoordinators }}</p>
         <p v-if="info.advisors">Number of advisors, including advising coordinators: {{ info.advisors }}</p>
 
         <p v-if="info.forms">Number of evaluation forms: {{ info.forms }}</p>
@@ -69,6 +70,16 @@ function updateView() {
 
     firebase.database().ref("supervisors").once('value', function (snapshot) {
         info.supervisors = Object.keys(snapshot.val()).length;
+        renderView();
+    });
+
+    firebase.database().ref("inactive/coordinators/").once('value', function (snapshot) {
+        try {
+            info.inactiveCoordinators = Object.keys(snapshot.val()).length;
+        } catch (err) {
+            console.log(err.name);
+            info.inactiveCoordinators = "0";
+        }
         renderView();
     });
 

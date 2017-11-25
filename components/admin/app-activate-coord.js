@@ -6,7 +6,7 @@ template = `
         <template slot="items" slot-scope="props">
             <td class="text-xs-center">{{ props.item.name }}</td>
             <td class="text-xs-center">{{ props.item.email }}</td>
-            <td class="text-xs-center"><v-btn color="red" flat icon @click="activateCoord(props.item.key)">
+            <td class="text-xs-center"><v-btn color="green" flat icon @click="activateCoord(props.item.key)">
                 <v-icon>check</v-icon>
             </v-btn></td>
         </template>
@@ -38,9 +38,12 @@ function updateView() {
         for (var key in vals) {
             var coord = vals[key];
             coord.email = key.split(" ").join(".");
-            coord.majors = vals[key].majors.sort().join(", ");
             coord.key = key;
-
+            try {
+                coord.majors = vals[key].majors.sort().join(", ");
+            } catch (err) {
+                console.log(err.name);
+            }
             coordinators.push(coord);
         }
     })
