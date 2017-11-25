@@ -25,7 +25,7 @@ template = `
                     <v-text-field style="width:90%" class="ml-2 mr-2" label="ID Number" id="id" v-model="id" prepend-icon="credit_card" required :rules="required"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4 lg3>
-                    <v-text-field style="width:90%" class="ml-2 mr-2" label="Type" id="type" v-model="type" prepend-icon="school" required :rules="required"></v-text-field>
+                    <v-text-field style="width:90%" class="ml-2 mr-2" label="Training Type" id="type" v-model="type" prepend-icon="school" required :rules="required"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4 lg3>
                     <v-text-field style="width:90%" class="ml-2 mr-2" label="Period" id="terms" v-model="terms" prepend-icon="av_timer" required :rules="required"></v-text-field>
@@ -43,13 +43,13 @@ template = `
                     <v-text-field style="width:90%" class="ml-2 mr-2" label="Company Name" id="company" v-model="company" prepend-icon="location_city" required :rules="required"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
-                    <v-text-field style="width:90%" class="ml-2 mr-2" label="Address" id="address" v-model="address" prepend-icon="location_searching"></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
                     <v-text-field style="width:90%" class="ml-2 mr-2" label="Country" id="country" v-model="country" prepend-icon="flag"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
                     <v-text-field style="width:90%" class="ml-2 mr-2" label="City" id="city" v-model="city" prepend-icon="map"></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                    <v-text-field style="width:90%" class="ml-2 mr-2" label="Address" id="address" v-model="address" prepend-icon="location_searching"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
                     <v-text-field style="width:90%" class="ml-2 mr-2" label="Zip code" id="zip" v-model="zip" prepend-icon="move_to_inbox"></v-text-field>
