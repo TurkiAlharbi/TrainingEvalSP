@@ -3,16 +3,16 @@ app_setup_new_template = `
     <v-form v-model="isValid">
         <v-layout wrap>
             <v-flex xs12 sm5>
-                <v-text-field label="Name" id="name" v-model="name" :rules="nameRules" required></v-text-field>
+                <v-text-field label="Name" id="name" v-model="name" :rules="nameRules"  prepend-icon="title" required></v-text-field>
             </v-flex>
             <v-flex xs12 sm5 offset-sm2>
-                <v-select label="Period" v-bind:items="periods" v-model="period" :rules="periodRules" required></v-select>
+                <v-select label="Period" v-bind:items="periods" v-model="period" :rules="periodRules"  prepend-icon="av_timer" required></v-select>
             </v-flex>
             <v-flex xs12 sm5>
-                <v-text-field label="Opened for" id="autoClose" v-model="autoClose" :rules="autoRules" required suffix="day(s) "></v-text-field>
+                <v-text-field label="Opened for" id="autoClose" v-model="autoClose" :rules="autoRules"  prepend-icon="timer" required suffix="day(s) "></v-text-field>
             </v-flex>
             <v-flex xs12 sm5 offset-sm2>
-                <v-text-field label="Form number" id="formNumber" v-model="formNumber" :rules="numRules" required></v-text-field>
+                <v-text-field label="Form number" id="formNumber" v-model="formNumber" :rules="numRules"  prepend-icon="format_list_numbered" required></v-text-field>
             </v-flex>
 
             <app-dashboard title="Questions">
@@ -28,10 +28,10 @@ app_setup_new_template = `
                         <template v-for="(question,index) in newQuestions">
                             <tr>
                                 <td style="width:95%" class="pl-5 pr-5">
-                                    <v-text-field v-model="question.title" :rules="qRules"></v-text-field>
+                                    <v-text-field v-model="question.title" :rules="qRules"  prepend-icon="question_answer"></v-text-field>
                                 </td>
                                 <td class="pl-5 pr-5 ma-5" >
-                                    <v-text-field v-model="question.weight" type="number" :rules="wRules"></v-text-field>
+                                    <v-text-field v-model="question.weight" type="number" :rules="wRules"  prepend-icon="exposure"></v-text-field>
                                 </td>
                                 <td>
                                     <v-btn color="red" flat icon @click="removeQ(index)"><v-icon>cancel</v-icon></v-btn>

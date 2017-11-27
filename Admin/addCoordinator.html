@@ -26,13 +26,14 @@
                         <legend>Coordinator Information:</legend>
                     </v-flex>
                     <v-flex xs12>
-                        <v-text-field label="Name" id="name" required :rules="nameRules"></v-text-field>
+                        <v-text-field label="Name" id="name" required :rules="nameRules" prepend-icon="person"></v-text-field>
                     </v-flex>
                     <v-flex xs12>
-                        <v-text-field label="Email" id="email" required :rules="emailRules"></v-text-field>
+                        <v-text-field label="Email" id="email" required :rules="emailRules" prepend-icon="email"></v-text-field>
                     </v-flex>
                     <v-flex xs12>
-                        <v-select label="Majors" v-bind:items="majors" v-model="selectedMajors" :rules="majorRules" multiple chips required></v-select>
+                        <v-select label="Majors" v-bind:items="majors" v-model="selectedMajors" prepend-icon="school" :rules="majorRules" multiple
+                            chips required></v-select>
                     </v-flex>
                     <v-flex xs12>
                         <v-btn class="green white--text" @click="addCoord" :disabled="!valid">Add

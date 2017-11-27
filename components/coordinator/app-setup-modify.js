@@ -3,7 +3,7 @@ app_setup_modify_template = `
     <v-form v-model="isValid">
         <v-layout wrap>
             <v-flex xs12>
-                <v-select label="Form" v-bind:items="forms" item-text="title" v-model="form" required></v-select>
+                <v-select label="Form" v-bind:items="forms" item-text="title" v-model="form" required  prepend-icon="library_books"></v-select>
             </v-flex>
             <v-btn class="green white--text" @click="if(show(form))shown=true">Show</v-btn>
             
@@ -20,10 +20,10 @@ app_setup_modify_template = `
                         <template v-for="(question,index) in questions">
                             <tr>
                                 <td style="width:95%" class="pl-5 pr-5">
-                                    <v-text-field v-model="question.title" :rules="qRules"></v-text-field>
+                                    <v-text-field v-model="question.title" :rules="qRules"  prepend-icon="question_answer"></v-text-field>
                                 </td>
                                 <td class="pl-5 pr-5 ma-5" >
-                                    <v-text-field v-model="question.weight" type="number" :rules="wRules"></v-text-field>
+                                    <v-text-field v-model="question.weight" type="number" :rules="wRules"  prepend-icon="exposure"></v-text-field>
                                 </td>
                                 <td>
                                     <v-btn color="red" flat icon @click="removeQ2(index)"><v-icon>cancel</v-icon></v-btn>
