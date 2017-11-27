@@ -109,7 +109,7 @@ template = `
         <v-layout justify-center>
             <v-btn class="green white--text" @click="submit" :disabled="!valid">Submit</v-btn>
         </v-layout>
-    <v-form>
+    </v-form>
 </div>
 `;
 

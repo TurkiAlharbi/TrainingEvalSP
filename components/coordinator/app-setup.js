@@ -23,7 +23,6 @@ app_setup_template = `
                 </v-card>
             </v-tabs-content>
         </v-tabs-items>
-
     </v-tabs>
 </div>
 `;
