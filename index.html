@@ -52,13 +52,14 @@
                                         </v-flex>
 
                                         <v-flex xs12>
-                                            <v-text-field name="uname" label="Email" prepend-icon="email" v-model:email="auth.email" @keyup.enter="newLogin" single-line></v-text-field>
+                                            <v-text-field name="uname" label="Email" prepend-icon="email" v-model:email="auth.email" :rules="emailRules" @keyup.enter="newLogin"
+                                                single-line></v-text-field>
                                         </v-flex>
 
                                         <v-flex xs12>
-                                            <v-text-field name="pass" label="Password" prepend-icon="work" v-model:password="auth.password" @keyup.enter="newLogin"
-                                                single-line :append-icon="e1 ? 'visibility' : 'visibility_off'" :append-icon-cb="() => (e1 = !e1)"
-                                                :type="e1 ? 'password' : 'text'"></v-text-field>
+                                            <v-text-field name="pass" label="Password" prepend-icon="work" v-model:password="auth.password" @keyup.enter="newLogin" single-line
+                                                :append-icon="e1 ? 'visibility' : 'visibility_off'" :append-icon-cb="() => (e1 = !e1)"
+                                                :type="e1 ? 'password' : 'text'" :rules="passwordRules"></v-text-field>
                                         </v-flex>
                                     </v-layout>
                                 </v-container>

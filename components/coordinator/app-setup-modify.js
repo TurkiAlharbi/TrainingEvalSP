@@ -1,47 +1,49 @@
 app_setup_modify_template = `
 <div>
-    <v-layout wrap>
-        <v-flex xs12>
-            <v-select label="Form" v-bind:items="forms" item-text="title" v-model="form" required></v-select>
-        </v-flex>
-        <v-btn class="green white--text" @click="if(show(form))shown=true">Show</v-btn>
-        
-        
-        <app-dashboard title="Questions" v-if="shown">
-            <table v-if="questions.length!=0">
-                <thead class="text-xs-center">
-                    <tr>
-                        <td>Question</td>
-                        <td>Weight</td>
-                        <td>Remove</td>
-                    </tr>
-                </thead>
-                <tbody>
-                    <template v-for="(question,index) in questions">
+    <v-form v-model="isValid">
+        <v-layout wrap>
+            <v-flex xs12>
+                <v-select label="Form" v-bind:items="forms" item-text="title" v-model="form" required></v-select>
+            </v-flex>
+            <v-btn class="green white--text" @click="if(show(form))shown=true">Show</v-btn>
+            
+            <app-dashboard title="Questions" v-if="shown">
+                <table v-if="questions.length!=0">
+                    <thead class="text-xs-center">
                         <tr>
-                            <td style="width:95%" class="pl-5 pr-5">
-                                <v-text-field v-model="question.title"></v-text-field>
-                            </td>
-                            <td class="pl-5 pr-5 ma-5" >
-                                <v-text-field v-model="question.weight" type="number" min=0 max=100></v-text-field>
-                            </td>
-                            <td>
-                                <v-btn color="red" flat icon @click="removeQ2(index)"><v-icon>cancel</v-icon></v-btn>
-                            </td>
+                            <td>Question</td>
+                            <td>Weight</td>
+                            <td>Remove</td>
                         </tr>
-                    </template>
-                </tbody>
-            </table>
-            <v-flex xs12 class="text-xs-center">
-                <v-btn class="cyan white--text" @click="addNewQ2">Add extra question</v-btn>
-            </v-flex>
-            <v-flex xs12 class="text-xs-center">
-                <v-btn class="green white--text" @click="saveOpen2(form.title,form.terms,form.autoClose,form.id)">Save and open</v-btn>
-                <v-btn class="green white--text" @click="saveDraft2(form.title,form.terms,form.autoClose,form.id)">Save and keep as a draft</v-btn>
-            </v-flex>
-        </app-dashboard>
-        
-    </v-layout>
+                    </thead>
+                    <tbody>
+                        <template v-for="(question,index) in questions">
+                            <tr>
+                                <td style="width:95%" class="pl-5 pr-5">
+                                    <v-text-field v-model="question.title" :rules="qRules"></v-text-field>
+                                </td>
+                                <td class="pl-5 pr-5 ma-5" >
+                                    <v-text-field v-model="question.weight" type="number" :rules="wRules"></v-text-field>
+                                </td>
+                                <td>
+                                    <v-btn color="red" flat icon @click="removeQ2(index)"><v-icon>cancel</v-icon></v-btn>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+
+                <v-flex xs12 class="text-xs-center">
+                    <v-btn class="cyan white--text" @click="addNewQ2">Add extra question</v-btn>
+                </v-flex>
+                <v-flex xs12 class="text-xs-center">
+                    <v-btn class="green white--text" @click="saveOpen2(form.title,form.terms,form.autoClose,form.id)" :disabled="!isValid">Save and open</v-btn>
+                    <v-btn class="green white--text" @click="saveDraft2(form.title,form.terms,form.autoClose,form.id)" :disabled="!isValid">Save and keep as a draft</v-btn>
+                </v-flex>
+            </app-dashboard>
+            
+        </v-layout>
+    </v-form>
 </div>
 `;
 
@@ -52,12 +54,21 @@ app_setup_modify = {
     template: app_setup_modify_template,
     data() {
         return {
+            isValid: false,
             questions: questions,
             forms: forms,
             form: '',
             name: '',
             autoClose: '',
-            shown: false
+            shown: false,
+            wRules: [
+                v => !!v || 'Weight for the question is required',
+                v => v <= 100 || 'Weight must be 100 or less',
+                v => v > 0 || 'Weight must be greater than 0',
+            ],
+            qRules: [
+                v => !!v || 'The question title is required',
+            ],
         };
     }
 };

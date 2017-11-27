@@ -20,25 +20,27 @@
         <app-page-header></app-page-header>
 
         <app-dashboard title="Add coordinators">
-            <v-layout wrap>
-                <v-flex xs12>
-                    <legend>Coordinator Information:</legend>
-                </v-flex>
-                <v-flex xs12>
-                    <v-text-field label="Name" id="name" required></v-text-field>
-                </v-flex>
-                <v-flex xs12>
-                    <v-text-field label="Email" id="email" required></v-text-field>
-                </v-flex>
-                <v-flex xs12>
-                    <v-select label="Majors" v-bind:items="majors" v-model="selectedMajors" multiple chips required></v-select>
-                </v-flex>
-                <v-flex xs12>
-                    <v-btn class="green white--text" @click="addCoord">Add
-                        <v-icon dark right>check_circle</v-icon>
-                    </v-btn>
-                </v-flex>
-            </v-layout>
+            <v-form v-model="valid">
+                <v-layout wrap>
+                    <v-flex xs12>
+                        <legend>Coordinator Information:</legend>
+                    </v-flex>
+                    <v-flex xs12>
+                        <v-text-field label="Name" id="name" required :rules="nameRules"></v-text-field>
+                    </v-flex>
+                    <v-flex xs12>
+                        <v-text-field label="Email" id="email" required :rules="emailRules"></v-text-field>
+                    </v-flex>
+                    <v-flex xs12>
+                        <v-select label="Majors" v-bind:items="majors" v-model="selectedMajors" :rules="majorRules" multiple chips required></v-select>
+                    </v-flex>
+                    <v-flex xs12>
+                        <v-btn class="green white--text" @click="addCoord" :disabled="!valid">Add
+                            <v-icon dark right>check_circle</v-icon>
+                        </v-btn>
+                    </v-flex>
+                </v-layout>
+            </v-form>
         </app-dashboard>
 
     </v-app>
@@ -64,7 +66,7 @@
         }
     </script>
 
-    <script src="../lib/vue/vue-2.5.0.min.js"></script>
+    <script src="../lib/vue/vue-2.5.3.min.js"></script>
     <script src="../lib/vuetify/vuetify-0.17.0.min.js"></script>
 
     <!-- Firebase -->
@@ -88,6 +90,18 @@
                         "MATH", "ME", "MGT", "MIS", "MKT", "PHYS", "STAT",
                     ],
                     selectedMajors: [],
+                    valid: false,
+                    nameRules: [
+                        (v) => !!v || 'Name is required',
+                        (v) => v.length <= 10 || 'Name must be less than 10 characters'
+                    ],
+                    emailRules: [
+                        (v) => !!v || 'E-mail is required',
+                        (v) => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
+                    ],
+                    majorRules: [
+                        (v) => v.length >= 1 || 'Majors are required',
+                    ]
                 }
             }
         });
