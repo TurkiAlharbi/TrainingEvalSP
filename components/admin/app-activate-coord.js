@@ -17,7 +17,7 @@ template = `
 var coordinators = [];
 var headers = [
     { text: 'Name', value: 'name', align: "center" },
-    { text: 'Email', value: 'email', align: "center", sortable: false },
+    { text: 'Email', value: 'email', align: "center" },
     { text: 'Activate', align: "center", sortable: false },
 ];
 

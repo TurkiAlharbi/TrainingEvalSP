@@ -8,7 +8,7 @@
 
     <!-- <link href='./lib/fonts/fonts.css' rel="stylesheet"> -->
     <link href='./lib/fonts/material.css' rel="stylesheet">
-    
+
     <link href="./lib/vuetify/vuetify-0.17.0.min.css" rel="stylesheet">
     <link href="./res/css/everything.css" rel="stylesheet">
 
@@ -52,11 +52,11 @@
                                         </v-flex>
 
                                         <v-flex xs12>
-                                            <v-text-field name="uname" label="Email" prepend-icon="email" v-model:email="auth.email" @keydown.enter="newLogin" single-line></v-text-field>
+                                            <v-text-field name="uname" label="Email" prepend-icon="email" v-model:email="auth.email" @keyup.enter="newLogin" single-line></v-text-field>
                                         </v-flex>
 
                                         <v-flex xs12>
-                                            <v-text-field name="pass" label="Password" prepend-icon="work" v-model:password="auth.password" @keydown.enter="newLogin"
+                                            <v-text-field name="pass" label="Password" prepend-icon="work" v-model:password="auth.password" @keyup.enter="newLogin"
                                                 single-line :append-icon="e1 ? 'visibility' : 'visibility_off'" :append-icon-cb="() => (e1 = !e1)"
                                                 :type="e1 ? 'password' : 'text'"></v-text-field>
                                         </v-flex>
@@ -85,7 +85,7 @@
                                         <v-icon>forward</v-icon>
                                     </v-btn>
                                 </v-layout>
-
+                            </v-layout>
                         </v-card-actions>
                     </v-card>
 

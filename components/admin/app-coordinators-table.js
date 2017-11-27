@@ -18,8 +18,8 @@ app_coordinators_table_template = `
 var coordinators = [];
 var headers = [
     { text: 'Name', value: 'name', align: "center" },
-    { text: 'Email', value: 'email', align: "center", sortable: false },
-    { text: 'Majors', value: 'majors', align: "center", sortable: false },
+    { text: 'Email', value: 'email', align: "center" },
+    { text: 'Majors', value: 'majors', align: "center" },
     { text: 'Remove', align: "center", sortable: false },
 ];
 

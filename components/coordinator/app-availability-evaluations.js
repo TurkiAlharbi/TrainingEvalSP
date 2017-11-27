@@ -25,16 +25,16 @@ app_availability_evaluations_template = `
                     </template>
                 </td>
                 <td class="text-xs-center">
-                    <v-btn v-if="props.item.status == 'Drafted'" class="cyan  white--text" @click="open(coordinator+'/'+props.item.id)">
+                    <v-btn v-if="props.item.status == 'Drafted'" class="cyan  white--text" @click="open(coordinator+'/'+props.item.id);props.item.status='Opened';props.item.autoClose='7'">
                         Save & Open
                         <v-icon dark right>library_books</v-icon>
                     </v-btn>
-                    <v-btn v-if="props.item.status == 'Closed'" class="green white--text" @click="open(coordinator+'/'+props.item.id)">
+                    <v-btn v-if="props.item.status == 'Closed'" class="green white--text" @click="open(coordinator+'/'+props.item.id);props.item.status='Opened';props.item.autoClose='7'">
                         Open
                         <v-icon dark right>lock_open</v-icon>
                     </v-btn>
                     
-                    <v-btn v-if="props.item.status == 'Opened'" class="red white--text" @click="close(coordinator+'/'+props.item.id)">
+                    <v-btn v-if="props.item.status == 'Opened'" class="red white--text" @click="close(coordinator+'/'+props.item.id);props.item.status='Closed'">
                         Close now
                         <v-icon dark right>lock</v-icon>
                     </v-btn>

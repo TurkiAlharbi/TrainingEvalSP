@@ -27,7 +27,7 @@ var coordRef = firebase.database().ref('coordinators/');
 var coordinators = [];
 var headers = [
     { text: 'Name', value: 'name', align: "center" },
-    { text: 'Majors', value: 'majors', align: "center", sortable: false },
+    { text: 'Majors', value: 'majors', align: "center" },
 ];
 
 firebase.auth().onAuthStateChanged(function (user) {
