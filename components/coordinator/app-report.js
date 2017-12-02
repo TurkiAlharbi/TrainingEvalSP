@@ -73,6 +73,8 @@ function updateView() {
             periods.push({ period: i, majors: vals[i], total: total });
         }
 
+        exportTable("coordinatorReport");
+
     });
 
 }
