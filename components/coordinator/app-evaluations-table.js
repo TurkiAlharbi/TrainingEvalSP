@@ -98,7 +98,6 @@ function updateView() {
         var index = 0;
         for (var form_meta in coordinatorForms) {
             var form = coordinatorForms[form_meta];
-            console.log(form);
             var jsonQuestions = [];
             var numOfQuestions = Object.keys(form.questions).length;
 
@@ -125,7 +124,19 @@ function getEvaluations(name, newForm) {
 
         newForm.students = students;
         forms.push(newForm);
-    })
+    });
+}
+
+function resolveStudentName(json, student) {
+    firebase.database().ref("students/" + student + "/name").once('value', function (snapshot3) {
+        try {
+            json.name = snapshot3.val();
+        } catch (err) {
+            json.name = student;
+            console.log(err.name);
+        }
+        formStudents.push(json);
+    });
 }
 
 function viewForm(formID) {
@@ -135,14 +146,8 @@ function viewForm(formID) {
     while (formStudents.length != 0)
         formStudents.pop();
 
-    for (var stu in forms[formID].students) {
-        var brief = forms[formID].students[stu].brief;
-        var comments = forms[formID].students[stu].comments;
-        var rating = forms[formID].students[stu].rating;
-        var stuQuestions = forms[formID].students[stu].questions;
-        var json = { name: stu, brief: brief, comments: comments, rating: rating, questions: stuQuestions };
-        formStudents.push(json);
-    }
+    for (var stu in forms[formID].students)
+        resolveStudentName(forms[formID].students[stu], stu);
 
     var form = forms[formID];
 
