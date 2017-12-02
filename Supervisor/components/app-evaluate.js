@@ -17,18 +17,20 @@ app_evaluate_template = `
                         <p class="h5">Each question is in scale of 0-10</p>
                     </v-flex>
                     <v-flex sm12>
-                        <v-layout wrap row>
-                            <v-flex xs12 sm6 md4 v-for="question in questions">
-                                <v-layout wrap row>
-                                    <v-flex xs11>
-                                        <v-subheader>{{ question.title }}</v-subheader>
-                                    </v-flex>
-                                    <v-flex xs1>
-                                        <v-text-field type="number" min=0 max=10 v-model="question.value"></v-text-field>
-                                    </v-flex>
-                                </v-layout>
-                            </v-flex>
-                        </v-layout>
+                        <table xs12 style="margin:auto">
+                            <thead>
+                                <tr>
+                                    <th>Question</th>
+                                    <th>Score</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr xs12 v-for="question in questions">
+                                    <td>{{ question.title }}</td>
+                                    <td><v-text-field type="number" min=0 max=10 v-model="question.value"></v-text-field></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </v-flex>
                     <v-flex sm12>
                         <v-select label="Overall rating for the student’s performance" v-bind:items="ratings" v-model="rating" id="ratings" required></v-select>

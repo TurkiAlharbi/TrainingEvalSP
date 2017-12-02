@@ -11,6 +11,21 @@
     <link href="../lib/vuetify/vuetify-0.17.0.min.css" rel="stylesheet">
     <link href="../res/css/everything.css" rel="stylesheet">
 
+    <style>
+        tbody tr:nth-child(2n+1) {
+            background-color: #f9f9f9;
+        }
+
+        table {
+            border: 1px solid #ddd;
+        }
+
+        th,
+        td {
+            margin: 0;
+        }
+    </style>
+
     <title>Evaluate student</title>
 </head>
 
@@ -27,13 +42,14 @@
 
     <script src="../lib/vue/vue-2.5.0.min.js "></script>
     <script src="../lib/vuetify/vuetify-0.17.0.min.js"></script>
-    
+
     <!-- Firebase -->
     <script src="../lib/firebase/firebase-4.6.0.min.js"></script>
     <script src="../firebase/config.js"></script>
     <script src="../firebase/functions.js"></script>
 
     <script src="./components/app-evaluate.js "></script>
+
     <script src="../components/vuetify-dashboard/app-dashboard.js "></script>
     <script src="../components/vuetify-dashboard/app-page-header.js "></script>
 
