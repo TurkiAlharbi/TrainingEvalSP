@@ -20,6 +20,8 @@ app_evaluations_table_template = `
                     </ul>
                 </app-expandable>
 
+                <p>Number of submitted evaluations: {{ formStudents.length }}</p>
+
                 <v-text-field append-icon="search" label="Search" v-model="search"></v-text-field>
                 
                 <v-data-table v-bind:headers="headers.concat(questions)" :items="formStudents" v-bind:search="search" item-key="name" hide-actions class="elevation-1">
@@ -91,44 +93,39 @@ function updateView() {
     coordinator = firebase.auth().currentUser.email.split(".").join(" ");
 
     // Connects to the evaluations
-    firebase.database().ref("evaluation/" + coordinator).once('value', function (snapshot) {
+    firebase.database().ref("evaluation forms/" + coordinator).once('value', function (snapshot3) {
+        coordinatorForms = snapshot3.val();
+        var index = 0;
+        for (var form_meta in coordinatorForms) {
+            var form = coordinatorForms[form_meta];
+            console.log(form);
+            var jsonQuestions = [];
+            var numOfQuestions = Object.keys(form.questions).length;
 
-        vals = snapshot.val();
+            for (var q = 0; q < numOfQuestions; q++) {
+                var newQuestion = { title: form.questions["Q" + (q + 1)].title, text: "Q" + (q + 1), sortable: false };
+                jsonQuestions.push(newQuestion);
+            }
 
-        while (forms.length != 0)
-            forms.pop();
+            var newForm = { key: form_meta, title: form.title, jsonQuestions: jsonQuestions, id: index };
+            index++;
+            getEvaluations(form_meta, newForm);
 
-        var x = 0;
-
-        for (var key in vals) {
-            addForm(vals[key], key, x);
-            x++;
         }
     });
 }
 
-function addForm(vals, key, x) {
+function getEvaluations(name, newForm) {
+    firebase.database().ref("evaluation/" + coordinator + "/" + name).once('value', function (snapshot3) {
+        var form = snapshot3.val();
 
-    for (var s in vals) {
-        firebase.database().ref("students/" + s + "/name").once('value', function (snapshot2) {
-            name = snapshot2.val();
-            vals[s].name = name;
-        });
-    }
+        var students = {};
+        for (var student in form)
+            students[student] = form[student];
 
-    firebase.database().ref("evaluation forms/" + coordinator + "/" + key).once('value', function (snapshot3) {
-        form_meta = snapshot3.val();
-        var jsonQuestions = [];
-        var numOfQuestions = Object.keys(form_meta.questions).length;
-        for (var q = 0; q < numOfQuestions; q++) {
-            var newQuestion = { title: form_meta.questions["Q" + (q + 1)].title, text: "Q" + (q + 1), sortable: false };
-            jsonQuestions.push(newQuestion);
-        }
-        var newForm = { students: vals, key: key, id: x, title: form_meta.title, jsonQuestions: jsonQuestions };
+        newForm.students = students;
         forms.push(newForm);
-    });
-
-
+    })
 }
 
 function viewForm(formID) {
@@ -147,7 +144,7 @@ function viewForm(formID) {
         formStudents.push(json);
     }
 
-    form = forms[formID];
+    var form = forms[formID];
 
     // Clears old list
     while (questions.length != 0)
@@ -162,7 +159,6 @@ function viewForm(formID) {
 function rerender() {
     form.demo = form.demo + "1";
 }
-
 
 app_evaluations_table = {
     template: app_evaluations_table_template,
