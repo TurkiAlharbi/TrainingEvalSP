@@ -13,26 +13,48 @@ app_evaluations_table_template = `
             <p v-show="false">{{form}}</p>
             
             <div v-if="view">
-                
+
+                <app-expandable title="Questions">
+                    <ul>
+                        <li v-for="(question,i,b) in questions" class="black--text">{{ 'Q'+(i+1)+': '+question.title }}</li>
+                    </ul>
+                </app-expandable>
+
                 <v-text-field append-icon="search" label="Search" v-model="search"></v-text-field>
                 
-                <v-data-table v-bind:headers="headers.concat(questions)" :items="formStudents" v-bind:search="search" hide-actions class="elevation-1">
+                <v-data-table v-bind:headers="headers.concat(questions)" :items="formStudents" v-bind:search="search" item-key="name" hide-actions class="elevation-1">
                     <template slot="items" slot-scope="props">
                         <tr @click="props.expanded = !props.expanded">
                             <td class="text-xs-center ma-0 pa-0">{{ props.item.name }}</td>
-                            <td class="text-xs-center ma-0 pa-0">{{ props.item.brief }}</td>
-                            <td class="text-xs-center ma-0 pa-0">{{ props.item.comments }}</td>
                             <td class="text-xs-center ma-0 pa-0">{{ props.item.rating }}</td>
                             <td class="text-xs-center ma-0 pa-0" v-for="(question,i,b) in props.item.questions">
-                                {{props.item.questions['Q'+(b+1)]}}
+                                {{ props.item.questions['Q'+(b+1)] }}
                             </td>
                         </tr>
                     </template>
                     <template slot="expand" slot-scope="props">
                         <v-card flat>
                             <v-card-text>
-                                Brief: {{ props.item.brief }}
-                                Comments: {{ props.item.comments }}
+                                <tr>
+                                    <th></th>
+                                    <th>Score/Brief/Comment</th>
+                                </tr>
+                                <tr>
+                                    <td>Brief</td>
+                                    <td>{{ props.item.brief }}</td
+                                </tr>
+                                <tr v-for="(question,i,b) in props.item.questions">
+                                    <td>{{ questions[b].title }}</td>
+                                    <td>{{ props.item.questions['Q'+(b+1)] }}</td
+                                </tr>
+                                <tr>
+                                    <td>Rating</td>
+                                    <td>{{ props.item.rating }}</td
+                                </tr>
+                                <tr>
+                                    <td>Comments</td>
+                                    <td>{{ props.item.comments }}</td
+                                </tr>
                             </v-card-text>
                         </v-card>
                     </template>
@@ -49,8 +71,6 @@ var questions = [];
 
 var headers = [
     { text: 'Name', pop: 'Name', value: 'name', align: "center" },
-    { text: 'Brief', pop: 'Brief', value: 'brief', align: "center" },
-    { text: 'Comments', pop: 'Comments', value: 'comments', align: "center" },
     { text: 'Rating', pop: 'Rating', value: 'rating', align: "center" },
 ];
 
@@ -101,7 +121,7 @@ function addForm(vals, key, x) {
         var jsonQuestions = [];
         var numOfQuestions = Object.keys(form_meta.questions).length;
         for (var q = 0; q < numOfQuestions; q++) {
-            var newQuestion = { text: form_meta.questions["Q" + (q + 1)].title, sortable: false };
+            var newQuestion = { title: form_meta.questions["Q" + (q + 1)].title, text: "Q" + (q + 1), sortable: false };
             jsonQuestions.push(newQuestion);
         }
         var newForm = { students: vals, key: key, id: x, title: form_meta.title, jsonQuestions: jsonQuestions };
