@@ -5,8 +5,11 @@ app_students_table_template = `
 <v-data-table v-bind:headers="headers" :items="students" v-bind:search="search" hide-actions class="elevation-1">
     <template slot="items" slot-scope="props">
         <td class="text-xs-center">{{ props.item.name }}</td>
+        <td class="text-xs-center">{{ props.item.stumail }}</td>
         <td class="text-xs-center">{{ props.item.coordinator }}</td>
+        <td class="text-xs-center">{{ props.item.coordmail }}</td>
         <td class="text-xs-center">{{ props.item.advisor }}</td>
+        <td class="text-xs-center">{{ props.item.advmail }}</td>
     </template>
 </v-data-table>
 </div>
@@ -14,8 +17,11 @@ app_students_table_template = `
 
 var headers = [
     { text: 'Name', value: 'name', align: "center" },
+    { text: 'Email', value: 'stumail', align: "center" },
     { text: 'Coordinator', value: 'coordinator', align: "center" },
+    { text: 'Email', value: 'coordmail', align: "center" },
     { text: 'Advisor', value: 'advisor', align: "center" },
+    { text: 'Email', value: 'advmail', align: "center" },
 ];
 
 var students = [];
@@ -64,8 +70,10 @@ function fetchStudent(stu) {
         };
 
         // Get students data
-        for (var key in studentVals)
-            student[key] = studentVals[key];
+        student = studentVals;
+        student.stumail = stu + "@kfupm.edu.sa";
+        student.coordmail = student.coordinator.split(" ").join(".");
+        student.advmail = student.advisor.split(" ").join(".");
 
         // Trying to get the student's advisor's data
         try {
