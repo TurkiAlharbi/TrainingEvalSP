@@ -26,14 +26,14 @@
                         <legend>Coordinator Information:</legend>
                     </v-flex>
                     <v-flex xs12>
-                        <v-text-field label="Name" id="name" required :rules="nameRules" prepend-icon="person"></v-text-field>
+                        <v-text-field label="Name" v-model="name" required :rules="nameRules" prepend-icon="person"></v-text-field>
                     </v-flex>
                     <v-flex xs12>
-                        <v-text-field label="Email" id="email" required :rules="emailRules" prepend-icon="email"></v-text-field>
+                        <v-text-field label="Email" v-model="email" required :rules="emailRules" prepend-icon="email"></v-text-field>
                     </v-flex>
                     <v-flex xs12>
-                        <v-select label="Majors" v-bind:items="majors" v-model="selectedMajors" prepend-icon="school" :rules="majorRules" multiple
-                            chips required></v-select>
+                        <v-select label="Majors" :items="majors" v-model="selectedMajors" prepend-icon="school" :rules="majorRules" multiple chips
+                            required></v-select>
                     </v-flex>
                     <v-flex xs12>
                         <v-btn class="green white--text" @click="addCoord" :disabled="!valid">Add
@@ -47,23 +47,19 @@
     </v-app>
     <script>
         function addCoord() {
-            var name = $('#name').val();
-            var email = $('#email').val();
+            var name = app.name;
+            var email = app.email;
             var majors = app.selectedMajors;
             var password = email;//temp
 
+            // Creates a user for that email
             createUser(email, password, "Coordinator");
 
+            // Adds to the advisors list
             write2DB("advisors/" + email.split(".").join(" "), { name: name });
 
+            // Adds to the coordinators list
             write2DB("coordinators/" + email.split(".").join(" "), { name: name, majors: majors });
-
-            // TBD
-            setTimeout(function () {
-                $('#name').val("");
-                $('#email').val("");
-                app.selectedMajors = [];
-            }, 1500);
         }
     </script>
 
@@ -81,8 +77,10 @@
     <script>
         app = new Vue({
             el: "#app",
-            data() {
+            data: function () {
                 return {
+                    name: '',
+                    email: '',
                     majors: [
                         "ICS", "SWE", "COE",
 
