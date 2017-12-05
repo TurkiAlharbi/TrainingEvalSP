@@ -1,27 +1,24 @@
 app_marks_template = `
-<table class="table table-striped table-hover table-bordered">
-    <thead>
-        <tr>
-            <th v-for="header in headers" style="text-align: center">{{ header }}</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr v-for="student in students">
-            <td>{{ student.id }}</td>
-            <td>{{ student.name }}</td>
-            <td>{{ student.company }}</td>
-            <td>{{ student.supervisor }}</td>
-            <td>{{ student.mark }}</td>
-        </tr>
-    </tbody>
-</table>
+<div>
+    <v-data-table v-bind:headers="headers" :items="students" hide-actions class="elevation-1">
+        <template slot="items" slot-scope="props">
+            <td class="text-xs-center">{{ props.item.id }}</td>
+            <td class="text-xs-center">{{ props.item.name }}</td>
+            <td class="text-xs-center">{{ props.item.mark }}</td>
+        </template>
+    </v-data-table>
+</div>
 `;
 
-headers = ["ID", "Name", "Company", "Supervisor", "Mark"];
+var headers = [
+    { text: 'ID', value: 'id', align: "center" },
+    { text: 'Name', value: 'name', align: "center" },
+    { text: 'Mark', value: 'mark', align: "center" },
+];
 
-students = [
-    { id: "201224780", name: "Ibrahim Al-Beladi", company: "Aramco", supervisor: "Maha Al-Dossary", mark: "35 / 40" },
-    { id: "201237940", name: "Mohammed Alhumaidi", company: "Tweetso", supervisor: "Abdulrahman Alshehri", mark: "33 / 40" },
+var students = [
+    { id: "201224780", name: "Ibrahim Al-Beladi", mark: "35 / 40" },
+    { id: "201237940", name: "Mohammed Alhumaidi", mark: "33 / 40" },
 ];
 
 app_marks = {
