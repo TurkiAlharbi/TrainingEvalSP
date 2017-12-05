@@ -4,6 +4,7 @@ template = `
         <app-option name="View students" link="./Advisor/viewStudents.html" done="true"></app-option>
         <app-option name="View contracts" link="./Advisor/viewContracts.html" done="true"></app-option>
         <app-option name="Add a supervisor" link="./Advisor/addSupervisor.html" done="true"></app-option>
+        <app-option name="View evaluations" link="./Advisor/viewEvaluations.html" done="true"></app-option>
     </app-dashboard-no-container>
 
     <app-dashboard-no-container title="Other utilities">
