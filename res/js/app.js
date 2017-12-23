@@ -22,6 +22,11 @@ var app = new Vue({
             (v) => !!v || 'Password is required',
             (v) => v.length > 6 || 'Password is short'
         ],
+        sent: false,
+        drawer: false,
+        passwordDialog: false,
+        oldPassword: '',
+        newPassword: '',
     },
 
     methods: {
@@ -47,9 +52,76 @@ var app = new Vue({
                 }).catch(function (error) {
                     vm.auth.message = error.message;
                     vm.auth.hasErrors = true;
+                    console.log(error);
                 });
         },
 
+        forgotPassword: function (event) {
+            /**
+             * Sends a message with a link for resetting the password
+             */
+            var vm = this;
+
+            if (vm.auth.email === '') {
+                vm.auth.message = "Please provide the email first";
+                vm.auth.hasErrors = true;
+                return;
+            }
+
+            firebase.auth().sendPasswordResetEmail(vm.auth.email).then(function () {
+                vm.auth.message = "Email sent, check your email, maybe junkmail";
+                vm.auth.hasErrors = false;
+            }).catch(function (error) {
+                vm.auth.message = "Failed to send password reset email, try again later";
+                vm.auth.hasErrors = true;
+                console.log(error);
+            });
+
+        },
+
+        changePassword: function () {
+            /**
+             * Changes the password of a logged in user
+             */
+            var vm = this;
+
+            if (vm.newPassword === '') {
+                vm.auth.message = "Please provide the password first";
+                vm.auth.hasErrors = true;
+                return;
+            }
+
+            if (vm.newPassword.length < 6) {
+                vm.auth.message = "Password most be longer than that";
+                vm.auth.hasErrors = true;
+                return;
+            }
+
+            if (vm.newPassword === vm.oldPassword) {
+                vm.auth.message = "New password is the same as the old one!";
+                vm.auth.hasErrors = true;
+                return;
+            }
+
+            credential = firebase.auth.EmailAuthProvider.credential(firebase.auth().currentUser.email, vm.oldPassword);
+
+            firebase.auth().currentUser.reauthenticateWithCredential(credential).then(function () {
+                firebase.auth().currentUser.updatePassword(vm.newPassword).then(function () {
+                    vm.auth.message = 'Password changed successfully';
+                    vm.auth.hasErrors = false;
+                }).catch(function (error) {
+                    vm.auth.message = 'Failed to change password, try again later';
+                    vm.auth.hasErrors = true;
+                    console.log(error);
+                });
+            }).catch(function (error) {
+                vm.auth.message = 'The old password is wrong, check again!';
+                vm.auth.hasErrors = true;
+                console.log(error);
+            });
+
+
+        },
         signOut: function () {
             /**
              * Signout the currently logged-in user
@@ -59,8 +131,11 @@ var app = new Vue({
                 .then(function (error) {
                     this.auth.user = firebase.auth().currentUser;
                     this.auth.message = 'User signed out Successfully';
+                    this.auth.hasErrors = false;
                 }.bind(this), function (error) {
-                    alert('Failed to signout user, try again later');
+                    this.auth.message = 'Failed to signout user, try again later';
+                    this.auth.hasErrors = true;
+                    console.log(error);
                 });
         },
         dismissAlert: function () {
@@ -92,18 +167,29 @@ var app = new Vue({
             firebase.auth().onAuthStateChanged(function (user) {
                 if (user) {
                     this.auth.user = user;
-                    userId = user.email.split(".").join(" ");
+                    if (user.emailVerified) {
+                        console.log('Email is verified');
+                        userId = user.email.split(".").join(" ");
 
-                    firebase.database().ref('/users/' + userId).once('value').then(function (snapshot) {
-                        app.auth.type = snapshot.val() && snapshot.val().type;
-                        firebase.database().ref(app.auth.type.toLowerCase() + "s/" + userId + "/name").once('value').then(function (snapshot2) {
-                            app.auth.userName = snapshot2.val();
+                        firebase.database().ref('/users/' + userId).once('value').then(function (snapshot) {
+                            app.auth.type = snapshot.val() && snapshot.val().type;
+                            firebase.database().ref(app.auth.type.toLowerCase() + "s/" + userId + "/name").once('value').then(function (snapshot2) {
+                                app.auth.userName = snapshot2.val();
+                            });
                         });
-                    });
+                    }
+                    else {
+                        console.log('Email is not verified');
+                        if (!this.sent) {
+                            user.sendEmailVerification();
+                            this.sent = true;
+                        }
+                    }
                 } else {
                     this.auth.user = null;
                     this.auth.type = null;
                 }
+
             }.bind(this));
 
             return (this.auth.user !== null);

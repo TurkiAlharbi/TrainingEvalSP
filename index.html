@@ -18,23 +18,88 @@
 <body>
     <v-app id="app" v-cloak>
 
+        <v-navigation-drawer light v-model="drawer" right absolute temporary app>
+            <v-toolbar flat dense class="blue">
+                <v-list>
+                    <v-list-tile>
+                        <v-list-tile-title class="title">
+                            <a href="/" class="white--text" style="text-decoration: none">EvaluateMe</a>
+                        </v-list-tile-title>
+                    </v-list-tile>
+                </v-list>
+            </v-toolbar>
+            <v-divider></v-divider>
+            <v-list>
+                <v-list-tile id="signout" @click="signOut();drawer = false">
+                    <v-list-tile-content>
+                        <v-list-tile-title>
+                            <a>Sign out</a>
+                        </v-list-tile-title>
+                    </v-list-tile-content>
+                    <v-list-tile-action>
+                        <v-icon>exit_to_app</v-icon>
+                    </v-list-tile-action>
+                </v-list-tile>
+                <v-list-tile @click="passwordDialog = true;drawer = false">
+                    <v-list-tile-content>
+                        <v-list-tile-title>
+                            <a>Change password</a>
+                        </v-list-tile-title>
+                    </v-list-tile-content>
+                    <v-list-tile-action>
+                        <v-icon>mode_edit</v-icon>
+                    </v-list-tile-action>
+                </v-list-tile>
+            </v-list>
+        </v-navigation-drawer>
+
         <v-toolbar class="blue" dense fixed>
             <v-toolbar-title>
                 <a href="/" class="white--text" style="text-decoration: none">EvaluateMe</a>
             </v-toolbar-title>
             <v-spacer></v-spacer>
-            <template v-if="isAuthenticated">
-                <v-toolbar-title v-if="auth.userName" class="text-xs-center" style="cursor:default;">
-                    <p class="blue white--text" style="font-size:0.75em;margin:0 25px 0 0">Welcome {{ auth.userName }}</p>
-                    <p v-if="auth.type" class="blue white--text" style="font-size:0.75em;margin:0 25px 0 0">Account type: {{ auth.type }}</p>
-                </v-toolbar-title>
-                <v-spacer></v-spacer>
-                <v-toolbar-items>
-                    <v-btn flat id="signout" @click="signOut" class="white--text">Sign out</v-btn>
-                </v-toolbar-items>
-            </template>
+            <v-btn icon dark @click.stop="drawer = !drawer">
+                <v-icon>settings</v-icon>
+            </v-btn>
         </v-toolbar>
+
         <div class="ma-5"></div>
+
+        <v-dialog v-model="passwordDialog" max-width="500px">
+            <v-form>
+                <v-card>
+                    <v-card-text>
+                        <v-container fluid>
+                            <v-layout row wrap>
+                                <v-flex xs12>
+                                    <v-text-field name="pass" label="Old Password" v-model:password="oldPassword" :append-icon="e1 ? 'visibility' : 'visibility_off'"
+                                        :append-icon-cb="() => (e1 = !e1)" :type="e1 ? 'password' : 'text'" :rules="passwordRules"></v-text-field>
+                                </v-flex>
+                                <v-flex xs12>
+                                    <v-text-field name="pass" label="New Password" v-model:password="newPassword" :append-icon="e1 ? 'visibility' : 'visibility_off'"
+                                        :append-icon-cb="() => (e1 = !e1)" :type="e1 ? 'password' : 'text'" :rules="passwordRules"></v-text-field>
+                                </v-flex>
+                            </v-layout>
+                        </v-container>
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-layout row wrap>
+                            <v-layout class="justify-center" sm12>
+                                <v-btn @click="changePassword" class="green white--text">
+                                    Save password
+                                    <v-icon>save</v-icon>
+                                </v-btn>
+                            </v-layout>
+                        </v-layout>
+                    </v-card-actions>
+                </v-card>
+                <v-flex v-if="auth.message !== ''" @click="dismissAlert" :class="{'red': auth.hasErrors, 'green': !auth.hasErrors, 'text-xs-center': true}">
+                    <v-btn flat>
+                        <p :class="{'white--text': !auth.hasErrors}">{{ auth.message }}</p>
+                    </v-btn>
+                </v-flex>
+            </v-form>
+        </v-dialog>
 
         <v-container v-if="loadAuth" fill-height class="mb-5">
             <v-container>
@@ -61,22 +126,12 @@
                                                 :append-icon="e1 ? 'visibility' : 'visibility_off'" :append-icon-cb="() => (e1 = !e1)"
                                                 :type="e1 ? 'password' : 'text'" :rules="passwordRules"></v-text-field>
                                         </v-flex>
+                                        <v-flex class="text-xs-right">
+                                            <a @click="forgotPassword">Forgot password?</a>
+                                        </v-flex>
                                     </v-layout>
                                 </v-container>
                             </div>
-                            <!--
-                                    <div class="col-xs-6 col-sm-6 col-md-6">
-                                        <div class="form-group">
-                                            <input type="checkbox" name="check" checked="checked"> Remember Me
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-6 col-sm-6 col-md-6">
-                                        <div class="form-group">
-                                            <a href="#forgot" data-toggle="modal"> Forgot Password? </a>
-                                        </div>
-                                    </div>
-                                <hr>
-                            -->
                         </v-card-text>
                         <v-card-actions class="pb-3">
                             <v-layout row wrap>
@@ -90,9 +145,9 @@
                         </v-card-actions>
                     </v-card>
 
-                    <v-flex v-if="auth.message !== ''" @click="dismissAlert" :class="{'red': auth.hasErrors, 'green': !auth.hasErrors}">
+                    <v-flex v-if="auth.message !== ''" @click="dismissAlert" :class="{'red': auth.hasErrors, 'green': !auth.hasErrors, 'text-xs-center': true}">
                         <v-btn flat>
-                            <p>{{ auth.message }}</p>
+                            <p :class="{'white--text': !auth.hasErrors}">{{ auth.message }}</p>
                         </v-btn>
                     </v-flex>
                 </v-flex>
@@ -102,40 +157,51 @@
 
         <v-container v-else-if="isAuthenticated" id="content" class="container">
 
-            <div v-if="auth.message !== ''">
-                <div :class="{'red white--text': auth.hasErrors, 'green white--text': !auth.hasErrors}">
-                    <button @click="dismissAlert" type="button" class="close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                    <p>
-                        <strong>{{auth.message}}</strong>
-                    </p>
+            <template v-if="auth.userName">
+                <div class="text-xs-center">
+                    <p class="body-1" style="font-size:0.75em">Welcome {{ auth.userName }}</p>
+                    <p class="body-2" v-if="auth.type" style="font-size:0.75em">Role: {{ auth.type }}</p>
+                </div>
+            </template>
+
+            <div v-if="auth.user.emailVerified">
+                <div v-if="auth.type == 'Admin'">
+                    <app-admin></app-admin>
+                </div>
+
+                <div v-else-if="auth.type == 'Coordinator'">
+                    <app-coordinator></app-coordinator>
+                </div>
+
+                <div v-else-if="auth.type == 'Advisor'">
+                    <app-advisor></app-advisor>
+                </div>
+
+                <div v-else-if="auth.type == 'Supervisor'">
+                    <app-supervisor></app-supervisor>
+                </div>
+
+                <div v-else-if="auth.type == 'disabled'">
+                    <p style="text-align:center">Your account is disabled, contact system's admin!</p>
+                </div>
+
+                <div v-else-if="!loaded">
+                    <p style="text-align:center">Loading!</p>
+                    <!-- //TBD: more visual loading screen -->
                 </div>
             </div>
-
-            <div v-if="auth.type == 'Admin'">
-                <app-admin></app-admin>
-            </div>
-
-            <div v-else-if="auth.type == 'Coordinator'">
-                <app-coordinator></app-coordinator>
-            </div>
-
-            <div v-else-if="auth.type == 'Advisor'">
-                <app-advisor></app-advisor>
-            </div>
-
-            <div v-else-if="auth.type == 'Supervisor'">
-                <app-supervisor></app-supervisor>
-            </div>
-
-            <div v-else-if="auth.type == 'disabled'">
-                <p style="text-align:center">Your account is disabled, contact system's admin!</p>
-            </div>
-
-            <div v-else-if="!loaded">
-                <p style="text-align:center">Loading!</p>
-                <!-- //TBD: more visual loading screen -->
+            <div v-else>
+                <v-container>
+                    <v-container>
+                        <v-card>
+                            <v-card-text class="text-xs-center">
+                                <p>The verification link is sent to your email : {{auth.user.email}}.</p>
+                                <p>The email is probably in the junk folder, kindly mark as not junk.</p>
+                                <p>Refresh this page after verification.</p>
+                            </v-card-text>
+                        </v-card>
+                    </v-container>
+                </v-container>
             </div>
         </v-container>
 
