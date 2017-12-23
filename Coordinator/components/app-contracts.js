@@ -112,7 +112,7 @@ function fetchStudent(stu, major, term, vals) {
 
         // Highlight not submitting the contract yet
         if (student.name == undefined) {
-            student.name = stu;
+            student.name = stu + " <no contract>";
         }
 
         // Add to the list of students
