@@ -5,7 +5,7 @@ template = `
             <v-select label="Type" v-bind:items="types" v-model="type" required></v-select>
         </v-flex>
         <v-flex xs12>
-            <v-select label="Term(s)" v-bind:items="terms" v-model="term" required></v-select>
+            <v-select label="Term(s)" v-bind:items="filteredTerms" v-model="term" required></v-select>
         </v-flex>
         <v-flex xs12>
             <v-btn class="green white--text" @click="addPeriods(type,term)">Add period
@@ -39,6 +39,7 @@ var terms = [
     "171", "172", "172 + 173", "173", "173 + 181",
     "181", "182", "182 + 183", "183", "183 + 191",
 ];
+
 var types = ["summer", "coop", "internship"];
 
 firebase.auth().onAuthStateChanged(function (user) {
@@ -91,11 +92,27 @@ app_add_student = {
             period: '',
             types: types,
             type: types[0],
-            terms: terms,
-            term: terms[0],
+            // terms: terms,
+            term: '',
             majors: majors,
             major: '',
             names: ''
+        }
+    },
+    computed: {
+        filteredTerms: function () {
+            if (this.type == "summer")
+                return terms.filter(function (el) {
+                    return el.length == 3 && el[2] == "3"
+                });
+            if (this.type == "internship")
+                return terms.filter(function (el) {
+                    return el.length == 3 && el[2] != "3"
+                });
+            if (this.type == "coop")
+                return terms.filter(function (el) {
+                    return el.length != 3
+                });
         }
     }
 }
@@ -165,5 +182,5 @@ function addPeriods(type, term) {
     // Add to coordinator's periods
     coordinator = firebase.auth().currentUser.email.split(".").join(" ");
     update2DB("coordinators/" + coordinator + "/terms", json);
-
+    alert("period: " + period + " added");
 }
