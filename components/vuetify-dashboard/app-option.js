@@ -1,5 +1,5 @@
 app_option_template = `
-<v-flex xs12 sm6 md4 lg3>
+<v-flex xs12 sm6 md4 lg3 xl2>
     <v-card class="ma-2" :href="link">
         <v-card-title class="justify-center" style="border:1px solid #2196f3">
             <div class="caption mb-2 mt-2">
