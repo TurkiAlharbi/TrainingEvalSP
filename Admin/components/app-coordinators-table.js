@@ -2,7 +2,7 @@ app_coordinators_table_template = `
 <div>
     <v-text-field append-icon="search" label="Search" v-model="search"></v-text-field>
 
-    <v-data-table v-bind:headers="headers" :items="coordinators" v-bind:search="search" hide-actions class="elevation-1">
+    <v-data-table v-bind:headers="headers" :items="coordinators" v-bind:search="search" hide-actions class="elevation-1" id="coords">
         <template slot="items" slot-scope="props">
             <td class="text-xs-center">{{ props.item.name }}</td>
             <td class="text-xs-center">{{ props.item.email }}</td>
@@ -12,6 +12,9 @@ app_coordinators_table_template = `
             </v-btn></td>
         </template>
     </v-data-table>
+    <v-layout justify-center>
+        <v-btn class="green white--text" @click="exportCurrentView">Save current view as xls</v-btn>
+    </v-layout>
 </div>
 `;
 
@@ -56,6 +59,15 @@ function remCoord(coordKey) {
     // in-activate coordinator
     moveRecord('coordinators/' + coordKey, 'inactive/coordinators/' + coordKey);
     write2DB('users/' + coordKey, { type: "disabled" });
+}
+
+function exportCurrentView() {
+    $("thead .material-icons.icon").remove();
+    $(".datatable__progress").remove();
+
+    e1 = exportTable2("Coordinators report");
+    e1.reset();
+    document.getElementsByClassName("button-default xls")[0].click();
 }
 
 app_coordinators_table = {

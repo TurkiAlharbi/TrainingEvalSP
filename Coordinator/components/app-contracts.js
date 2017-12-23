@@ -120,7 +120,6 @@ function fetchStudent(stu, major, term, vals) {
     });
 }
 
-
 app_contracts_table = {
     template: app_contracts_table_template,
     data() {

@@ -10,7 +10,7 @@
 
     <link href="../lib/vuetify/vuetify-0.17.0.min.css" rel="stylesheet">
     <link href="../res/css/everything.css" rel="stylesheet">
-    
+
     <style>
         tbody tr:nth-child(2n+1) {
             background-color: #f9f9f9;
@@ -52,6 +52,20 @@
     <script src="../components/app.js "></script>
 
     <script src="../lib/jquery/jquery-3.2.1.min.js "></script>
+
+    <!-- Export table -->
+    <script src="../lib/tableexport/xlsx.min.js"></script>
+    <script src="../lib/tableexport/Blob.js"></script>
+    <script src="../lib/tableexport/FileSaver.min.js"></script>
+    <link href="../lib/tableexport/tableexport.min.css" rel="stylesheet">
+    <script src="../lib/tableexport/tableexport.min.js"></script>
+    <script src="../res/js/export-table.js"></script>
+    <style>
+        button.button-default.xls {
+            display: none;
+        }
+    </style>
+    
 </body>
 
 </html>

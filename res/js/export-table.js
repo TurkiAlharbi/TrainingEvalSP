@@ -1,3 +1,5 @@
+exportInstance = '';
+
 function exportTable(filename) {
     removeOtherExporters();
     var settings = { formats: ['xls'], filename: filename, trimWhitespace: true };
@@ -13,4 +15,16 @@ function removeOtherExporters() {
     }
 }
 
-exportInstance = ''
+function exportTableById(filename, id) {
+    removeOtherExporters();
+    var settings = { formats: ['xls'], filename: filename, trimWhitespace: true };
+    var Table = document.getElementById(id);
+    return TableExport(Table, settings);
+}
+
+function exportTable2(filename) {
+    removeOtherExporters();
+    var settings = { formats: ['xls'], filename: filename, trimWhitespace: true };
+    var Table = document.getElementsByTagName("table");
+    return TableExport(Table, settings);
+}

@@ -17,6 +17,12 @@ template = `
             <td class="text-xs-center">{{ totalTotal }}</td>
         </template>
     </v-data-table>
+
+    <br/>
+    
+    <v-layout justify-center v-if="periods.length != 0">
+        <v-btn class="green white--text" @click="exportCurrentView">Save current view as xls</v-btn>
+    </v-layout>
 </div>
 `;
 
@@ -28,7 +34,7 @@ var headers = [
 ];
 
 var totalHeader = [
-    { text: 'Total', value: 'total', align: "center", sortable: false },
+    { text: 'Total', value: 'total', align: "center" },
 ];
 var totalTotal = 0;
 
@@ -63,7 +69,7 @@ function updateView() {
                 total += count;
                 if (majors2.indexOf(newMajors[m]) == -1) {
                     majors2.push(newMajors[m]);
-                    majors.push({ text: newMajors[m], align: "center", sortable: false, total: count });
+                    majors.push({ text: newMajors[m], align: "center", total: count, sortable: false });
                 }
                 else {
                     majors[majors2.indexOf(newMajors[m])].total += count;
@@ -72,11 +78,17 @@ function updateView() {
             totalTotal += total;
             periods.push({ period: i, majors: vals[i], total: total });
         }
-
-        exportTable("coordinatorReport");
-
     });
 
+}
+
+function exportCurrentView() {
+    $("thead .material-icons.icon").remove();
+    $(".datatable__progress").remove();
+
+    e1 = exportTable2("Report");
+    e1.reset();
+    document.getElementsByClassName("button-default xls")[0].click();
 }
 
 app_report = {

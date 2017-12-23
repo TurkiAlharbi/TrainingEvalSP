@@ -11,6 +11,12 @@ app_students_table_template = `
             <td class="text-xs-center">{{ props.item.supervisor }}</td>
         </template>
     </v-data-table>
+
+    <br/>
+    
+    <v-layout justify-center v-if="students.length != 0">
+        <v-btn class="green white--text" @click="exportCurrentView">Save current view as xls</v-btn>
+    </v-layout>
 </div>
 `;
 
@@ -98,6 +104,15 @@ function fetchStudent(stu, major, term, vals) {
         // Add to the list of students
         students.push(student);
     });
+}
+
+function exportCurrentView() {
+    $("thead .material-icons.icon").remove();
+    $(".datatable__progress").remove();
+
+    e1 = exportTable2("List of students");
+    e1.reset();
+    document.getElementsByClassName("button-default xls")[0].click();
 }
 
 app_students_table = {

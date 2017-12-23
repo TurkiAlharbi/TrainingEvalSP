@@ -11,6 +11,12 @@ template = `
             </v-btn></td>
         </template>
     </v-data-table>
+    
+    <br/>
+    
+    <v-layout justify-center v-if="coordinators.length != 0">
+        <v-btn class="green white--text" @click="exportCurrentView">Save current view as xls</v-btn>
+    </v-layout>
 </div>
 `;
 
@@ -54,6 +60,16 @@ function activateCoord(coordKey) {
     // activate coordinator
     moveRecord('inactive/coordinators/' + coordKey, 'coordinators/' + coordKey);
     write2DB('users/' + coordKey, { type: "Coordinator" });
+}
+
+
+function exportCurrentView() {
+    $("thead .material-icons.icon").remove();
+    $(".datatable__progress").remove();
+
+    e1 = exportTable2("Inactivated coordinators report");
+    e1.reset();
+    document.getElementsByClassName("button-default xls")[0].click();
 }
 
 app_activate_coord = {

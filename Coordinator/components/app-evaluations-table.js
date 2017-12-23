@@ -64,6 +64,12 @@ app_evaluations_table_template = `
             </div>
         </v-flex>
     </div>
+
+    <br/>
+    
+    <v-layout justify-center v-if="formStudents.length != 0">
+        <v-btn class="green white--text" @click="exportCurrentView">Save current view as xls</v-btn>
+    </v-layout>
 </div>
 `;
 
@@ -102,7 +108,7 @@ function updateView() {
             var numOfQuestions = Object.keys(form.questions).length;
 
             for (var q = 0; q < numOfQuestions; q++) {
-                var newQuestion = { title: form.questions["Q" + (q + 1)].title, text: "Q" + (q + 1), sortable: false };
+                var newQuestion = { title: form.questions["Q" + (q + 1)].title, text: "Q" + (q + 1), label: "Q" + (q + 1), sortable: false };
                 jsonQuestions.push(newQuestion);
             }
 
@@ -163,6 +169,30 @@ function viewForm(formID) {
 
 function rerender() {
     form.demo = form.demo + "1";
+}
+
+function setQuestionsHeader() {
+    for (i in questions)
+        questions[i].text = questions[i].title;
+}
+
+function resetQuestionsHeader() {
+    for (i in questions)
+        questions[i].text = questions[i].label;
+}
+
+function exportCurrentView() {
+    $("thead .material-icons.icon").remove();
+    $(".datatable__progress").remove();
+
+    setQuestionsHeader();
+
+    setTimeout(() => {
+        e1 = exportTable2("Evaluations");
+        e1.reset();
+        document.getElementsByClassName("button-default xls")[0].click();
+        resetQuestionsHeader();
+    }, 500);
 }
 
 app_evaluations_table = {

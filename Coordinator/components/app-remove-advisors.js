@@ -20,6 +20,12 @@ app_remove_advisors_template = `
             </td>
         </template>
     </v-data-table>
+    
+    <br/>
+    
+    <v-layout justify-center v-if="advisors.length != 0">
+        <v-btn class="green white--text" @click="exportCurrentView">Save current view as xls</v-btn>
+    </v-layout>
 </div>
 `;
 
@@ -118,6 +124,15 @@ function getAdvisors3(advisor, adv, id) {
         // Add to the list of advisors
         advisors.push(advisor);
     });
+}
+
+function exportCurrentView() {
+    $("thead .material-icons.icon").remove();
+    $(".datatable__progress").remove();
+
+    e1 = exportTable2("List of advisors");
+    e1.reset();
+    document.getElementsByClassName("button-default xls")[0].click();
 }
 
 app_remove_advisors = {

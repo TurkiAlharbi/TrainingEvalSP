@@ -1,17 +1,23 @@
 app_students_table_template = `
 <div>
-<v-text-field append-icon="search" label="Search" v-model="search"></v-text-field>
+    <v-text-field append-icon="search" label="Search" v-model="search"></v-text-field>
 
-<v-data-table v-bind:headers="headers" :items="students" v-bind:search="search" hide-actions class="elevation-1">
-    <template slot="items" slot-scope="props">
-        <td class="text-xs-center">{{ props.item.name }}</td>
-        <td class="text-xs-center">{{ props.item.stumail }}</td>
-        <td class="text-xs-center">{{ props.item.coordinator }}</td>
-        <td class="text-xs-center">{{ props.item.coordmail }}</td>
-        <td class="text-xs-center">{{ props.item.advisor }}</td>
-        <td class="text-xs-center">{{ props.item.advmail }}</td>
-    </template>
-</v-data-table>
+    <v-data-table v-bind:headers="headers" :items="students" v-bind:search="search" hide-actions class="elevation-1">
+        <template slot="items" slot-scope="props">
+            <td class="text-xs-center">{{ props.item.name }}</td>
+            <td class="text-xs-center">{{ props.item.stumail }}</td>
+            <td class="text-xs-center">{{ props.item.coordinator }}</td>
+            <td class="text-xs-center">{{ props.item.coordmail }}</td>
+            <td class="text-xs-center">{{ props.item.advisor }}</td>
+            <td class="text-xs-center">{{ props.item.advmail }}</td>
+        </template>
+    </v-data-table>
+
+    <br/>
+        
+    <v-layout justify-center v-if="students.length != 0">
+        <v-btn class="green white--text" @click="exportCurrentView">Save current view as xls</v-btn>
+    </v-layout>
 </div>
 `;
 
@@ -98,6 +104,15 @@ function fetchStudent(stu) {
         // Add to the list of students
         students.push(student);
     });
+}
+
+function exportCurrentView() {
+    $("thead .material-icons.icon").remove();
+    $(".datatable__progress").remove();
+
+    e1 = exportTable2("List of students");
+    e1.reset();
+    document.getElementsByClassName("button-default xls")[0].click();
 }
 
 app_students_table = {

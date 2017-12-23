@@ -51,8 +51,8 @@ app_marks_template = `
 `;
 
 var headers = [
-    { text: 'ID', value: 'id', align: "center", sortable: false },
-    { text: 'Name', value: 'name', align: "center", sortable: false },
+    { text: 'ID', value: 'id', align: "center" },
+    { text: 'Name', value: 'name', align: "center" },
 ];
 
 var view = false;
@@ -96,7 +96,7 @@ function addFormToPeriod(period, formName, form) {
     for (i in periods)
         if (period == periods[i].name) {
             periods[i].forms.push({ name: formName, form: form, weight: 25 });
-            periods[i].formHeaders.push({ text: form.title, value: formName, align: "center", sortable: false });
+            periods[i].formHeaders.push({ text: form.title, value: formName, align: "center" });
             return;
         }
 }
@@ -108,14 +108,17 @@ function viewPeriod(period) {
                 fetchEval(period, period.forms[i])
             period.fetched = true;
         }
-        exportTable("Marks report");
         return true;
     }
     return false;
 }
 
 function exportCurrentView() {
-    exportInstance.reset();
+    $("thead .material-icons.icon").remove();
+    $(".datatable__progress").remove();
+
+    e1 = exportTable2("Marks report");
+    e1.reset();
     document.getElementsByClassName("button-default xls")[0].click();
 }
 

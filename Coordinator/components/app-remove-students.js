@@ -18,6 +18,12 @@ app_remove_students_template = `
             </v-btn></td>
         </template>
     </v-data-table>
+
+    <br/>
+    
+    <v-layout justify-center v-if="students.length != 0">
+        <v-btn class="green white--text" @click="exportCurrentView">Save current view as xls</v-btn>
+    </v-layout>
 </div>
 `;
 
@@ -144,6 +150,14 @@ function fetchStudent(stu, major, term, vals) {
     });
 }
 
+function exportCurrentView() {
+    $("thead .material-icons.icon").remove();
+    $(".datatable__progress").remove();
+
+    e1 = exportTable2("List of students");
+    e1.reset();
+    document.getElementsByClassName("button-default xls")[0].click();
+}
 
 app_remove_students = {
     template: app_remove_students_template,
