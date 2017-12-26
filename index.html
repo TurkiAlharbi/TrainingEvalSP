@@ -159,8 +159,8 @@
 
             <template v-if="auth.userName">
                 <div class="text-xs-center">
-                    <p class="body-1" style="font-size:0.75em">Welcome {{ auth.userName }}</p>
-                    <p class="body-2" v-if="auth.type" style="font-size:0.75em">Role: {{ auth.type }}</p>
+                    <p class="body-1 ma-0">Welcome {{ auth.userName }}</p>
+                    <p class="body-2 ma-0" v-if="auth.type">Your role: {{ auth.type }}</p>
                 </div>
             </template>
 
