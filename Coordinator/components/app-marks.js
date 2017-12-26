@@ -146,6 +146,7 @@ function addStudentToPeriod(period, form, formVals, sid) {
     }
 
     for (i in questions) {
+        questions[i].weight = parseFloat(questions[i].weight);
         totalWeight += questions[i].weight;
         totalScore += formVals[sid].questions[i] * questions[i].weight / 10;
     }
