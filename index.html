@@ -165,30 +165,7 @@
             </template>
 
             <div v-if="auth.user.emailVerified">
-                <div v-if="auth.type == 'Admin'">
-                    <app-admin></app-admin>
-                </div>
-
-                <div v-else-if="auth.type == 'Coordinator'">
-                    <app-coordinator></app-coordinator>
-                </div>
-
-                <div v-else-if="auth.type == 'Advisor'">
-                    <app-advisor></app-advisor>
-                </div>
-
-                <div v-else-if="auth.type == 'Supervisor'">
-                    <app-supervisor></app-supervisor>
-                </div>
-
-                <div v-else-if="auth.type == 'disabled'">
-                    <p style="text-align:center">Your account is disabled, contact system's admin!</p>
-                </div>
-
-                <div v-else-if="!loaded">
-                    <p style="text-align:center">Loading!</p>
-                    <!-- //TBD: more visual loading screen -->
-                </div>
+                <app-verified :auth="auth"></app-verified>
             </div>
             <div v-else>
                 <v-container>
@@ -243,6 +220,9 @@
         <script src="./components/vuetify-dashboard/app-dashboard-no-container.js"></script>
         <script src="./components/vuetify-dashboard/app-footer.js"></script>
         <script src="./components/vuetify-dashboard/app-expandable.js"></script>
+
+        <!-- Views -->
+        <script src="./components/views/app-verified.js"></script>
 
         <!-- Vue main -->
         <script src="./res/js/app.js"></script>
