@@ -130,6 +130,8 @@ var app = new Vue({
             firebase.auth().signOut()
                 .then(function (error) {
                     this.auth.user = firebase.auth().currentUser;
+                    this.auth.userName = "";
+                    this.auth.type = "";
                     this.auth.message = 'User signed out Successfully';
                     this.auth.hasErrors = false;
                 }.bind(this), function (error) {
