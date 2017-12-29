@@ -10,36 +10,45 @@ app_evaluate_template = `
         
         <v-flex xs12 v-if="view">
             <app-dashboard title="Evaluation">
-                <v-layout wrap row>
-                    <v-flex sm12 class="text-xs-center">
-                        <v-text-field name="brief" label="Brief Training Description" v-model="brief" textarea rows=3></v-text-field>
+                <v-form v-model="valid">
+                    <v-layout wrap row>
+                        <v-flex sm12 class="text-xs-center">
+                            <v-text-field name="brief" label="Brief Training Description" v-model="brief" textarea rows=3></v-text-field>
 
-                        <p class="h5">Each question is in scale of 0-10</p>
-                    </v-flex>
-                    <v-flex sm12>
-                        <table xs12 style="margin:auto">
-                            <thead>
-                                <tr>
-                                    <th>Question</th>
-                                    <th>Score</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr xs12 v-for="question in questions">
-                                    <td>{{ question.title }}</td>
-                                    <td><v-text-field type="number" min=0 max=10 v-model="question.value"></v-text-field></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </v-flex>
-                    <v-flex sm12>
-                        <v-select label="Overall rating for the student’s performance" v-bind:items="ratings" v-model="rating" id="ratings" required></v-select>
-                        <v-text-field name="comments" v-model="comments" label="Comments (if any)" textarea rows=3></v-text-field>
-                    </v-flex>
-                    <v-flex sm12 class="text-xs-center">
-                        <v-btn class="green white--text" @click="submit(student, form, brief, comments, rating)">Submit evaluation</v-btn>
-                    </v-flex>
-                </v-layout>
+                            <p class="h5">Each question is in scale of 0-10</p>
+                        </v-flex>
+                        
+                        <v-flex sm12>
+                            <table class="datatable table" xs12 style="margin:auto">
+                                <thead>
+                                    <tr>
+                                        <th>Question</th>
+                                        <th>Score</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr xs12 v-for="question in questions">
+                                        <td>{{ question.title }}</td>
+                                        <td><v-text-field type="number" min=0 max=10 v-model="question.value" required :rules="rules"></v-text-field></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </v-flex>
+                        
+                        <v-flex sm12>
+                            <br/>
+                        </v-flex>
+                        
+                        <v-flex sm12>
+                            <v-select label="Overall rating" v-bind:items="ratings" v-model="rating" id="ratings" required :rules="ratingRules"></v-select>
+                            <v-text-field name="comments" v-model="comments" label="Comments (if any)" textarea rows=3></v-text-field>
+                        </v-flex>
+                        
+                        <v-flex sm12 class="text-xs-center">
+                            <v-btn class="green white--text" @click="submit(student, form, brief, comments, rating)" :disabled="!valid">Submit evaluation</v-btn>
+                        </v-flex>
+                    </v-layout>
+                </v-form>
             </app-dashboard>
         </v-flex>
     </v-layout>
@@ -119,7 +128,16 @@ app_evaluate = {
             ratings: ["Excellent", "Very Good", "Good", "Marginal", "Poor"],
             rating: '',
             brief: '',
-            comments: ''
+            comments: '',
+            rules: [
+                (v) => !!v || 'Score is required',
+                (v) => v >= 0 || 'Score must be positive',
+                (v) => v <= 10 || 'Score must be 10 or less',
+            ],
+            ratingRules: [
+                (v) => !!v || 'Rating is required',
+            ],
+            valid: false
         };
     }
 };
