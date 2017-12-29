@@ -103,55 +103,55 @@
 
         <v-container v-if="loadAuth" fill-height class="mb-5">
             <v-container>
+                <v-form v-model="valid">
+                    <v-flex sm8 offset-sm2 md6 offset-md3>
+                        <v-card>
+                            <v-card-text>
+                                <div id="login" class="tab-pane fade in active register">
+                                    <v-container fluid>
+                                        <v-layout row wrap>
+                                            <v-flex class="green--text">
+                                                <v-layout class="justify-center">
+                                                    <h1>Login</h1>
+                                                </v-layout>
+                                            </v-flex>
 
-                <v-flex sm8 offset-sm2 md6 offset-md3>
-                    <v-card>
-                        <v-card-text>
-                            <div id="login" class="tab-pane fade in active register">
-                                <v-container fluid>
-                                    <v-layout row wrap>
-                                        <v-flex class="green--text">
-                                            <v-layout class="justify-center">
-                                                <h1>Login</h1>
-                                            </v-layout>
-                                        </v-flex>
+                                            <v-flex xs12>
+                                                <v-text-field name="uname" label="Email" prepend-icon="email" v-model:email="auth.email" :rules="emailRules" @keyup.enter="newLogin"
+                                                    single-line></v-text-field>
+                                            </v-flex>
 
-                                        <v-flex xs12>
-                                            <v-text-field name="uname" label="Email" prepend-icon="email" v-model:email="auth.email" :rules="emailRules" @keyup.enter="newLogin"
-                                                single-line></v-text-field>
-                                        </v-flex>
-
-                                        <v-flex xs12>
-                                            <v-text-field name="pass" label="Password" prepend-icon="work" v-model:password="auth.password" @keyup.enter="newLogin" single-line
-                                                :append-icon="e1 ? 'visibility' : 'visibility_off'" :append-icon-cb="() => (e1 = !e1)"
-                                                :type="e1 ? 'password' : 'text'" :rules="passwordRules"></v-text-field>
-                                        </v-flex>
-                                        <v-flex class="text-xs-right">
-                                            <a @click="forgotPassword">Forgot password?</a>
-                                        </v-flex>
+                                            <v-flex xs12>
+                                                <v-text-field name="pass" label="Password" prepend-icon="work" v-model:password="auth.password" @keyup.enter="newLogin" single-line
+                                                    :append-icon="e1 ? 'visibility' : 'visibility_off'" :append-icon-cb="() => (e1 = !e1)"
+                                                    :type="e1 ? 'password' : 'text'" :rules="passwordRules"></v-text-field>
+                                            </v-flex>
+                                            <v-flex class="text-xs-right">
+                                                <a @click="forgotPassword">Forgot password?</a>
+                                            </v-flex>
+                                        </v-layout>
+                                    </v-container>
+                                </div>
+                            </v-card-text>
+                            <v-card-actions class="pb-3">
+                                <v-layout row wrap>
+                                    <v-layout class="justify-center" sm12>
+                                        <v-btn @click="newLogin" class="green white--text" :disabled="!valid">
+                                            Login
+                                            <v-icon>forward</v-icon>
+                                        </v-btn>
                                     </v-layout>
-                                </v-container>
-                            </div>
-                        </v-card-text>
-                        <v-card-actions class="pb-3">
-                            <v-layout row wrap>
-                                <v-layout class="justify-center" sm12>
-                                    <v-btn @click="newLogin" class="green white--text">
-                                        Login
-                                        <v-icon>forward</v-icon>
-                                    </v-btn>
                                 </v-layout>
-                            </v-layout>
-                        </v-card-actions>
-                    </v-card>
+                            </v-card-actions>
+                        </v-card>
 
-                    <v-flex v-if="auth.message !== ''" @click="dismissAlert" :class="{'red': auth.hasErrors, 'green': !auth.hasErrors, 'text-xs-center': true}">
-                        <v-btn flat>
-                            <p :class="{'white--text': !auth.hasErrors}">{{ auth.message }}</p>
-                        </v-btn>
+                        <v-flex v-if="auth.message !== ''" @click="dismissAlert" :class="{'red': auth.hasErrors, 'green': !auth.hasErrors, 'text-xs-center': true}">
+                            <v-btn flat>
+                                <p :class="{'white--text': !auth.hasErrors}">{{ auth.message }}</p>
+                            </v-btn>
+                        </v-flex>
                     </v-flex>
-                </v-flex>
-
+                </v-form>
             </v-container>
         </v-container>
 
