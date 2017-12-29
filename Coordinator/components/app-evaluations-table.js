@@ -15,9 +15,14 @@ app_evaluations_table_template = `
             <div v-if="view">
 
                 <app-expandable title="Questions">
-                    <ul>
-                        <li v-for="(question,i,b) in questions" class="black--text">{{ 'Q'+(i+1)+': '+question.title }}</li>
-                    </ul>
+                    <table class="datatable inner table">
+                        <tbody>
+                            <tr v-for="(question,i,b) in questions">
+                                <td class="text-xs-center ma-0 pa-0">{{ 'Q'+(i+1) }}</td>
+                                <td class="text-xs-center ma-0 pa-0">{{ question.title }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </app-expandable>
 
                 <p>Number of submitted evaluations: {{ formStudents.length }}</p>
@@ -37,26 +42,24 @@ app_evaluations_table_template = `
                     <template slot="expand" slot-scope="props">
                         <v-card flat>
                             <v-card-text>
-                                <tr>
-                                    <th></th>
-                                    <th>Score/Brief/Comment</th>
-                                </tr>
-                                <tr>
-                                    <td>Brief</td>
-                                    <td>{{ props.item.brief }}</td
-                                </tr>
-                                <tr v-for="(question,i,b) in props.item.questions">
-                                    <td>{{ questions[b].title }}</td>
-                                    <td>{{ props.item.questions['Q'+(b+1)] }}</td
-                                </tr>
-                                <tr>
-                                    <td>Rating</td>
-                                    <td>{{ props.item.rating }}</td
-                                </tr>
-                                <tr>
-                                    <td>Comments</td>
-                                    <td>{{ props.item.comments }}</td
-                                </tr>
+                                <table class="datatable inner table">
+                                    <tr v-if="props.item.brief">
+                                        <td>Brief</td>
+                                        <td>{{ props.item.brief }}</td
+                                    </tr>
+                                    <tr v-for="(question,i,b) in props.item.questions">
+                                        <td>{{ questions[b].title }}</td>
+                                        <td>{{ props.item.questions['Q'+(b+1)] }}</td
+                                    </tr>
+                                    <tr>
+                                        <td>Overall rating</td>
+                                        <td>{{ props.item.rating }}</td
+                                    </tr>
+                                    <tr v-if="props.item.comments">
+                                        <td>Comments</td>
+                                        <td>{{ props.item.comments }}</td
+                                    </tr>
+                                </table>
                             </v-card-text>
                         </v-card>
                     </template>
@@ -108,7 +111,7 @@ function updateView() {
             var numOfQuestions = Object.keys(form.questions).length;
 
             for (var q = 0; q < numOfQuestions; q++) {
-                var newQuestion = { title: form.questions["Q" + (q + 1)].title, text: "Q" + (q + 1), label: "Q" + (q + 1), sortable: false };
+                var newQuestion = { title: form.questions["Q" + (q + 1)].title, text: "Q" + (q + 1), label: "Q" + (q + 1), sortable: false, align: "center" };
                 jsonQuestions.push(newQuestion);
             }
 
