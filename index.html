@@ -58,7 +58,7 @@
                 <a href="/" class="white--text" style="text-decoration: none">EvaluateMe</a>
             </v-toolbar-title>
             <v-spacer></v-spacer>
-            <v-btn icon dark @click.stop="drawer = !drawer">
+            <v-btn icon dark @click.stop="drawer = !drawer" v-if="isAuthenticated">
                 <v-icon>settings</v-icon>
             </v-btn>
         </v-toolbar>
