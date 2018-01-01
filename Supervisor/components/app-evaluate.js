@@ -5,7 +5,7 @@ app_evaluate_template = `
             <v-select label="Student" v-bind:items="students" item-text="name" item-value="id" v-model="student" id="student" required></v-select>
             <v-btn class="green white--text" @click="viewForms(student);view = false">Choose student</v-btn>
             <v-select label="Form" v-bind:items="forms" item-text="name" v-model="form" id="form" required></v-select>
-            <v-btn class="green white--text" @click="if(viewForm(form)){view=true;viewQuestions(form.questions)}">View form</v-btn>
+            <v-btn class="green white--text" @click="if(viewForm(form)){view=true;viewQuestions(form.questions,form.id,student)}">View form</v-btn>
         </v-flex>
         
         <v-flex xs12 v-if="view">
@@ -139,6 +139,46 @@ app_evaluate = {
             ],
             valid: false
         };
+    },
+    methods: {
+
+        viewQuestions: function (newQuestions, formId, student) {
+            console.log("view questions");
+
+            while (questions.length != 0)
+                questions.pop();
+
+            for (var q in newQuestions) {
+                questions.push(newQuestions[q]);
+            }
+            evaluated = false;
+            brief2 = "";
+            comments2 = "";
+            rating2 = "";
+            questions2 = "";
+            firebase.database().ref("evaluation" + "/" + coordinator.split(".").join(" ") + "/" + formId + "/" + student).once('value', function (snapshot) {
+                vals = snapshot.val();
+                evaluated = true;
+                brief2 = vals.brief;
+                comments2 = vals.comments;
+                rating2 = vals.rating;
+                questions2 = vals.questions;
+            });
+
+            setTimeout(() => {
+                if (evaluated) {
+                    this.brief = brief2;
+                    this.comments = comments2;
+                    this.rating = rating2;
+
+                    for (var q in questions) {
+                        index = "Q" + (parseInt(q) + 1)
+                        console.log(index);
+                        this.questions[q].value = questions2[index];
+                    }
+                }
+            }, 500);
+        }
     }
 };
 
@@ -150,6 +190,7 @@ function submit(student, form, brief, comments, rating) {
     for (var q = 0; q < questions.length; q++) {
         jsonQuestions["Q" + (q + 1)] = questions[q].value;
     }
+
     json = {
         brief: brief,
         comments: comments,
@@ -196,15 +237,4 @@ function viewForm(form) {
 
     console.log("new view");
     return true;
-}
-
-function viewQuestions(newQuestions) {
-    console.log("view questions");
-
-    while (questions.length != 0)
-        questions.pop();
-
-    for (var q in newQuestions) {
-        questions.push(newQuestions[q]);
-    }
 }
