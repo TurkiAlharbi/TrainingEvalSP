@@ -132,6 +132,8 @@ var app = new Vue({
                     this.auth.user = firebase.auth().currentUser;
                     this.auth.userName = "";
                     this.auth.type = "";
+                    this.auth.password = "";
+                    this.auth.email = "";
                     this.auth.message = 'User signed out Successfully';
                     this.auth.hasErrors = false;
                 }.bind(this), function (error) {
