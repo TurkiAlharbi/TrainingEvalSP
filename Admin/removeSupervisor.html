@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- <link href='../lib/fonts/fonts.css' rel="stylesheet"> -->
+    <link href='../lib/fonts/material.css' rel="stylesheet">
+
+    <link href="../lib/vuetify/vuetify-0.17.0.min.css" rel="stylesheet">
+    <link href="../res/css/everything.css" rel="stylesheet">
+
+    <style>
+        tbody tr:nth-child(2n+1) {
+            background-color: #f9f9f9;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+        }
+    </style>
+
+    <title>Remove obsolete supervisors</title>
+</head>
+
+<body>
+    <v-app id="app" v-cloak>
+
+        <app-page-header></app-page-header>
+
+        <app-dashboard title="Remove obsolete supervisors">
+            <app-remove-supervisors></app-remove-supervisors>
+        </app-dashboard>
+
+    </v-app>
+
+    <script src="../lib/vue/vue-2.5.0.min.js "></script>
+    <script src="../lib/vuetify/vuetify-0.17.0.min.js"></script>
+
+    <!-- Firebase -->
+    <script src="../lib/firebase/firebase-4.6.0.min.js"></script>
+    <script src="../firebase/config.js"></script>
+    <script src="../firebase/functions.js"></script>
+
+    <script src="./components/app-remove-supervisors.js"></script>
+
+    <script src="../components/vuetify-dashboard/app-dashboard.js "></script>
+    <script src="../components/vuetify-dashboard/app-page-header.js "></script>
+
+    <script src="../components/app.js "></script>
+
+    <script src="../lib/jquery/jquery-3.2.1.min.js "></script>
+
+</body>
+
+</html>

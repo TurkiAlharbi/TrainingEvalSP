@@ -10,6 +10,7 @@ template = `
 
     <app-dashboard-no-container title="Other utilities">
         <app-option name="Generate a report" link="./Admin/generateReport.html"></app-option>
+        <app-option name="Remove osbelete supervisors" link="./Admin/removeSupervisor.html"></app-option>
     </app-dashboard-no-container>
 
 </div>

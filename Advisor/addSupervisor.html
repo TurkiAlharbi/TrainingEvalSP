@@ -49,12 +49,14 @@
             var mobile = $('#mobile').val();
             var email = $('#email').val();
             var password = email;//temp
+            var date = new Date();
+            var lastActivity = date.getFullYear() + " " + (date.getMonth() + 1) + " " + date.getDate();
 
             // Create the account for supervisor
             createUser(email, password, "Supervisor");
 
             // Add to the supervisor's list of students
-            update2DB("supervisors/" + email.split(".").join(" "), { name: name, mobile: mobile });
+            update2DB("supervisors/" + email.split(".").join(" "), { name: name, mobile: mobile, lastActivity: lastActivity });
 
             // Clears the form
             setTimeout(function () {

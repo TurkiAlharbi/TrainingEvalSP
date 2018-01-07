@@ -198,12 +198,18 @@ function submit(student, form, brief, comments, rating) {
         questions: jsonQuestions
     };
 
+    var date = new Date();
+    var lastActivity = date.getFullYear() + " " + (date.getMonth() + 1) + " " + date.getDate();
+
     write2DB("evaluation" + "/" + coordinator.split(".").join(" ") + "/" + form.id + "/" + student, json);
 
+    supervisor = firebase.auth().currentUser.email.split(".").join(" ");
+    write2DB("supervisors" + "/" + supervisor.split(".").join(" ") + "/lastActivity", lastActivity);
+
     // Go to submitted page
-    setTimeout(function () {
-        window.location.href = "./submitted.html";
-    }, 1500);
+    // setTimeout(function () {
+    // window.location.href = "./submitted.html";
+    // }, 1500);
 }
 
 function viewForms(student) {
