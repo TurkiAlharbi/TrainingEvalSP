@@ -22,6 +22,7 @@ template = `
 
     <app-expandable title="Other utilities" expanded>
         <app-option name="Generate a report" link="../Coordinator/generateReport.html"></app-option>
+        <app-option name="Archive" link="../Coordinator/archive.html"></app-option>
     </app-expandable>
     
     <!-- Advisor's view -->
